@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"DTD/xhtml11-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+<style type="text/css"> P.statechart { text-align: center; } </style>
+
+<title>Class Diagram for Example ATM System</title>
+
+</head>
+
+<body>
+
+<h2>Class Diagram for Example ATM System</h2>
+
+<p>
+Shown below is the class diagram for the ATM system.  The basic structure of the
+class diagram arises from the responsibilities and relationships discovered when
+doing the CRC cards and Interaction Diagrams.  (If a class uses another class
+as a collaborator, or sends a message to an object of that class during an
+Interaction, then there must either be an association linking objects of those classes,
+or linking the "sending" class to an object which provides access to an object of
+the "receiving" class.)   
+</p>
+
+<p>
+In the case of the ATM system, one of the responsibilities
+of the ATM is to provide access to its component parts for Session and Transaction
+objects; thus, Session and Transaction have associations to ATM, which in turn has
+associations to the classes representing the individual component parts.  (Explicit
+"uses" links between Session and Transaction, on the one hand, and the component
+parts of the ATM, on the other hand, have been omitted from the diagram to avoid
+making it excessively cluttered.)
+</p>
+
+<p>
+The need for the various classes in the diagram was discovered at various points in
+the design process.
+</p>
+
+<ul>
+<li>Some classes were discovered when doing analysis (see the 
+<a href="AnalysisClasses.html">Analysis Class Diagram</a> developed earlier.)<br />&nbsp;</li>
+<li>Some classes were discovered when doing CRC cards<br />&nbsp;
+	<ul>
+	<li>Message - used to represent a message to the bank.</li>
+	<li>Receipt - used to encapsulate information to be printed on a receipt.</li>
+	<li>Status - used to represent return value from message to the bank.</li>
+	<li>Balances - used to record balance information returned by the bank.</li>
+	</ul><br /></li>
+<li>Some classes were discovered when doing detailed design or writing code<br />&nbsp;
+	<ul>
+	<li>Money - used to represent money amounts, in numerous places.</li>
+	<li>AccountInformation - contains names of various types of accounts customer can
+		choose from</li>
+	</ul></li>
+</ul>
+
+<p>
+That is, OO design is not a "waterfall" process - discoveries made when doing detailed
+design and coding can impact overall system design.
+</p>
+
+<p>
+To prevent the diagram from
+becoming overly large, only the name of each class is shown - the attribute and
+behavior "compartments" are shown in the detailed design, but are omitted here.
+</p>
+
+<hr />
+
+<h4>
+Click on a class icon for links to further information about it
+</h4>
+
+<p class="clickablediagram">
+<img src="ClassDiagram.gif" usemap="#ClassDiagramMap" alt="[ Class Diagram ]" />
+
+<map name="ClassDiagramMap" id="ClassDiagramMap">
+<area shape="rect" coords="243,342,300,376" href="ClassLinks.html#ATM" 
+    alt="Class ATM" 
+    title="Class ATM" />
+<area shape="rect" coords="27,351,84,385" href="ClassLinks.html#CardReader" 
+    alt="Class CardReader" 
+    title="Class CardReader" />
+<area shape="rect" coords="144,234,201,268" href="ClassLinks.html#CashDispenser" 
+    alt="Class CashDispenser" 
+    title="Class CashDispenser" />
+<area shape="rect" coords="99,324,156,358" href="ClassLinks.html#CustomerConsole" 
+    alt="Class CustomerConsole" 
+    title="Class CustomerConsole" />
+<area shape="rect" coords="243,234,300,268" href="ClassLinks.html#EnvelopeAcceptor" 
+    alt="Class EnvelopeAcceptor" 
+    title="Class EnvelopeAcceptor" />
+<area shape="rect" coords="180,144,237,178" href="ClassLinks.html#Log" 
+    alt="Class Log" 
+    title="Class Log" />
+<area shape="rect" coords="315,234,372,268" href="ClassLinks.html#NetworkToBank" 
+    alt="Class NetworkToBank" 
+    title="Class NetworkToBank" />
+<area shape="rect" coords="378,324,435,358" href="ClassLinks.html#OperatorPanel" 
+    alt="Class OperatorPanel" 
+    title="Class OperatorPanel" />
+<area shape="rect" coords="450,351,507,385" href="ClassLinks.html#ReceiptPrinter" 
+    alt="Class ReceiptPrinter" 
+    title="Class ReceiptPrinter" />
+<area shape="rect" coords="162,423,219,457" href="ClassLinks.html#Session" 
+    alt="Class Session" 
+    title="Class Session" />
+<area shape="rect" coords="330,423,387,457" href="ClassLinks.html#Transaction" 
+    alt="Class Transaction" 
+    title="Class Transaction" />
+<area shape="rect" coords="234,520,291,554" href="ClassLinks.html#Withdrawal" 
+    alt="Class Withdrawal" 
+    title="Class Withdrawal" />
+<area shape="rect" coords="297,520,354,554" href="ClassLinks.html#Deposit" 
+    alt="Class Deposit" 
+    title="Class Deposit" />
+<area shape="rect" coords="360,520,417,554" href="ClassLinks.html#Transfer" 
+    alt="Class Transfer" 
+    title="Class Transfer" />
+<area shape="rect" coords="423,520,480,554" href="ClassLinks.html#Inquiry" 
+    alt="Class Inquiry" 
+    title="Class Inquiry" />
+<area shape="rect" coords="90,27,147,61" href="ClassLinks.html#Money" 
+    alt="Class Money" 
+    title="Class Money" />
+<area shape="rect" coords="333,144,390,178" href="ClassLinks.html#Status" 
+    alt="Class Status" 
+    title="Class Status" />
+<area shape="rect" coords="279,90,336,124" href="ClassLinks.html#Message" 
+    alt="Class Message" 
+    title="Class Message" />
+<area shape="rect" coords="450,27,507,61" href="ClassLinks.html#Balances" 
+    alt="Class Balances" 
+    title="Class Balances" />
+<area shape="rect" coords="450,144,507,178" href="ClassLinks.html#Receipt" 
+    alt="Class Receipt" 
+    title="Class Receipt" />
+<area shape="rect" coords="27,504,84,538" href="ClassLinks.html#Card" 
+    alt="Class Card" 
+    title="Class Card" />
+<area shape="rect" coords="334,612,391,646" href="ClassLinks.html#AccountInformation" 
+    alt="Class AccountInformation" 
+    title="Class AccountInformation" />
+</map>
+</p>
+
+<hr />
+
+<p class="navigation">
+<a href="CRCCards.html"><img src="Back.gif" alt="Link to previous page" /></a>
+<a href="Statecharts.html"><img src="Next.gif" alt="Link to next page" /></a>
+</p>
+
+<p>
+<a href="Links.html">Page of links for non frames-enabled browsers.</a>
+</p>
+
+
+<p>
+<a href="http://validator.w3.org/check/referer">
+<img class="XHTML_image"
+	src="XHTML_validation_image.gif"
+	alt="Valid XHTML 1.0!" height="31" width="88" />
+</a>
+</p>
+
+<h6>Copyright &copy; 2000, 2001, 2002 - Russell C. Bjork.  Permission for non-commercial 
+reproduction for educational use is hereby granted; all other rights are reserved.</h6>
+
+</body>
+</html>

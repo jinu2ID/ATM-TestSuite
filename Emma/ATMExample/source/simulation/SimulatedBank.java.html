@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SimulatedBank.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">simulation</a> &gt; <span class="el_source">SimulatedBank.java</span></div><h1>SimulatedBank.java</h1><pre class="source lang-java linenums">/*
+ * ATM Example system - file SimulatedBank.java 
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package simulation;
+import banking.AccountInformation;
+import banking.Balances;
+import banking.Card;
+import banking.Message;
+import banking.Money;
+import banking.Status;
+
+/** Simulation of the bank.  A set of simulated accounts is initalized at startup.
+ */
+<span class="fc" id="L18">public class SimulatedBank</span>
+{
+    /** Simulate the handling of a message
+     *
+     *  @param message the message to send
+     *  @param balances (out) balances in customer's account as reported
+     *         by bank
+     *  @return status code returned by bank
+     */
+    public Status handleMessage(Message message, Balances balances)
+    {       
+<span class="fc" id="L29">        int cardNumber = message.getCard().getNumber(); </span>
+<span class="fc bfc" id="L30" title="All 4 branches covered.">        if (cardNumber &lt; 1 || cardNumber &gt; PIN.length)</span>
+<span class="fc" id="L31">            return new Failure(&quot;Invalid card&quot;);</span>
+    
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if (message.getPIN() != PIN [ cardNumber ] )</span>
+<span class="fc" id="L34">            return new InvalidPIN();</span>
+    
+<span class="fc bfc" id="L36" title="All 6 branches covered.">        switch(message.getMessageCode())</span>
+        {
+            case Message.WITHDRAWAL:
+            
+<span class="fc" id="L40">                return withdrawal(message, balances);</span>
+                            
+            case Message.INITIATE_DEPOSIT:
+            
+<span class="fc" id="L44">                return initiateDeposit(message);</span>
+            
+            case Message.COMPLETE_DEPOSIT:
+            
+<span class="fc" id="L48">                return completeDeposit(message, balances);</span>
+            
+            case Message.TRANSFER:
+            
+<span class="fc" id="L52">                return transfer(message, balances);</span>
+            
+            case Message.INQUIRY:
+            
+<span class="fc" id="L56">                return inquiry(message, balances);</span>
+        }
+        
+        // Need to keep compiler happy
+        
+<span class="fc" id="L61">        return null;</span>
+    }
+
+    /** Simulate processing of a withdrawal
+     *
+     *  @param message the message describing the withdrawal requested
+     *  @param balances (out) balances in account after withdrawal
+     *  @return status code derived from current values
+     */
+    private Status withdrawal(Message message, Balances balances)
+    {
+<span class="fc" id="L72">        int cardNumber = message.getCard().getNumber();</span>
+        
+<span class="fc" id="L74">        int accountNumber = ACCOUNT_NUMBER [ cardNumber ] [ message.getFromAccount() ];</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (accountNumber == 0)</span>
+<span class="fc" id="L76">            return new Failure(&quot;Invalid account type&quot;);</span>
+    
+<span class="fc" id="L78">        Money amount = message.getAmount();</span>
+        
+<span class="fc" id="L80">        Money limitRemaining = new Money(DAILY_WITHDRAWAL_LIMIT);</span>
+<span class="fc" id="L81">        limitRemaining.subtract(WITHDRAWALS_TODAY[ cardNumber ]);</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (! amount.lessEqual(limitRemaining))</span>
+<span class="fc" id="L83">            return new Failure(&quot;Daily withdrawal limit exceeded&quot;);</span>
+
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (! amount.lessEqual(AVAILABLE_BALANCE [ accountNumber ]))</span>
+<span class="fc" id="L86">             return new Failure(&quot;Insufficient available balance&quot;);</span>
+
+        // Update withdrawals today and account balances once we know everything is
+        // OK
+            
+<span class="fc" id="L91">        WITHDRAWALS_TODAY [ cardNumber ].add(amount);</span>
+<span class="fc" id="L92">        BALANCE [ accountNumber ].subtract(amount);</span>
+<span class="fc" id="L93">        AVAILABLE_BALANCE [ accountNumber ].subtract(amount);</span>
+        
+        // Return updated balances
+        
+<span class="fc" id="L97">        balances.setBalances(BALANCE [ accountNumber ], </span>
+<span class="fc" id="L98">                             AVAILABLE_BALANCE [ accountNumber ]);</span>
+        
+<span class="fc" id="L100">        return new Success();</span>
+    } 
+    
+    /** Simulate initiation of a deposit. At this point, the bank only approves
+     *  the validity of the deposit - no changes to the records are made until
+     *  the envelope is actually inserted 
+     *
+     *  @param message the message describing the deposit requested
+     *  @return status code derived from current values
+     */
+    private Status initiateDeposit(Message message)
+    {
+<span class="fc" id="L112">        int cardNumber = message.getCard().getNumber(); </span>
+    
+<span class="fc" id="L114">        int accountNumber = ACCOUNT_NUMBER [ cardNumber ] [ message.getToAccount() ];</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (accountNumber == 0)</span>
+<span class="fc" id="L116">            return new Failure(&quot;Invalid account type&quot;);</span>
+            
+        // Don't update anything yet
+            
+<span class="fc" id="L120">        return new Success();</span>
+    }    
+    
+    /** Simulate completion of a deposit
+     *
+     *  @param message the message describing the deposit requested
+     *  @param balances (out) balances (not updated until completed)
+     *  @return status code - must always be success in this case
+     */
+    private Status completeDeposit(Message message, Balances balances)
+    {
+<span class="fc" id="L131">        int cardNumber = message.getCard().getNumber(); </span>
+        
+<span class="fc" id="L133">        int accountNumber = ACCOUNT_NUMBER [ cardNumber ] [ message.getToAccount() ];</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">        if (accountNumber == 0)</span>
+<span class="fc" id="L135">            return new Failure(&quot;Invalid account type&quot;);</span>
+            
+        // Now we can update the balance
+        
+<span class="fc" id="L139">        Money amount = message.getAmount();</span>
+<span class="fc" id="L140">        BALANCE [ accountNumber ].add(amount);</span>
+        
+        // Return updated balances
+        
+<span class="fc" id="L144">        balances.setBalances(BALANCE [ accountNumber ], </span>
+<span class="fc" id="L145">                             AVAILABLE_BALANCE [ accountNumber ]);</span>
+        
+<span class="fc" id="L147">        return new Success();</span>
+    }    
+    
+    /** Simulate processing of a transfer
+     *
+     *  @param message the message describing the transfer requested
+     *  @param balances (out) balances in &quot;to&quot; account after transfer
+     *  @return status code derived from current values
+     */
+    private Status transfer(Message message, Balances balances)
+    {
+<span class="fc" id="L158">        int cardNumber = message.getCard().getNumber(); </span>
+    
+<span class="fc" id="L160">        int fromAccountNumber = ACCOUNT_NUMBER [ cardNumber ] [ message.getFromAccount() ];</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (fromAccountNumber == 0)</span>
+<span class="fc" id="L162">            return new Failure(&quot;Invalid from account type&quot;);</span>
+    
+<span class="fc" id="L164">        int toAccountNumber = ACCOUNT_NUMBER [ cardNumber ] [ message.getToAccount() ];</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">        if (toAccountNumber == 0)</span>
+<span class="fc" id="L166">            return new Failure(&quot;Invalid to account type&quot;);</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">        if (fromAccountNumber == toAccountNumber)</span>
+<span class="fc" id="L168">            return new Failure(&quot;Can't transfer money from\n&quot; +</span>
+                    &quot;an account to itself&quot;);
+    
+<span class="fc" id="L171">        Money amount = message.getAmount();</span>
+        
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (! amount.lessEqual(AVAILABLE_BALANCE [ fromAccountNumber ]))</span>
+<span class="fc" id="L174">             return new Failure(&quot;Insufficient available balance&quot;);</span>
+
+        // Update account balances once we know everything is OK
+            
+<span class="fc" id="L178">        BALANCE [ fromAccountNumber ].subtract(amount);</span>
+<span class="fc" id="L179">        AVAILABLE_BALANCE [ fromAccountNumber ].subtract(amount);</span>
+<span class="fc" id="L180">        BALANCE [ toAccountNumber ].add(amount);</span>
+<span class="fc" id="L181">        AVAILABLE_BALANCE [ toAccountNumber ].add(amount);</span>
+        
+        // Return updated balances
+        
+<span class="fc" id="L185">        balances.setBalances(BALANCE [ toAccountNumber ], </span>
+<span class="fc" id="L186">                             AVAILABLE_BALANCE [ toAccountNumber ]);</span>
+        
+<span class="fc" id="L188">        return new Success();</span>
+    } 
+    
+    /** Simulate processing of an inquiry
+     *
+     *  @param message the message describing the inquiry requested
+     *  @param balances (out) balances in account
+     *  @return status code derived from current values
+     */
+    private Status inquiry(Message message, Balances balances)
+    {
+<span class="fc" id="L199">        int cardNumber = message.getCard().getNumber(); </span>
+
+<span class="fc" id="L201">        int accountNumber = ACCOUNT_NUMBER [ cardNumber ] [ message.getFromAccount() ];</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        if (accountNumber == 0)</span>
+<span class="fc" id="L203">            return new Failure(&quot;Invalid account type&quot;);</span>
+        
+        // Return requested balances
+        
+<span class="fc" id="L207">        balances.setBalances(BALANCE [ accountNumber ], </span>
+<span class="fc" id="L208">                             AVAILABLE_BALANCE [ accountNumber ]);</span>
+        
+<span class="fc" id="L210">        return new Success();</span>
+    }
+     
+    /** Representation for status of a transaction that succeeded
+     */
+<span class="fc" id="L215">    private static class Success extends Status</span>
+    {
+        public boolean isSuccess()
+        {
+<span class="fc" id="L219">            return true;</span>
+        }
+        
+        public boolean isInvalidPIN()
+        {
+<span class="fc" id="L224">            return false;</span>
+        }
+        
+        public String getMessage()
+        {
+<span class="fc" id="L229">            return null;</span>
+        }
+    }
+    
+    /** Representation for status of a transaction that failed (for reason other than
+     *  invalid PIN)
+     */
+    private static class Failure extends Status
+    {
+        /** Constructor
+         *
+         *  @param message description of the failure
+         */
+<span class="fc" id="L242">        public Failure(String message)</span>
+        {
+<span class="fc" id="L244">            this.message = message;</span>
+<span class="fc" id="L245">        }</span>
+        
+        public boolean isSuccess()
+        {
+<span class="fc" id="L249">            return false;</span>
+        }
+        
+        public boolean isInvalidPIN()
+        {
+<span class="fc" id="L254">            return false;</span>
+        }
+        
+        public String getMessage()
+        {
+<span class="fc" id="L259">            return message;</span>
+        }
+        
+        private String message;
+    }
+
+    /** Representation for status of a transaction that failed due to an invalid PIN
+     */
+    private static class InvalidPIN extends Failure
+    {
+        /** Constructor
+         *
+         *  @param message description of the failure
+         */
+        public InvalidPIN()
+        {
+<span class="fc" id="L275">            super(&quot;Invalid PIN&quot;);</span>
+<span class="fc" id="L276">        }</span>
+        
+        public boolean isInvalidPIN()
+        {
+<span class="fc" id="L280">            return true;</span>
+        }
+    }
+    
+    /** PIN for each card.  (Valid card numbers start with 1)
+     */
+<span class="fc" id="L286">    private static final int PIN [] =</span>
+<span class="fc" id="L287">    { </span>
+        0,  // dummy for nonexistent card 0
+<span class="fc" id="L289">        42, </span>
+<span class="fc" id="L290">        1234 </span>
+    };
+
+    /** Array of account numbers associated with each card.  For each card,
+     *  there can be three different types of account, which correspond to
+     *  the names in class AccountInformation.  0 means no account of this
+     *  type.   (Valid card numbers start with 1)
+     */
+<span class="fc" id="L298">    private static final int ACCOUNT_NUMBER [] [] =</span>
+<span class="fc" id="L299">    { </span>
+<span class="fc" id="L300">        { 0, 0, 0 },    // dummies for nonexistent card 0</span>
+<span class="fc" id="L301">        { 1, 2, 0 },</span>
+<span class="fc" id="L302">        { 1, 0, 3 }</span>
+    };
+
+    /** Withdrawals so far today on each card.   (Valid card numbers start with 1)
+     */ 
+<span class="fc" id="L307">    private static Money WITHDRAWALS_TODAY [] =</span>
+<span class="fc" id="L308">    {</span>
+<span class="fc" id="L309">        new Money(0),   // dummy for nonexistent card 0</span>
+<span class="fc" id="L310">        new Money(0),</span>
+<span class="fc" id="L311">        new Money(0)</span>
+    };
+    
+    /** Maximum daily withdrawal limit for any one card.  
+     */
+<span class="fc" id="L316">    private static final Money DAILY_WITHDRAWAL_LIMIT = new Money(300);</span>
+    
+    /** Balance for each account (will change as program runs, hence not a
+     *  static final.
+     */
+<span class="fc" id="L321">    private Money BALANCE [] =</span>
+<span class="fc" id="L322">    {</span>
+<span class="fc" id="L323">        new Money(0),   // dummy for nonexistent account 0</span>
+<span class="fc" id="L324">        new Money(100), </span>
+<span class="fc" id="L325">        new Money(1000),</span>
+<span class="fc" id="L326">        new Money(5000) </span>
+    }; 
+    
+    /** Available alance for each account (will change as program runs, hence
+     *  not a static final.
+     */
+<span class="fc" id="L332">    private Money AVAILABLE_BALANCE [] =</span>
+<span class="fc" id="L333">    { </span>
+<span class="fc" id="L334">        new Money(0),   // dummy for nonexistent account 0</span>
+<span class="fc" id="L335">        new Money(100), </span>
+<span class="fc" id="L336">        new Money(1000),</span>
+<span class="fc" id="L337">        new Money(5000) </span>
+    };
+}    
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

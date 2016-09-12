@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ATMPanel.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">ATMMain (Nov 1, 2015 8:01:40 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">simulation</a> &gt; <span class="el_source">ATMPanel.java</span></div><h1>ATMPanel.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">/*</span>
+ * ATM Example system - file ATMPanel.java  
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package simulation;
+
+import atm.ATM;
+
+import java.awt.*;
+import java.awt.event.*;
+
+/** The GUI panel that simulates the ATM itself
+ */
+class ATMPanel extends Panel
+{
+    /** Constructor
+     *
+     *  @param gui the the overall GUI
+     *  @param operatorPanel the simulation of the card reader
+     *  @param cardReader the simulation of the card reader
+     *  @param display the simulation of the display
+     *  @param keyboard the simulation of the keyboard
+     *  @param cashDispenser the simulation of the cash dispenser
+     *  @param receiptPrinter the simulation of the receipt printer
+     */
+<span class="fc" id="L29">    ATMPanel(final GUI gui,</span>
+             SimOperatorPanel operatorPanel,
+             SimCardReader cardReader,
+             SimDisplay display,
+             SimKeyboard keyboard,
+             SimCashDispenser cashDispenser,
+             SimEnvelopeAcceptor envelopeAcceptor,
+             SimReceiptPrinter receiptPrinter)
+    {
+<span class="fc" id="L38">        GridBagLayout atmLayout = new GridBagLayout();</span>
+<span class="fc" id="L39">        setLayout(atmLayout);</span>
+        
+        // Add the operator panel
+        
+<span class="fc" id="L43">        add(operatorPanel);</span>
+<span class="fc" id="L44">        atmLayout.setConstraints(operatorPanel,</span>
+<span class="fc" id="L45">                GUI.makeConstraints(OPERATOR_ROW, OPERATOR_COL,</span>
+<span class="fc" id="L46">                                OPERATOR_WIDTH, OPERATOR_HEIGHT,</span>
+<span class="fc" id="L47">                                OPERATOR_FILL));</span>
+                                
+        // Put cardReader in a Panel with GridLayout to ensure it gets space
+        // even when invisible, then add it
+        
+<span class="fc" id="L52">        Panel cardReaderPanel = new Panel();</span>
+<span class="fc" id="L53">        cardReaderPanel.setLayout(new GridLayout(1,1));</span>
+<span class="fc" id="L54">        cardReaderPanel.add(cardReader);</span>
+<span class="fc" id="L55">        add(cardReaderPanel);</span>
+<span class="fc" id="L56">        atmLayout.setConstraints(cardReaderPanel, </span>
+<span class="fc" id="L57">                GUI.makeConstraints(READER_ROW, READER_COL,</span>
+<span class="fc" id="L58">                                READER_WIDTH, READER_HEIGHT, </span>
+<span class="fc" id="L59">                                READER_FILL));</span>
+                                
+        // The customer console consists of two components (display and keyboard)
+        // that must be added individually in different places in the GUI
+        
+<span class="fc" id="L64">        add(display);</span>
+<span class="fc" id="L65">        atmLayout.setConstraints(display, </span>
+<span class="fc" id="L66">                GUI.makeConstraints(DISPLAY_ROW, DISPLAY_COL,</span>
+<span class="fc" id="L67">                                DISPLAY_WIDTH, DISPLAY_HEIGHT,</span>
+<span class="fc" id="L68">                                DISPLAY_FILL));</span>
+                                
+<span class="fc" id="L70">        add(keyboard);</span>
+<span class="fc" id="L71">        atmLayout.setConstraints(keyboard,</span>
+<span class="fc" id="L72">                GUI.makeConstraints(KEYBOARD_ROW, KEYBOARD_COL,</span>
+<span class="fc" id="L73">                                KEYBOARD_WIDTH, KEYBOARD_HEIGHT,</span>
+<span class="fc" id="L74">                                KEYBOARD_FILL));</span>
+                                
+        // Add the cash dispenser
+        
+<span class="fc" id="L78">        add(cashDispenser);</span>
+<span class="fc" id="L79">        atmLayout.setConstraints(cashDispenser,</span>
+<span class="fc" id="L80">                GUI.makeConstraints(DISPENSER_ROW, DISPENSER_COL,</span>
+<span class="fc" id="L81">                                DISPENSER_WIDTH, DISPENSER_HEIGHT,</span>
+<span class="fc" id="L82">                                DISPENSER_FILL));                                </span>
+                                
+        // Put envelope acceptor in a Panel with GridLayout to ensure it gets space
+        // even when invisible, then add it
+        
+<span class="fc" id="L87">        Panel envelopeAcceptorPanel = new Panel();</span>
+<span class="fc" id="L88">        envelopeAcceptorPanel.setLayout(new GridLayout(1,1));</span>
+<span class="fc" id="L89">        envelopeAcceptorPanel.add(envelopeAcceptor);</span>
+<span class="fc" id="L90">        add(envelopeAcceptorPanel);</span>
+<span class="fc" id="L91">        atmLayout.setConstraints(envelopeAcceptorPanel,</span>
+<span class="fc" id="L92">                GUI.makeConstraints(ENVELOPE_ROW, ENVELOPE_COL, </span>
+<span class="fc" id="L93">                                ENVELOPE_WIDTH, ENVELOPE_HEIGHT,</span>
+<span class="fc" id="L94">                                ENVELOPE_FILL));</span>
+<span class="fc" id="L95">        envelopeAcceptor.setVisible(false);</span>
+        
+        // Add the receipt printer
+        
+<span class="fc" id="L99">        add(receiptPrinter);</span>
+<span class="fc" id="L100">        atmLayout.setConstraints(receiptPrinter,</span>
+<span class="fc" id="L101">                GUI.makeConstraints(PRINTER_ROW, PRINTER_COL,</span>
+<span class="fc" id="L102">                                PRINTER_WIDTH, PRINTER_HEIGHT,</span>
+<span class="fc" id="L103">                                PRINTER_FILL));</span>
+                                
+        // Add a button for showing the log
+        
+<span class="fc" id="L107">        Panel showLogButtonPanel = new Panel();</span>
+<span class="fc" id="L108">        showLogButtonPanel.setBackground(operatorPanel.getBackground());</span>
+<span class="fc" id="L109">        Button showLogButton = new Button(&quot;Show Log&quot;);</span>
+<span class="fc" id="L110">        showLogButton.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e)
+            {
+<span class="nc" id="L113">                gui.showCard(&quot;LOG&quot;);</span>
+<span class="nc" id="L114">            }</span>
+        });
+<span class="fc" id="L116">        showLogButtonPanel.add(showLogButton);</span>
+<span class="fc" id="L117">        add(showLogButtonPanel);</span>
+<span class="fc" id="L118">        atmLayout.setConstraints(showLogButtonPanel,</span>
+<span class="fc" id="L119">                GUI.makeConstraints(SHOW_LOG_BUTTON_ROW, SHOW_LOG_BUTTON_COL,</span>
+<span class="fc" id="L120">                                SHOW_LOG_BUTTON_WIDTH, SHOW_LOG_BUTTON_HEIGHT,</span>
+<span class="fc" id="L121">                                SHOW_LOG_BUTTON_FILL));</span>
+<span class="fc" id="L122">    }</span>
+
+    // The GUI representing the ATM is laid out using a GridBagLayout.  
+    // The following constants determine the positioning of the various
+    // components within the grid bag.  Each component has a row and column
+    // coordinate for its upper left hand corner, plus a height in rows and
+    // a width in columns.  The following is the arrangement:
+    
+    // ----------------------------------------------------------------------
+    // |       DISPLAY                                     |     RECEIPT    |
+    // |                                                   |     PRINTER    |
+    // |                                                   |                |
+    // |                                                   |                |
+    // |                                                   |                |
+    // |                                                   |                |
+    // |                                                   |                |
+    // |                                                   |                |
+    // |--------------------------------------------------------------------|
+    // |  ENVELOPE       |    CASH        |    CARD        |   KEYBOARD     |
+    // |  ACCEPTOR       |    DISPENSER   |    READER      |                |
+    // |                 |                |                |                |
+    // |                 |                |                |                |
+    // |                 |                |                |                |
+    // |                 |                |                |                |
+    // ----------------------------------------------------------------------
+    // | SHOW LOG BUTTON | OPERATOR PANEL                                   |
+    // |                 |                                                  |
+    // ----------------------------------------------------------------------
+    
+    // The following constants govern the size of various components, and
+    // need to be used by the component
+    
+    public static final int DISPLAYABLE_LINES =     9;
+    public static final String BLANK_DISPLAY_LINE = 
+        &quot;                                             &quot;;
+    public static final int PRINTABLE_LINES =       9;
+    public static final int PRINTABLE_CHARS =      30;
+    
+    // The following are used only for doing the layout
+
+    private static final int DISPLAY_ROW =          0;
+    private static final int DISPLAY_COL =          0;
+    private static final int DISPLAY_WIDTH =        3;
+    private static final int DISPLAY_HEIGHT =       1;
+    private static final int DISPLAY_FILL =         GridBagConstraints.BOTH;
+    
+    private static final int PRINTER_ROW =          0;
+    private static final int PRINTER_COL =          DISPLAY_COL + DISPLAY_WIDTH;
+    private static final int PRINTER_WIDTH =        1;
+    private static final int PRINTER_HEIGHT =       1;
+    private static final int PRINTER_FILL =         GridBagConstraints.NONE;
+    
+    private static final int ENVELOPE_ROW =         DISPLAY_ROW + DISPLAY_HEIGHT;
+    private static final int ENVELOPE_COL =         0;
+    private static final int ENVELOPE_WIDTH =       1;
+    private static final int ENVELOPE_HEIGHT =      1;
+    private static final int ENVELOPE_FILL =        GridBagConstraints.NONE;
+        
+    private static final int DISPENSER_ROW =        ENVELOPE_ROW;
+    private static final int DISPENSER_COL =        ENVELOPE_COL + ENVELOPE_WIDTH;
+    private static final int DISPENSER_WIDTH =      1;
+    private static final int DISPENSER_HEIGHT =     1;
+    private static final int DISPENSER_FILL =       GridBagConstraints.NONE;
+
+    private static final int READER_ROW =           ENVELOPE_ROW;
+    private static final int READER_COL =           DISPENSER_COL + DISPENSER_WIDTH;
+    private static final int READER_WIDTH =         1;
+    private static final int READER_HEIGHT =        1;
+    private static final int READER_FILL =          GridBagConstraints.NONE;
+    
+    private static final int KEYBOARD_ROW =         ENVELOPE_ROW;
+    private static final int KEYBOARD_COL =         READER_COL + READER_WIDTH;
+    private static final int KEYBOARD_WIDTH =       1;
+    private static final int KEYBOARD_HEIGHT =      1;
+    private static final int KEYBOARD_FILL =        GridBagConstraints.NONE;
+    
+    private static final int SHOW_LOG_BUTTON_ROW =  ENVELOPE_ROW + ENVELOPE_HEIGHT;
+    private static final int SHOW_LOG_BUTTON_COL =  0;
+    private static final int SHOW_LOG_BUTTON_WIDTH= 1;
+    private static final int SHOW_LOG_BUTTON_HEIGHT=1;
+    private static final int SHOW_LOG_BUTTON_FILL = GridBagConstraints.BOTH;
+    
+    private static final int OPERATOR_ROW =         SHOW_LOG_BUTTON_ROW;
+    private static final int OPERATOR_COL =         SHOW_LOG_BUTTON_COL + SHOW_LOG_BUTTON_WIDTH;
+    private static final int OPERATOR_WIDTH =       3;
+    private static final int OPERATOR_HEIGHT =      1;
+    private static final int OPERATOR_FILL =        GridBagConstraints.BOTH;
+    
+    private static final int TOTAL_ROWS = 3;
+    private static final int TOTAL_COLS = 3;
+}
+                                            
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>ATMMain (Nov 1, 2015 8:01:40 PM)</div></body></html>

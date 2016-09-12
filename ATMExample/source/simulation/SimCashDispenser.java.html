@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SimCashDispenser.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">ATMMain (Nov 1, 2015 8:01:40 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">simulation</a> &gt; <span class="el_source">SimCashDispenser.java</span></div><h1>SimCashDispenser.java</h1><pre class="source lang-java linenums">/*
+ * ATM Example system - file SimCashDispenser.java
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package simulation;
+
+import banking.Money;
+
+import java.awt.*;
+import java.awt.event.*;
+
+/** Simulate the cash dispenser
+ */
+class SimCashDispenser extends Panel
+{
+    /** Constructor
+     */
+<span class="fc" id="L21">    SimCashDispenser()</span>
+    {
+<span class="fc" id="L23">        setLayout(new GridLayout(1,1));</span>
+<span class="fc" id="L24">        label = new Label(&quot;$XXX.XX&quot;, Label.CENTER);</span>
+<span class="fc" id="L25">        label.setFont(new Font(&quot;SansSerif&quot;, Font.PLAIN, 24));</span>
+<span class="fc" id="L26">        label.setForeground(new Color(0, 64, 0));</span>
+<span class="fc" id="L27">        add(label);</span>
+<span class="fc" id="L28">        label.setVisible(false);</span>
+<span class="fc" id="L29">    }</span>
+    
+    /** Animate dispensing cash to a customer
+     *
+     *  @param amount the amount of cash to dispense
+     *
+     *  Precondition: amount is &lt;= cash on hand
+     */
+    public void animateDispensingCash(Money amount)
+    {
+<span class="fc" id="L39">        label.setText(amount.toString());</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        for (int size = 3; size &lt;= 24; size += 1)</span>
+        { 
+<span class="fc" id="L42">            label.setFont(new Font(&quot;SansSerif&quot;, Font.PLAIN, size));</span>
+<span class="fc" id="L43">            label.setVisible(true);</span>
+            try
+            { 
+<span class="fc" id="L46">                Thread.sleep(250);</span>
+<span class="fc" id="L47">            }</span>
+<span class="nc" id="L48">            catch (InterruptedException e)</span>
+            { }
+<span class="fc" id="L50">            label.setVisible(false);</span>
+        }
+<span class="fc" id="L52">    }</span>
+    
+    /** Label that shows the amount of money being dispensed - starts out
+     *  small and grows to simulate cash coming out of the machine
+     */
+    private Label label;
+}                               
+    
+    
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>ATMMain (Nov 1, 2015 8:01:40 PM)</div></body></html>

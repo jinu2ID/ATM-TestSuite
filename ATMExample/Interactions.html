@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"DTD/xhtml11-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+<style type="text/css"> P.statechart { text-align: center; } </style>
+
+<title>Interaction Diagrams for Example ATM System</title>
+
+</head>
+
+<body>
+
+<h2>Interaction Diagrams for Example ATM System</h2>
+
+<p>
+UML defines two types of Interaction Diagram: the Sequence Diagram and the
+Collaboration Diagram.  In order to illustrate both types, the major
+use cases are documented using Sequence Diagrams, and the specific subcases
+of transaction (withdrawal, etc.) and the Invalid PIN Extension are documented
+using Collaboration Diagrams.  (The major reason for using two different
+types of diagram is pedagogical - to illustrate each type.)
+</p>
+
+
+<ul>
+<li><a href="#Startup">Sequence Diagram for System Startup Use Case</a></li>
+<li><a href="#Shutdown">Sequence Diagram for System Shutdown Use Case</a></li>
+<li><a href="#Session">Sequence Diagram for Session Use Case</a></li>
+<li><a href="#Transaction">Sequence Diagram for Transaction Use Case</a> (Since
+transaction is abstract, this gives the overall flow of a transaction.  See the
+interactions below for specific concrete cases.)</li>
+<li><a href="#Withdrawal">Collaboration realizing specifics of Withdrawal Transaction Use Case</a></li>
+<li><a href="#Deposit">Collaboration realizing specifics of Deposit Transaction Use Case</a></li>
+<li><a href="#Transfer">Collaboration realizing specifics of Transfer Transaction Use Case</a></li>
+<li><a href="#Inquiry">Collaboration realizing specifics of Inquiry Transaction Use Case</a></li>
+<li><a href="#InvalidPIN">Collaboration realizing Invalid PIN Extension</a></li>
+</ul>
+
+
+<div>
+
+<a name="Startup"></a>
+<hr />
+<p class="diagram">
+<img src="StartupInteraction.gif" alt="[ Interaction for system startup ]"/>
+</p>
+
+<a name="Shutdown"></a>
+<hr />
+<p class="diagram">
+<img src="ShutdownInteraction.gif" alt="[ Interaction for system shutdown ]"/>
+</p>
+
+<a name="Session"></a>
+<hr />
+<p class="diagram">
+<img src="SessionInteraction.gif" alt="[ Interaction for a session ]"/>
+</p>
+
+<a name="Transaction"></a>
+<hr />
+<p class="diagram">
+<img src="TransactionInteraction.gif" alt="[ Interaction for a transaction ]"/>
+</p>
+
+<a name="Withdrawal"></a>
+<hr />
+<p class="diagram">
+<img src="WithdrawalInteraction.gif" alt="[ Interaction for specifics of a withdrawal transaction ]"/>
+</p>
+
+<a name="Deposit"></a>
+<hr />
+<p class="diagram">
+<img src="DepositInteraction.gif" alt="[ Interaction for specifics of a deposit transaction ]"/>
+</p>
+
+<a name="Transfer"></a>
+<hr />
+<p class="diagram">
+<img src="TransferInteraction.gif" alt="[ Interaction for specifics of a transfer transaction ]" />
+</p>
+
+<a name="Inquiry"></a>
+<hr />
+<p class="diagram">
+<img src="InquiryInteraction.gif" alt="[ Interaction for specifics of an inquiry transaction ]"/>
+</p>
+
+<a name="InvalidPIN"></a>
+<hr />
+<p class="diagram">
+<img src="InvalidPINInteraction.gif" alt="[ Interaction for invalid PIN extension ]"/>
+</p>
+
+<hr />
+
+</div>
+
+
+<p class="navigation">
+<a href="Statecharts.html"><img src="Back.gif" alt="Link to previous page" /></a>
+<a href="DetailedDesign.html"><img src="Next.gif" alt="Link to next page" /></a>
+</p>
+
+<p>
+<a href="Links.html">Page of links for non frames-enabled browsers.</a>
+</p>
+
+
+<p>
+<a href="http://validator.w3.org/check/referer">
+<img class="XHTML_image"
+	src="XHTML_validation_image.gif"
+	alt="Valid XHTML 1.0!" height="31" width="88" />
+</a>
+</p>
+
+<h6>Copyright &copy; 2000, 2002 - Russell C. Bjork.  Permission for non-commercial 
+reproduction for educational use is hereby granted; all other rights are reserved.</h6>
+
+</body>
+</html>

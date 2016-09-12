@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CardPanel.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">ATMMain (Nov 1, 2015 8:01:40 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">simulation</a> &gt; <span class="el_source">CardPanel.java</span></div><h1>CardPanel.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">/*</span>
+ * ATM Example system - file BillsPanel.java    
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package simulation;
+
+import java.awt.*;
+import java.awt.event.*;
+
+/** The GUI panel that simulates the reading of the ATM card's magnetic stripe
+ *  by asking the user to enter the number
+ */
+class CardPanel extends Panel
+{
+    /** Constructor
+     */
+<span class="fc" id="L20">    CardPanel()</span>
+    {
+<span class="fc" id="L22">        setLayout(new GridLayout(0, 1, 0, 0));</span>
+<span class="fc" id="L23">        setFont(new Font(&quot;Monospaced&quot;, Font.PLAIN, 14));</span>
+        
+<span class="fc" id="L25">        add(new Label(&quot;A real ATM would have a magnetic&quot;,</span>
+<span class="fc" id="L26">                      Label.CENTER));</span>
+<span class="fc" id="L27">        add(new Label(&quot;stripe reader to read the card&quot;,</span>
+<span class="fc" id="L28">                      Label.CENTER));</span>
+<span class="fc" id="L29">        add(new Label(&quot;For purposes of the simulation,&quot;,</span>
+<span class="fc" id="L30">                      Label.CENTER));</span>
+<span class="fc" id="L31">        add(new Label(&quot;please enter the card number manually.&quot;,</span>
+<span class="fc" id="L32">                      Label.CENTER));</span>
+<span class="fc" id="L33">        add(new Label(&quot;Then press RETURN&quot;,</span>
+<span class="fc" id="L34">                      Label.CENTER));</span>
+<span class="fc" id="L35">        add(new Label(&quot;(An invalid integer or an integer not&quot;,</span>
+<span class="fc" id="L36">                      Label.CENTER));</span>
+<span class="fc" id="L37">        add(new Label(&quot;greater than zero will be treated as&quot;,</span>
+<span class="fc" id="L38">                      Label.CENTER));</span>
+<span class="fc" id="L39">        add(new Label(&quot;an unreadable card)&quot;,</span>
+<span class="fc" id="L40">                      Label.CENTER));</span>
+        
+<span class="fc" id="L42">        cardNumberField = new TextField(30);</span>
+<span class="fc" id="L43">        cardNumberField.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e)
+            {
+<span class="pc" id="L46">                synchronized(CardPanel.this)</span>
+                {
+<span class="fc" id="L48">                    CardPanel.this.notify();</span>
+                }
+<span class="fc" id="L50">            }</span>
+        });
+<span class="fc" id="L52">        Panel cardNumberPanel = new Panel();</span>
+<span class="fc" id="L53">        cardNumberPanel.add(cardNumberField);</span>
+<span class="fc" id="L54">        add(cardNumberPanel);</span>
+<span class="fc" id="L55">    }</span>
+    
+    /** Ask the customer to enter the number on the card
+     *
+     *  @return the number entered
+     */
+    synchronized int readCardNumber()
+    {
+<span class="fc" id="L63">        cardNumberField.setText(&quot;&quot;);</span>
+        
+<span class="fc" id="L65">        cardNumberField.requestFocus();</span>
+        try
+        {
+<span class="fc" id="L68">            wait();</span>
+<span class="fc" id="L69">        }</span>
+<span class="nc" id="L70">        catch(InterruptedException e)</span>
+        { }
+                
+        int cardNumber;
+        try
+        {
+<span class="fc" id="L76">            cardNumber = Integer.parseInt(cardNumberField.getText());</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">            if (cardNumber &lt;= 0)</span>
+<span class="fc" id="L78">                cardNumber = -1;</span>
+<span class="fc" id="L79">        }</span>
+<span class="nc" id="L80">        catch(NumberFormatException e)</span>
+        {
+<span class="nc" id="L82">            cardNumber = -1;</span>
+        }
+        
+<span class="fc" id="L85">        return cardNumber;</span>
+    }
+
+    /** The field into which the card number is to be entered
+     */
+    private TextField cardNumberField;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>ATMMain (Nov 1, 2015 8:01:40 PM)</div></body></html>

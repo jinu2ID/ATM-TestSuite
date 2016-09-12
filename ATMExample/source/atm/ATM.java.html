@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ATM.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">ATMMain (Nov 1, 2015 8:01:40 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">atm</a> &gt; <span class="el_source">ATM.java</span></div><h1>ATM.java</h1><pre class="source lang-java linenums">/*
+ * ATM Example system - file ATM.java
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package atm;
+import java.net.InetAddress;
+import atm.physical.*;
+import banking.Card;
+import banking.Money;
+
+/** Representation for the ATM itself.  An object of this class &quot;owns&quot;
+ *  the objects representing the component parts of the ATM, and the
+ *  communications network, and is responsible for creating customer 
+ *  sessions which then use it to gain access to the component parts.
+ *  This is an active class - when an instance of the class is created,
+ *  a thread is executed that actually runs the system.
+ */
+ 
+public class ATM implements Runnable
+{
+    /** Constructor
+     *
+     *  @param id the unique ID for this ATM
+     *  @param place the physical location of this ATM
+     *  @param bankName the name of the bank owning this ATM
+     *  @param bankAddress the Internet address of the bank
+     */
+<span class="fc" id="L31">    public ATM(int id, String place, String bankName, InetAddress bankAddress)</span>
+    {
+<span class="fc" id="L33">        this.id = id;</span>
+<span class="fc" id="L34">        this.place = place;</span>
+<span class="fc" id="L35">        this.bankName = bankName;</span>
+<span class="fc" id="L36">        this.bankAddress = bankAddress;</span>
+        
+        // Create objects corresponding to component parts
+
+<span class="fc" id="L40">        log = new Log();</span>
+<span class="fc" id="L41">        cardReader = new CardReader(this);</span>
+<span class="fc" id="L42">        cashDispenser = new CashDispenser(log);</span>
+<span class="fc" id="L43">        customerConsole = new CustomerConsole();</span>
+<span class="fc" id="L44">        envelopeAcceptor = new EnvelopeAcceptor(log);</span>
+<span class="fc" id="L45">        networkToBank = new NetworkToBank(log, bankAddress);</span>
+<span class="fc" id="L46">        operatorPanel = new OperatorPanel(this);</span>
+<span class="fc" id="L47">        receiptPrinter = new ReceiptPrinter();  </span>
+    
+        // Set up initial conditions when ATM first created
+        
+<span class="fc" id="L51">        state = OFF_STATE;</span>
+<span class="fc" id="L52">        switchOn = false;</span>
+<span class="fc" id="L53">        cardInserted = false;       </span>
+<span class="fc" id="L54">    }</span>
+    
+    // Methods corresponding to major responsibilities of the ATM
+    
+    /** The main program/applet will create a Thread that executes
+     *  this code.
+     */
+    public void run()
+    {
+<span class="fc" id="L63">        Session currentSession = null;</span>
+        
+<span class="fc" id="L65">        while (true)</span>
+        {
+<span class="pc bpc" id="L67" title="1 of 4 branches missed.">            switch(state)</span>
+            {
+                case OFF_STATE:
+                
+<span class="fc" id="L71">                    customerConsole.display(&quot;Not currently available&quot;);</span>
+
+<span class="pc" id="L73">                    synchronized(this)</span>
+                    {
+                        try
+                        { 
+<span class="fc" id="L77">                            wait();</span>
+<span class="fc" id="L78">                        }</span>
+<span class="nc" id="L79">                        catch(InterruptedException e)</span>
+                        { }
+                    }
+                    
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">                    if (switchOn)</span>
+                    {
+<span class="fc" id="L85">                        performStartup();</span>
+<span class="fc" id="L86">                        state = IDLE_STATE;</span>
+                    }
+                                            
+<span class="fc" id="L89">                    break;</span>
+                    
+                case IDLE_STATE:
+                
+<span class="fc" id="L93">                    customerConsole.display(&quot;Please insert your card&quot;);</span>
+<span class="fc" id="L94">                    cardInserted = false;</span>
+                                        
+<span class="pc" id="L96">                    synchronized(this)</span>
+                    {
+                        try
+                        { 
+<span class="fc" id="L100">                            wait();</span>
+<span class="fc" id="L101">                        }</span>
+<span class="nc" id="L102">                        catch(InterruptedException e)</span>
+                        { }
+                    }       
+                    
+<span class="fc bfc" id="L106" title="All 2 branches covered.">                    if (cardInserted)</span>
+                    {
+<span class="fc" id="L108">                        currentSession = new Session(this);</span>
+<span class="fc" id="L109">                        state = SERVING_CUSTOMER_STATE;</span>
+<span class="fc" id="L110">                    }</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">                    else if (! switchOn)</span>
+                    {
+<span class="fc" id="L113">                        performShutdown();</span>
+<span class="fc" id="L114">                        state = OFF_STATE;</span>
+                    }
+                    
+<span class="fc" id="L117">                    break;</span>
+            
+                case SERVING_CUSTOMER_STATE:
+                                    
+                    // The following will not return until the session has
+                    // completed
+                    
+<span class="fc" id="L124">                    currentSession.performSession();</span>
+                    
+<span class="fc" id="L126">                    state = IDLE_STATE;</span>
+                    
+                    break;
+                
+            }
+        }
+    }
+                
+    /** Inform the ATM that the switch on the operator console has been moved
+     *  to the &quot;on&quot; position.
+     */
+    public synchronized void switchOn()
+    {
+<span class="fc" id="L139">        switchOn = true;</span>
+<span class="fc" id="L140">        notify();</span>
+<span class="fc" id="L141">    }</span>
+    
+    /** Inform the ATM that the switch on the operator console has been moved
+     *  to the &quot;off&quot; position.
+     */
+    public synchronized void switchOff()
+    {
+<span class="fc" id="L148">        switchOn = false;</span>
+<span class="fc" id="L149">        notify();</span>
+<span class="fc" id="L150">    }</span>
+    
+    /** Inform the ATM that a card has been inserted into the card reader.
+     */
+    public synchronized void cardInserted()
+    {
+<span class="fc" id="L156">        cardInserted = true;</span>
+<span class="fc" id="L157">        notify();</span>
+<span class="fc" id="L158">    }</span>
+    
+    // The following methods allow objects of other classes to access component
+    // parts of the ATM
+    
+    /** Accessor for id
+     *
+     *  @return unique id of this ATM
+     */
+    public int getID()
+    {
+<span class="fc" id="L169">        return id;</span>
+    }
+    
+    /** Accessor for place
+     *
+     *  @return physical location of this ATM
+     */
+    public String getPlace()
+    {
+<span class="fc" id="L178">        return place;</span>
+    }
+    
+    /** Accessor for bank name
+     *
+     *  @return name of bank owning this ATM
+     */
+    public String getBankName()
+    {
+<span class="fc" id="L187">        return bankName;</span>
+    }
+    
+    /** Accessor for card reader
+     *
+     *  @return card reader component of this ATM
+     */
+    public CardReader getCardReader()
+    {
+<span class="fc" id="L196">        return cardReader;</span>
+    }
+    
+    /** Accessor for cash dispenser
+     *
+     *  @return cash dispenser component of this ATM
+     */
+    public CashDispenser getCashDispenser()
+    {
+<span class="fc" id="L205">        return cashDispenser;</span>
+    }
+    
+    /** Accessor for customer console 
+     *
+     *  @return customer console component of this ATM
+     */
+    public CustomerConsole getCustomerConsole()
+    {
+<span class="fc" id="L214">        return customerConsole;</span>
+    }
+    
+    /** Accessor for envelope acceptor
+     *
+     *  @return envelope acceptor component of this ATM
+     */
+    public EnvelopeAcceptor getEnvelopeAcceptor()
+    {
+<span class="fc" id="L223">        return envelopeAcceptor;</span>
+    }
+    
+    /** Accessor for log
+     *
+     *  @return log component of this ATM
+     */
+    public Log getLog()
+    {
+<span class="nc" id="L232">        return log;</span>
+    }
+    
+    /** Accessor for network to bank
+     *
+     *  @return network connection to bank of this ATM
+     */
+    public NetworkToBank getNetworkToBank()
+    {
+<span class="fc" id="L241">        return networkToBank;</span>
+    }
+    
+    /** Accessor for operator panel
+     *
+     *  @return operator panel component of this ATM
+     */
+    public OperatorPanel getOperatorPanel()
+    {
+<span class="nc" id="L250">        return operatorPanel;</span>
+    }
+    
+    /** Accessor for receipt printer
+     *
+     *  @return receipt printer component of this ATM
+     */
+    public ReceiptPrinter getReceiptPrinter()
+    {
+<span class="fc" id="L259">        return receiptPrinter;</span>
+    }
+
+    // Private methods
+
+    /** Perform the System Startup use case when switch is turned on
+     */
+    private void performStartup()
+    {
+<span class="fc" id="L268">        Money initialCash = operatorPanel.getInitialCash();</span>
+<span class="fc" id="L269">        cashDispenser.setInitialCash(initialCash);</span>
+<span class="fc" id="L270">        networkToBank.openConnection();     </span>
+<span class="fc" id="L271">    }</span>
+    
+    /** Perform the System Shutdown use case when switch is turned off
+     */
+    private void performShutdown()
+    {
+<span class="fc" id="L277">        networkToBank.closeConnection();</span>
+<span class="fc" id="L278">    }</span>
+    
+    
+    // Instance variables recording information about the ATM
+    
+    
+    /** Unique ID for this ATM
+     */
+    private int id;
+    
+    /** Physical location of this ATM
+     */
+    private String place;
+    
+    /** Name of the bank owning this ATM
+     */
+    private String bankName;
+    
+    /** Internet address of the bank
+     */
+    private InetAddress bankAddress;
+    
+    
+    // Instance variables referring to the omponent parts of the ATM
+    
+    /** The ATM's card reader
+     */
+    private CardReader cardReader;
+    
+    /** The ATM's cash dispenser
+     */
+    private CashDispenser cashDispenser;
+    
+    /** The ATM's customer console
+     */
+    private CustomerConsole customerConsole;
+    
+    /** The ATM's envelope acceptor
+     */
+    private EnvelopeAcceptor envelopeAcceptor;
+    
+    /** The ATM's log
+     */
+    private Log log;
+    
+    /** The ATM's network connection to the bank
+     */
+    private NetworkToBank networkToBank;
+    
+    /** The ATM's operator panel
+     */
+    private OperatorPanel operatorPanel;
+    
+    /** The ATM's receipt printer
+     */
+    private ReceiptPrinter receiptPrinter;
+    
+
+    // State information
+
+    
+    /** The current state of the ATM - one of the possible values listed below
+     */
+    private int state;
+    
+    /** Becomes true when the operator panel informs the ATM that the switch has
+     *  been turned on - becomes false when the operator panel informs the ATM
+     *  that the switch has been turned off.
+     */
+    private boolean switchOn;
+    
+    /** Becomes true when the card reader informs the ATM that a card has been
+     *  inserted - the ATM will make this false when it has tried to read the
+     *  card
+     */
+    private boolean cardInserted; 
+
+
+    // Possible values for state
+    
+    
+    /** The ATM is off.  The switch must be turned on before it can operate
+     */
+    private static final int OFF_STATE = 0;
+    
+    /** The ATM is on, but idle.  It can service a customer, or it can be shut down
+     */
+    private static final int IDLE_STATE = 1;
+    
+    /** The ATM is servicing a customer.
+     */
+    private static final int SERVING_CUSTOMER_STATE = 2;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>ATMMain (Nov 1, 2015 8:01:40 PM)</div></body></html>

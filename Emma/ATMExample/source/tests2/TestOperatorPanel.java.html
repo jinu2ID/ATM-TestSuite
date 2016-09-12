@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestOperatorPanel.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">tests2</a> &gt; <span class="el_source">TestOperatorPanel.java</span></div><h1>TestOperatorPanel.java</h1><pre class="source lang-java linenums">package tests2;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import atm.ATM;
+import atm.physical.OperatorPanel;
+import banking.Money;
+import simulation.Simulation;
+
+<span class="fc" id="L12">public class TestOperatorPanel {</span>
+
+	@Test
+	public void testConstructor(){
+<span class="fc" id="L16">		ATM newATM = new ATM(1,&quot;testPlace&quot;,&quot;testBank&quot;,null);</span>
+<span class="fc" id="L17">		OperatorPanel panel = new OperatorPanel(newATM);</span>
+		
+<span class="fc" id="L19">		assertNotNull(panel);</span>
+<span class="fc" id="L20">	}</span>
+	
+	@Test
+	public void testGetInitialCash(){
+<span class="fc" id="L24">		ATM newATM = new ATM(1,&quot;testPlace&quot;,&quot;testBank&quot;,null);</span>
+<span class="fc" id="L25">		Simulation newSimulation = new Simulation(newATM);</span>
+<span class="fc" id="L26">		OperatorPanel panel = newATM.getOperatorPanel();</span>
+<span class="fc" id="L27">		newATM.setBills(&quot;5&quot;);</span>
+		
+<span class="fc" id="L29">		Money testMoney = panel.getInitialCash();</span>
+<span class="fc" id="L30">		assertEquals(&quot;$100.00&quot;, testMoney.toString());</span>
+<span class="fc" id="L31">	}</span>
+	
+	
+	@Test
+	public void testSetBills(){
+<span class="fc" id="L36">		ATM newATM = new ATM(1,&quot;testPlace&quot;,&quot;testBank&quot;,null);</span>
+<span class="fc" id="L37">		Simulation newSimulation = new Simulation(newATM);</span>
+<span class="fc" id="L38">		OperatorPanel panel = newATM.getOperatorPanel();</span>
+<span class="fc" id="L39">		panel.setBills(&quot;5&quot;);</span>
+		
+<span class="fc" id="L41">		assertEquals(&quot;5&quot;, Simulation.getInstance().getBillsPanelBills());</span>
+<span class="fc" id="L42">	}</span>
+	
+	@Test
+	public void testGetNFECount(){
+<span class="fc" id="L46">		ATM newATM = new ATM(1,&quot;testPlace&quot;,&quot;testBank&quot;,null);</span>
+<span class="fc" id="L47">		Simulation newSimulation = new Simulation(newATM);</span>
+<span class="fc" id="L48">		OperatorPanel panel = newATM.getOperatorPanel();</span>
+		
+<span class="fc" id="L50">		assertEquals(0, panel.getNFECount());</span>
+<span class="fc" id="L51">	}</span>
+	
+	@Test
+	public void testGetCard(){
+<span class="fc" id="L55">		ATM newATM = new ATM(1,&quot;testPlace&quot;,&quot;testBank&quot;,null);</span>
+<span class="fc" id="L56">		Simulation newSimulation = new Simulation(newATM);</span>
+<span class="fc" id="L57">		OperatorPanel panel = newATM.getOperatorPanel();</span>
+<span class="fc" id="L58">		assertEquals(&quot;ATM&quot;, panel.getCard());</span>
+<span class="fc" id="L59">	}</span>
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

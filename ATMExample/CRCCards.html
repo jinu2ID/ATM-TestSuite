@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"DTD/xhtml11-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+<title>CRC Cards for ATM Example</title>
+
+</head>
+
+<body>
+<h2>CRC Cards for ATM Example</h2>
+
+<p>
+Using CRC cards to assign responsibiities to various classes for the tasks required by the
+various use cases leads to the creation of the following cards.  
+</p>
+
+<p>
+The following links can be used to go directly to the CRC cards for the various classes:
+</p>
+
+<ul>
+<li><a href="#ATM">Class ATM</a><br />&nbsp;</li>
+
+<li>Boundary/entity objects - component parts of the ATM<br />&nbsp;
+<ul>
+	<li><a href="#CardReader">Class CardReader</a></li>
+	<li><a href="#CashDispenser">Class CashDispenser</a></li>
+	<li><a href="#CustomerConsole">Class CustomerConsole</a></li>
+	<li><a href="#EnvelopeAcceptor">Class EnvelopeAcceptor</a></li>
+	<li><a href="#Log">Class Log</a></li>
+	<li><a href="#NetworkToBank">Class NetworkToBank</a></li>
+	<li><a href="#OperatorPanel">Class OperatorPanel</a></li>
+	<li><a href="#ReceiptPrinter">Class ReceiptPrinter</a></li>
+</ul><br />&nbsp;</li>
+<li>Controller objects corresponding to the various use cases<br />&nbsp;
+<ul>
+	<li><a href="#Session">Class Session</a></li>
+	<li><a href="#Transaction">Class Transaction</a></li>
+	<li><a href="#Withdrawal">Class Withdrawal</a></li>
+	<li><a href="#Deposit">Class Deposit</a></li>
+	<li><a href="#Transfer">Class Transfer</a></li>
+	<li><a href="#Inquiry">Class Inquiry</a></li>
+</ul><br />&nbsp;</li>
+<li>Entity objects found necessary when assigning responsiblities to other objects<br />&nbsp;
+<ul> 
+	<li><a href="#Balances">Class Balances</a></li>
+	<li><a href="#Card">Class Card</a></li>
+	<li><a href="#Message">Class Message</a></li>
+	<li><a href="#Receipt">Class Receipt</a></li>
+	<li><a href="#Status">Class Status</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="crccards">
+
+<a name="ATM" />
+<hr />
+
+<h3>Class ATM</h3>
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr><td>Start up when switch is turned on</td><td><a href="#OperatorPanel">OperatorPanel</a>
+	<br /><a href="#CashDispenser">CashDispenser</a>
+	<br /><a href="#NetworkToBank">NetworkToBank</a></td></tr> 
+<tr><td>Shut down when switch is turned off</td><td><a href="#NetworkToBank">NetworkToBank</a></td></tr> 
+<tr valign="top"><td>Start a new session when card is inserted by customer</td><td><a href="#CustomerConsole">CustomerConsole</a>
+	<br /><a href="#Session">Session</a></td></tr>
+<tr><td>Provide access to component parts for sessions and transactions</td><td></td></tr>
+
+</table>
+
+<p>
+<a href="ClassLinks.html#ATM">[ Links for this class ]</a>
+</p>
+
+
+<a name="CardReader" />
+<hr />
+<h3>Class CardReader</h3>
+
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr><td>Tell ATM when card is inserted</td><td><a href="#ATM">ATM</a></td></tr> 
+<tr><td>Read information from card</td><td><a href="#Card">Card</a></td></tr> 
+<tr><td>Eject card</td><td></td></tr> 
+<tr><td>Retain card</td><td></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#CardReader">[ Links for this class ]</a>
+</p>
+
+
+<a name="CashDispenser" />
+<hr />
+<h3>Class CashDispenser</h3>
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr><td>Keep track of cash on hand, starting with initial amount</td><td></td></tr>
+<tr><td>Report whether enough cash is available</td><td></td></tr> 
+<tr><td>Dispense cash</td><td><a href="#Log">Log</a></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#CashDispenser">[ Links for this class ]</a>
+</p>
+
+
+<a name="CustomerConsole" />
+<hr />
+<h3>Class CustomerConsole</h3>
+
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr><td>Display a message</td><td></td></tr>
+<tr><td>Display a prompt, accept a PIN from keyboard</td><td></td></tr>
+<tr><td>Display a prompt and menu, accept a choice from keyboard</td><td></td></tr>
+<tr><td>Display a prompt, accept a dollar amount from keyboard</td><td></td></tr>
+<tr><td>Respond to cancel key being pressed by customer</td><td></td></tr>
+
+</table>
+
+<p>
+<a href="ClassLinks.html#CustomerConsole">[ Links for this class ]</a>
+</p>
+
+
+
+<a name="EnvelopeAcceptor" />
+<hr />
+<h3>Class EnvelopeAcceptor</h3>
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr><td>Accept envelope from customer; report if timed out or cancelled</td><td><a href="#Log">Log</a></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#EnvelopeAcceptor">[ Links for this class ]</a>
+</p>
+
+
+<a name="Log" />
+<hr />
+
+
+<h3>Class Log</h3>
+
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr><td>Log messages sent to bank</td><td></td></tr> 
+<tr><td>Log responses from bank</td><td></td></tr> 
+<tr><td>Log dispensing of cash</td><td></td></tr>
+<tr><td>Log receiving an envelope</td><td></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#Log">[ Links for this class ]</a>
+</p>
+
+
+<a name="NetworkToBank" />
+<hr />
+<h3>Class NetworkToBank</h3>
+
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr><td>Initiate connection to bank at startup</td><td></td></tr>
+<tr valign="top"><td>Send message to bank and wait for response</td><td><a href="#Message">Message</a> <br />
+	 <a href="#Log">Log</a> <br />
+	 <a href="#Balances">Balances</a> <br />
+	 <a href="#Status">Status</a> </td></tr> 
+<tr><td>Terminate connection to bank at shutdown</td><td></td></tr>
+
+</table>
+
+<p>
+<a href="ClassLinks.html#NetworkToBank">[ Links for this class ]</a>
+</p>
+
+
+<a name="OperatorPanel" />
+<hr />
+<h3>Class OperatorPanel</h3>
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr><td>Inform ATM of changes to state of switch</td><td><a href="#ATM">ATM</a></td></tr> 
+<tr><td>Allow operator to specify amount of initial cash</td><td></td></tr>
+
+</table>
+
+<p>
+<a href="ClassLinks.html#OperatorPanel">[ Links for this class ]</a>
+</p>
+
+
+
+<a name="ReceiptPrinter" />
+<hr />
+<h3>Class ReceiptPrinter</h3>
+
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr><td>Print receipt</td><td><a href="#Receipt">Receipt</a></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#ReceiptPrinter">[ Links for this class ]</a>
+</p>
+
+
+<a name="Session" />
+<hr />
+
+<h3>Class Session</h3>
+
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr valign="top"><td>Perform session use case</td><td><a href="#ATM">ATM</a><br />
+	<a href="#CardReader">CardReader</a> <br />
+	<a href="#Card">Card</a><br />
+	<a href="#CustomerConsole">CustomerConsole</a> <br />
+	<a href="#Transaction">Transaction</a> <br /> 
+	 </td></tr>
+<tr><td>Update PIN value if customer has to re-enter it</td></tr> 
+<tr><td></td><td></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#Session">[ Links for this class ]</a>
+</p>
+
+
+<a name="Transaction" />
+<hr />
+
+
+<h3>Abstract Class Transaction</h3>
+
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr valign="top"><td>Allow customer to choose a type of transaction</td><td><a href="ATM">ATM</a><br />
+	 <a href="#CustomerConsole">CustomerConsole</a> <br />
+	 <a href="#Withdrawal">Withdrawal</a>  <br />
+	 <a href="#Deposit">Deposit</a>  <br />
+	 <a href="#Transfer">Transfer</a>  <br />
+	 <a href="#Inquiry">Inquiry</a> </td></tr>
+<tr valign="top"><td>Perform Transaction Use Case</td><td><a href="#ATM">ATM</a><br />
+	 <a href="#CustomerConsole">CustomerConsole</a> <br />
+	 <a href="#Withdrawal">Withdrawal</a>  <br />
+	 <a href="#Deposit">Deposit</a>  <br />
+	 <a href="#Transfer">Transfer</a>  <br />
+	 <a href="#Inquiry">Inquiry</a> <br />
+	 <a href="#Message">Message</a> <br />
+	 <a href="#NetworkToBank">NetworkToBank</a> <br />
+	 <a href="#Receipt">Receipt</a> <br />
+	 <a href="#ReceiptPrinter">ReceiptPrinter</a></td></tr>
+<tr valign="top"><td>Perform invalid PIN extension</td><td><a href="#CustomerConsole">CustomerConsole</a> <br />
+	 <a href="#Session">Session</a> <br />
+	 <a href="#CardReader">CardReader</a></td></tr> 
+<tr><td></td><td></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#Transaction">[ Links for this class ]</a>
+</p>
+
+
+
+<a name="Withdrawal" />
+<hr />
+<h3>Class Withdrawal</h3>
+
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr valign="top"><td>Perform operations peculiar to withdrawal transaction use case</td><td><a href="#CustomerConsole">CustomerConsole</a> <br />
+	 <a href="#CashDispenser">CashDispenser</a> <br /> <a href="#Message">Message</a> <br />
+	 <a href="#Receipt">Receipt</a> </td></tr> 
+<tr><td></td><td></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#Withdrawal">[ Links for this class ]</a>
+</p>
+
+
+
+<a name="Deposit" />
+<hr />
+
+<h3>Class Deposit</h3>
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr valign="top"><td>Perform operations peculiar to deposit transaction use case</td><td><a href="#CustomerConsole">CustomerConsole</a> <br />
+	 <a href="#Message">Message</a> <br /> <a href="#EnvelopeAcceptor">EnvelopeAcceptor</a> <br />
+	 <a href="#Receipt">Receipt</a> </td></tr> 
+<tr><td></td><td></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#Deposit">[ Links for this class ]</a>
+</p>
+
+
+<a name="Transfer" />
+<hr />
+
+
+<h3>Class Transfer</h3>
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr valign="top"><td>Perform operations peculiar to transfer transaction use case</td><td><a href="#CustomerConsole">CustomerConsole</a> <br />
+	 <a href="#Message">Message</a> <br /> <a href="#Receipt">Receipt</a> </td></tr> 
+<tr><td></td><td></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#Transfer">[ Links for this class ]</a>
+</p>
+
+
+<a name="Inquiry" />
+<hr />
+<h3>Class Inquiry</h3>
+
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr valign="top"><td>Perform operations peculiar to inquiry transaction use case</td><td><a href="#CustomerConsole">CustomerConsole</a> <br />
+	 <a href="#Message">Message</a> <br /> <a href="#Receipt">Receipt</a></td></tr> 
+<tr><td></td><td></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#Inquiry">[ Links for this class ]</a>
+</p>
+
+
+
+
+<a name="Balances" />
+<hr />
+
+<h3>Class Balances</h3>
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr><td>Represent account balance information returned by bank</td><td></td></tr> 
+<tr><td></td><td></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#Balances">[ Links for this class ]</a>
+</p>
+
+
+
+<a name="Card" />
+<hr />
+
+<h3>Class Card</h3>
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr><td>Represent information encoded on customer's ATM card</td><td></td></tr> 
+<tr><td></td><td></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#Card">[ Links for this class ]</a>
+</p>
+
+
+<a name="Message" />
+<hr />
+
+<h3>Class Message</h3>
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr><td>Represent information to be sent over network to bank</td><td></td></tr> 
+<tr><td></td><td></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#Message">[ Links for this class ]</a>
+</p>
+
+
+<a name="Receipt" />
+<hr />
+
+<h3>Class Receipt</h3>
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr><td>Represent information to be printed on a receipt</td><td></td></tr> 
+<tr><td></td><td></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#Receipt">[ Links for this class ]</a>
+</p>
+
+
+<a name="Status" />
+<hr />
+
+<h3>Class Status</h3>
+<table class="crc" width="100%">
+<tr><th width="70%">Responsibilities</th><th width="30%">Collaborators</th></tr>
+ 
+<tr><td>Represent transaction status information returned by bank</td><td></td></tr> 
+<tr><td></td><td></td></tr> 
+
+</table>
+
+<p>
+<a href="ClassLinks.html#Status">[ Links for this class ]</a>
+</p>
+
+
+<hr />
+
+</div>
+
+<p class="navigation">
+<a href="AnalysisClasses.html"><img src="Back.gif" alt="Link to previous page" /></a>
+<a href="ClassDiagram.html"><img src="Next.gif" alt="Link to next page" /></a>
+</p>
+
+<p>
+<a href="Links.html">Page of links for non frames-enabled browsers.</a>
+</p>
+
+<p>
+<a href="http://validator.w3.org/check/referer">
+<img class="XHTML_image"
+	src="XHTML_validation_image.gif"
+	alt="Valid XHTML 1.0!" height="31" width="88" />
+</a>
+</p>
+  
+<h6>Copyright &copy; 2000, 2001, 2002 - Russell C. Bjork.  Permission for non-commercial 
+reproduction for educational use is hereby granted; all other rights are reserved.</h6>
+
+</body>
+</html>

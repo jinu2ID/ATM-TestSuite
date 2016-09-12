@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestEnvelopeAcceptorClass.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">tests2</a> &gt; <span class="el_source">TestEnvelopeAcceptorClass.java</span></div><h1>TestEnvelopeAcceptorClass.java</h1><pre class="source lang-java linenums">package tests2;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import atm.ATM;
+import atm.physical.CustomerConsole;
+import atm.physical.CustomerConsole.Cancelled;
+import atm.physical.EnvelopeAcceptor;
+import atm.physical.Log;
+import simulation.Simulation;
+
+<span class="fc" id="L14">public class TestEnvelopeAcceptorClass {</span>
+
+	@Test
+	public void testConstructor(){
+		
+<span class="fc" id="L19">		Log log = new Log();</span>
+<span class="fc" id="L20">		EnvelopeAcceptor acceptor = new EnvelopeAcceptor(log);</span>
+<span class="fc" id="L21">		assertNotNull(acceptor);</span>
+<span class="fc" id="L22">	}</span>
+	
+	@Test
+	public void testAcceptEnvelope() throws Cancelled{
+		
+<span class="fc" id="L27">		ATM newATM = new ATM(1,&quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L28">		EnvelopeAcceptor acceptor = new EnvelopeAcceptor(newATM.getLog());</span>
+<span class="fc" id="L29">		MockSimulation newSimulation = new MockSimulation(newATM);</span>
+<span class="fc" id="L30">		newSimulation.envelopeInserted = true;</span>
+		
+<span class="fc" id="L32">		acceptor.acceptEnvelope();</span>
+<span class="fc" id="L33">	}</span>
+	
+	@Test(expected = Cancelled.class)
+	public void testAcceptEnvelope_Cancel() throws Cancelled{
+		
+<span class="nc" id="L38">		ATM newATM = new ATM(1,&quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="nc" id="L39">		EnvelopeAcceptor acceptor = new EnvelopeAcceptor(newATM.getLog());</span>
+<span class="nc" id="L40">		MockSimulation newSimulation = new MockSimulation(newATM);</span>
+<span class="nc" id="L41">		newSimulation.envelopeInserted = false;</span>
+		
+<span class="nc" id="L43">		acceptor.acceptEnvelope();</span>
+<span class="nc" id="L44">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

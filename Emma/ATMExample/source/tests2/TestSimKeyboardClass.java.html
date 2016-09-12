@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestSimKeyboardClass.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">tests2</a> &gt; <span class="el_source">TestSimKeyboardClass.java</span></div><h1>TestSimKeyboardClass.java</h1><pre class="source lang-java linenums">package tests2;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import simulation.SimDisplay;
+import simulation.SimEnvelopeAcceptor;
+import simulation.SimKeyboard;
+
+<span class="fc" id="L11">public class TestSimKeyboardClass {</span>
+	
+	@Test
+	public void testConstructor(){
+<span class="fc" id="L15">		SimDisplay display = new SimDisplay();</span>
+<span class="fc" id="L16">		SimEnvelopeAcceptor acceptor = new SimEnvelopeAcceptor();</span>
+<span class="fc" id="L17">		SimKeyboard keyboard = new SimKeyboard(display, acceptor);</span>
+<span class="fc" id="L18">		assertNotNull(keyboard);</span>
+<span class="fc" id="L19">	}</span>
+	
+	@Test
+	public void testReadInput(){
+<span class="fc" id="L23">		SimDisplay display = new SimDisplay();</span>
+<span class="fc" id="L24">		SimEnvelopeAcceptor acceptor = new SimEnvelopeAcceptor();</span>
+<span class="fc" id="L25">		SimKeyboard keyboard = new SimKeyboard(display, acceptor);</span>
+<span class="fc" id="L26">		keyboard.setCurrentInput(&quot;test&quot;);</span>
+<span class="fc" id="L27">		assertEquals(&quot;test&quot;, keyboard.readInput(0,0));</span>
+<span class="fc" id="L28">	}</span>
+	
+	@Test
+	public void testDigitKeyPressed(){
+<span class="fc" id="L32">		SimDisplay display = new SimDisplay();</span>
+<span class="fc" id="L33">		SimEnvelopeAcceptor acceptor = new SimEnvelopeAcceptor();</span>
+<span class="fc" id="L34">		SimKeyboard keyboard = new SimKeyboard(display, acceptor);</span>
+<span class="fc" id="L35">		keyboard.digitKeyPressed(1);</span>
+<span class="fc" id="L36">	}</span>
+	
+	@Test
+	public void testDigitKeyPressed_PIN_Mode(){
+<span class="fc" id="L40">		SimDisplay display = new SimDisplay();</span>
+<span class="fc" id="L41">		SimEnvelopeAcceptor acceptor = new SimEnvelopeAcceptor();</span>
+<span class="fc" id="L42">		SimKeyboard keyboard = new SimKeyboard(display, acceptor);</span>
+<span class="fc" id="L43">		keyboard.setMode(1);</span>
+<span class="fc" id="L44">		keyboard.digitKeyPressed(1234);</span>
+<span class="fc" id="L45">		boolean empty = display.getDisplay().isEmpty();</span>
+<span class="fc" id="L46">		assertFalse(empty);</span>
+<span class="fc" id="L47">	}</span>
+	
+	@Test
+	public void testDigitKeyPressed_Amount_Mode(){
+<span class="fc" id="L51">		SimDisplay display = new SimDisplay();</span>
+<span class="fc" id="L52">		SimEnvelopeAcceptor acceptor = new SimEnvelopeAcceptor();</span>
+<span class="fc" id="L53">		SimKeyboard keyboard = new SimKeyboard(display, acceptor);</span>
+		
+		// length == 1
+<span class="fc" id="L56">		keyboard.setMode(2);</span>
+<span class="fc" id="L57">		keyboard.digitKeyPressed(1);</span>
+<span class="fc" id="L58">		boolean empty = display.getDisplay().isEmpty();</span>
+<span class="fc" id="L59">		assertFalse(empty);</span>
+		
+		// length == 2
+<span class="fc" id="L62">		keyboard.setCurrentInput(&quot;&quot;);</span>
+<span class="fc" id="L63">		keyboard.digitKeyPressed(12);</span>
+<span class="fc" id="L64">		empty = display.getDisplay().isEmpty();</span>
+<span class="fc" id="L65">		assertFalse(empty);</span>
+		
+		// length &gt; 2
+<span class="fc" id="L68">		keyboard.setCurrentInput(&quot;&quot;);</span>
+<span class="fc" id="L69">		keyboard.digitKeyPressed(123);</span>
+<span class="fc" id="L70">		empty = display.getDisplay().isEmpty();</span>
+<span class="fc" id="L71">		assertFalse(empty);</span>
+<span class="fc" id="L72">	}</span>
+	
+	@Test
+	public void testDigitKeyPressed_Menu_Mode(){
+<span class="fc" id="L76">		SimDisplay display = new SimDisplay();</span>
+<span class="fc" id="L77">		SimEnvelopeAcceptor acceptor = new SimEnvelopeAcceptor();</span>
+<span class="fc" id="L78">		SimKeyboard keyboard = new SimKeyboard(display, acceptor);</span>
+		
+<span class="fc" id="L80">		keyboard.setMode(3);</span>
+<span class="fc" id="L81">		keyboard.digitKeyPressed(1);</span>
+<span class="fc" id="L82">		boolean empty = display.getDisplay().isEmpty();</span>
+<span class="fc" id="L83">		assertFalse(empty);</span>
+		
+		// set max value
+<span class="fc" id="L86">		keyboard.setMode(3);</span>
+<span class="fc" id="L87">		keyboard.setMaxValue(2);</span>
+<span class="fc" id="L88">		keyboard.digitKeyPressed(1);</span>
+<span class="fc" id="L89">		empty = display.getDisplay().isEmpty();</span>
+<span class="fc" id="L90">		assertFalse(empty);</span>
+<span class="fc" id="L91">	}</span>
+	
+	@Test
+	public void testCancelKeyPressed(){
+<span class="fc" id="L95">		SimDisplay display = new SimDisplay();</span>
+<span class="fc" id="L96">		SimEnvelopeAcceptor acceptor = new SimEnvelopeAcceptor();</span>
+<span class="fc" id="L97">		SimKeyboard keyboard = new SimKeyboard(display, acceptor);</span>
+<span class="fc" id="L98">		keyboard.cancelKeyPressed();</span>
+<span class="fc" id="L99">		assertTrue(keyboard.getCancelled());</span>
+<span class="fc" id="L100">	}</span>
+	
+	@Test
+	public void testGetCurrentInput(){
+<span class="fc" id="L104">		SimDisplay display = new SimDisplay();</span>
+<span class="fc" id="L105">		SimEnvelopeAcceptor acceptor = new SimEnvelopeAcceptor();</span>
+<span class="fc" id="L106">		SimKeyboard keyboard = new SimKeyboard(display, acceptor);</span>
+<span class="fc" id="L107">		keyboard.setCurrentInput(&quot;test&quot;);</span>
+<span class="fc" id="L108">		assertEquals(&quot;test&quot;, keyboard.getCurrentInput());</span>
+<span class="fc" id="L109">	}</span>
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

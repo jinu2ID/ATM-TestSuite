@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Money.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">banking</a> &gt; <span class="el_source">Money.java</span></div><h1>Money.java</h1><pre class="source lang-java linenums">/*
+ * ATM Example system - file Money.java
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package banking;
+
+/** Representation for money amounts */
+
+public class Money
+{
+    /** Constructor
+     *
+     *  @param dollars whole dollar amount
+     */
+    public Money(int dollars)
+    {
+<span class="fc" id="L20">        this(dollars, 0);</span>
+<span class="fc" id="L21">    }</span>
+    
+    /** Constructor
+     *
+     *  @param dollars dollar part of amount
+     *  @param cents cents part of amount
+     */
+<span class="fc" id="L28">    public Money(int dollars, int cents)</span>
+    {
+<span class="fc" id="L30">        this.cents = 100L * dollars + cents;</span>
+<span class="fc" id="L31">    }</span>
+    
+    /** Copy constructor
+     *
+     *  @param toCopy the Money object to copy
+     */
+<span class="fc" id="L37">    public Money(Money toCopy)</span>
+    {
+<span class="fc" id="L39">        this.cents = toCopy.cents;</span>
+<span class="fc" id="L40">    }</span>
+    
+    /** Create a string representation of this amount
+     *
+     *  @return string representation of this amount
+     */
+    public String toString()
+    {
+<span class="fc" id="L48">        return &quot;$&quot; + cents/100 + </span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            (cents %100 &gt;= 10  ? &quot;.&quot; + cents % 100 : &quot;.0&quot; + cents % 100);</span>
+    }
+    
+    /** Add an amount of money to this
+     *
+     *  @param amountToAdd the amount to add
+     */
+    public void add(Money amountToAdd)
+    {
+<span class="fc" id="L58">        this.cents += amountToAdd.cents;</span>
+<span class="fc" id="L59">    }</span>
+    
+    /** Subtract an amount of money from this
+     *
+     *  @param amountToSubtract the amount to subtract
+     *
+     *  Precondition: amount must be &lt;= this amount
+     */
+    public void subtract(Money amountToSubtract)
+    {
+<span class="fc" id="L69">        this.cents -= amountToSubtract.cents;</span>
+<span class="fc" id="L70">    }</span>
+    
+    /** Compare this to another amount
+     *
+     *  @param compareTo the amount to compare to
+     *  @return true if this amount is &lt;= compareTo amount
+     */
+    public boolean lessEqual(Money compareTo)
+    {
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        return this.cents &lt;= compareTo.cents;</span>
+    }
+    
+    //*************************
+    public long getCents(){
+<span class="fc" id="L84">    	return cents;</span>
+    }
+    
+    /** Instance variable: this amount represented as a number of cents 
+     */
+    private long cents; 
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

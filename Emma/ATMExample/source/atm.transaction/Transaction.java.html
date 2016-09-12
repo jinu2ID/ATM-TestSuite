@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Transaction.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">atm.transaction</a> &gt; <span class="el_source">Transaction.java</span></div><h1>Transaction.java</h1><pre class="source lang-java linenums">/*
+ * ATM Example system - file Transaction.java   
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package atm.transaction;
+import atm.ATM;
+import atm.Session;
+import atm.physical.*;
+import banking.Balances;
+import banking.Card;
+import banking.Message;
+import banking.Status;
+import banking.Receipt;
+
+/** Abstract base class for classes representing the various kinds of
+ *  transaction the ATM can perform
+ */
+public abstract class Transaction
+{
+    /** Constructor
+     *
+     *  @param atm the ATM used to communicate with customer
+     *  @param session the session in which this transaction is being performed
+     *  @param card the customer's card
+     *  @param pin the PIN entered by the customer
+     */
+     
+<span class="fc" id="L31">    protected Transaction(ATM atm, Session session, Card card, int pin)</span>
+    {
+<span class="fc" id="L33">        this.atm = atm;</span>
+<span class="fc" id="L34">        this.session = session;</span>
+<span class="fc" id="L35">        this.card = card;</span>
+<span class="fc" id="L36">        this.pin = pin;</span>
+<span class="fc" id="L37">        this.serialNumber = nextSerialNumber ++;</span>
+<span class="fc" id="L38">        this.balances = new Balances();</span>
+        
+<span class="fc" id="L40">        state = GETTING_SPECIFICS_STATE;</span>
+<span class="fc" id="L41">    }</span>
+         
+    /** Create a transaction of an appropriate type by asking the customer
+     *  what type of transaction is desired and then returning a newly-created
+     *  member of the appropriate subclass
+     *
+     *  @param atm the ATM used to communicate with customer
+     *  @param session the session in which this transaction is being performed
+     *  @param card the customer's card
+     *  @param pin the PIN entered by the customer
+     *  @return a newly created Transaction object of the appropriate type
+     *  @exception CustomerConsole.Cancelled if the customer presses cancel instead
+     *         of choosing a transaction type
+     */
+    public static Transaction makeTransaction(ATM atm, Session session,
+                                              Card card, int pin)
+                                throws CustomerConsole.Cancelled              
+    {
+<span class="nc" id="L59">        int choice = atm.getCustomerConsole().readMenuChoice(</span>
+<span class="nc" id="L60">                &quot;Please choose transaction type&quot;, TRANSACTION_TYPES_MENU);</span>
+                
+<span class="nc bnc" id="L62" title="All 5 branches missed.">        switch(choice)</span>
+        {
+            case 0:
+            
+<span class="nc" id="L66">                return new Withdrawal(atm, session, card, pin);</span>
+                
+            case 1:
+            
+<span class="nc" id="L70">                return new Deposit(atm, session, card, pin);</span>
+                
+            case 2:
+            
+<span class="nc" id="L74">                return new Transfer(atm, session, card, pin);</span>
+                
+            case 3:
+            
+<span class="nc" id="L78">                return new Inquiry(atm, session, card, pin);</span>
+                
+            default:
+            
+<span class="nc" id="L82">                return null;    // To keep compiler happy - should not happen!</span>
+        }
+    }
+    
+    /** Peform a transaction.  This method depends on the three abstract methods
+     *  that follow to perform the operations unique to each type of transaction
+     *  in the appropriate way.
+     *
+     *  @return true if customer indicates a desire to do another transaction;
+     *          false if customer does not desire to do another transaction
+     *  @exception CardRetained if card was retained due to too many invalid PIN's
+     */
+    public boolean performTransaction() throws CardRetained
+    {
+<span class="nc" id="L96">        String doAnotherMessage = &quot;&quot;;</span>
+<span class="nc" id="L97">        Status status = null;</span>
+<span class="nc" id="L98">        Receipt receipt = null;</span>
+        
+<span class="nc" id="L100">        while (true)    // Terminates by return in ASKING_DO_ANOTHER_STATE or exception</span>
+        {
+<span class="nc bnc" id="L102" title="All 7 branches missed.">            switch(state)</span>
+            {
+                case GETTING_SPECIFICS_STATE:
+                
+                    try
+                    {           
+<span class="nc" id="L108">                        message = getSpecificsFromCustomer();</span>
+<span class="nc" id="L109">                        atm.getCustomerConsole().display(&quot;&quot;);</span>
+<span class="nc" id="L110">                        state = SENDING_TO_BANK_STATE;</span>
+<span class="nc" id="L111">                        atm.updateTransactionState(state);</span>
+<span class="nc" id="L112">                    }</span>
+<span class="nc" id="L113">                    catch(CustomerConsole.Cancelled e)</span>
+                    {
+<span class="nc" id="L115">                        doAnotherMessage = &quot;Last transaction was cancelled&quot;;</span>
+<span class="nc" id="L116">                        state = ASKING_DO_ANOTHER_STATE;</span>
+<span class="nc" id="L117">                        atm.updateTransactionState(state);</span>
+                    }
+                    
+<span class="nc" id="L120">                    break;</span>
+                    
+                case SENDING_TO_BANK_STATE:
+                                
+<span class="nc" id="L124">                    status = atm.getNetworkToBank().sendMessage(message, balances);</span>
+                
+<span class="nc bnc" id="L126" title="All 2 branches missed.">                    if (status.isInvalidPIN()){</span>
+<span class="nc" id="L127">                        state = INVALID_PIN_STATE;</span>
+<span class="nc" id="L128">                        atm.updateTransactionState(state);</span>
+<span class="nc" id="L129">                    }</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">                    else if (status.isSuccess()){</span>
+<span class="nc" id="L131">                        state = COMPLETING_TRANSACTION_STATE;</span>
+<span class="nc" id="L132">                        atm.updateTransactionState(state);</span>
+<span class="nc" id="L133">                    }</span>
+                    else
+                    {
+<span class="nc" id="L136">                        doAnotherMessage = status.getMessage();</span>
+<span class="nc" id="L137">                        state = ASKING_DO_ANOTHER_STATE;</span>
+<span class="nc" id="L138">                        atm.updateTransactionState(state);</span>
+                    }
+                    
+<span class="nc" id="L141">                    break;</span>
+                
+                case INVALID_PIN_STATE:
+
+                	
+                    try
+                    {
+<span class="nc" id="L148">                        status = performInvalidPINExtension();</span>
+                    
+                        // If customer repeatedly enters invalid PIN's, a
+                        // CardRetained exception is thrown, and this method
+                        // terminates
+                        
+<span class="nc bnc" id="L154" title="All 2 branches missed.">                        if (status.isSuccess()){</span>
+<span class="nc" id="L155">                            state = COMPLETING_TRANSACTION_STATE;</span>
+<span class="nc" id="L156">                            atm.updateTransactionState(state);</span>
+<span class="nc" id="L157">                        }</span>
+                        else
+                        {
+<span class="nc" id="L160">                            doAnotherMessage = status.getMessage();</span>
+<span class="nc" id="L161">                            state = ASKING_DO_ANOTHER_STATE;</span>
+<span class="nc" id="L162">                            atm.updateTransactionState(state);</span>
+                        }
+<span class="nc" id="L164">                    }</span>
+<span class="nc" id="L165">                    catch(CustomerConsole.Cancelled e)</span>
+                    {
+<span class="nc" id="L167">                        doAnotherMessage = &quot;Last transaction was cancelled&quot;;</span>
+<span class="nc" id="L168">                        state = ASKING_DO_ANOTHER_STATE;</span>
+<span class="nc" id="L169">                        atm.updateTransactionState(state);</span>
+                    }
+
+<span class="nc" id="L172">                    break;</span>
+                        
+                case COMPLETING_TRANSACTION_STATE:
+
+                    try
+                    {
+<span class="nc" id="L178">                        receipt = completeTransaction();</span>
+<span class="nc" id="L179">                        state = PRINTING_RECEIPT_STATE;</span>
+<span class="nc" id="L180">                        atm.updateTransactionState(state);</span>
+<span class="nc" id="L181">                    }</span>
+<span class="nc" id="L182">                    catch(CustomerConsole.Cancelled e)</span>
+                    {
+<span class="nc" id="L184">                        doAnotherMessage = &quot;Last transaction was cancelled&quot;;</span>
+<span class="nc" id="L185">                        state = ASKING_DO_ANOTHER_STATE;</span>
+<span class="nc" id="L186">                        atm.updateTransactionState(state);</span>
+                    }
+                    
+<span class="nc" id="L189">                    break;</span>
+                    
+                case PRINTING_RECEIPT_STATE:
+                
+<span class="nc" id="L193">                    atm.getReceiptPrinter().printReceipt(receipt);</span>
+<span class="nc" id="L194">                    state = ASKING_DO_ANOTHER_STATE;</span>
+<span class="nc" id="L195">                    atm.updateTransactionState(state);</span>
+                    
+<span class="nc" id="L197">                    break;</span>
+                    
+                case ASKING_DO_ANOTHER_STATE:
+                
+<span class="nc bnc" id="L201" title="All 2 branches missed.">                    if (doAnotherMessage.length() &gt; 0)</span>
+<span class="nc" id="L202">                        doAnotherMessage += &quot;\n&quot;;</span>
+                        
+                    try
+                    {
+<span class="nc" id="L206">                        String [] yesNoMenu = { &quot;Yes&quot;, &quot;No&quot; };</span>
+
+<span class="nc bnc" id="L208" title="All 2 branches missed.">                        boolean doAgain = atm.getCustomerConsole().readMenuChoice(</span>
+<span class="nc" id="L209">                            doAnotherMessage + </span>
+<span class="nc" id="L210">                            &quot;Would you like to do another transaction?&quot;,</span>
+<span class="nc" id="L211">                            yesNoMenu) == 0;</span>
+<span class="nc" id="L212">                        return doAgain;</span>
+                    }
+<span class="nc" id="L214">                    catch(CustomerConsole.Cancelled e)</span>
+                    {
+<span class="nc" id="L216">                        return false;</span>
+                    }
+            }
+        }
+    }
+        
+    
+    /** Perform the Invalid PIN Extension - reset session pin to new value if successful
+     *
+     *  @return status code returned by bank from most recent re-submission
+     *          of transaction
+     *  @exception CustomerConsole.Cancelled if customer presses the CANCEL key
+     *             instead of re-entering PIN
+     *  @exception CardRetained if card was retained due to too many invalid PIN's
+     */
+    public Status performInvalidPINExtension() throws CustomerConsole.Cancelled,
+                                                      CardRetained
+    {
+<span class="nc" id="L234">        Status status = null;</span>
+<span class="nc bnc" id="L235" title="All 2 branches missed.">        for (int i = 0; i &lt; 3; i ++)</span>
+        {
+<span class="nc" id="L237">        	atm.updatePinInvalidCount(i);</span>
+<span class="nc" id="L238">            pin = atm.getCustomerConsole().readPIN(</span>
+<span class="nc" id="L239">                &quot;PIN was incorrect\nPlease re-enter your PIN\n&quot; +</span>
+                &quot;Then press ENTER&quot;);
+<span class="nc" id="L241">            atm.getCustomerConsole().display(&quot;&quot;);</span>
+            
+<span class="nc" id="L243">            message.setPIN(pin);</span>
+<span class="nc" id="L244">            status = atm.getNetworkToBank().sendMessage(message, balances);</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">            if (! status.isInvalidPIN())</span>
+            {
+<span class="nc" id="L247">                session.setPIN(pin);</span>
+<span class="nc" id="L248">                return status;</span>
+            }
+        }
+        
+<span class="nc" id="L252">        atm.getCardReader().retainCard();</span>
+<span class="nc" id="L253">        atm.updateCardRetained(true);</span>
+<span class="nc" id="L254">        atm.getCustomerConsole().display(</span>
+<span class="nc" id="L255">            &quot;Your card has been retained\nPlease contact the bank.&quot;);</span>
+        try
+        {
+<span class="nc" id="L258">            Thread.sleep(5000);</span>
+<span class="nc" id="L259">        }</span>
+<span class="nc" id="L260">        catch(InterruptedException e)</span>
+        { }
+<span class="nc" id="L262">        atm.getCustomerConsole().display(&quot;&quot;);</span>
+<span class="nc" id="L263">        atm.updateCardRetained(false);</span>
+<span class="nc" id="L264">        throw new CardRetained();</span>
+    }
+    
+
+    /** Get serial number of this transaction
+     *
+     *  @return serial number
+     */
+    public int getSerialNumber()
+    {
+<span class="fc" id="L274">        return serialNumber;</span>
+    }
+    
+    /** Get specifics for the transaction from the customer - each
+     *  subclass must implement this appropriately.
+     *
+     *  @return message to bank for initiating this transaction
+     *  @exception CustomerConsole.Cancelled if customer cancelled this transaction
+     */
+    protected abstract Message getSpecificsFromCustomer() throws CustomerConsole.Cancelled;
+    
+    /** Complete an approved transaction  - each subclass must implement
+     *  this appropriately.
+     *
+     *  @return receipt to be printed for this transaction
+     *  @exception CustomerConsole.Cancelled if customer cancelled this transaction
+     */
+    protected abstract Receipt completeTransaction() throws CustomerConsole.Cancelled;
+    
+    
+    // Local class representing card retained exception
+   
+    
+    /** Exception that is thrown when the customer's card is retained due to too
+     *  many invalid PIN entries
+     */
+    public static class CardRetained extends Exception
+    {
+        /** Constructor
+         */
+        public CardRetained()
+        {
+<span class="nc" id="L306">            super(&quot;Card retained due to too many invalid PINs&quot;);</span>
+<span class="nc" id="L307">        }</span>
+    }
+    
+    
+    // Instance variables
+
+
+    /** ATM to use for communication with the customer
+     */
+    protected ATM atm;
+    
+    /** Session in which this transaction is being performed
+     */
+    protected Session session;
+    
+    /** Customer card for the session this transaction is part of
+     */
+    protected Card card;
+    
+    /** PIN entered or re-entered by customer
+     */
+    protected int pin;
+    
+    /** Serial number of this transaction
+     */
+    protected int serialNumber;
+    
+    /** Message to bank describing this transaction
+     */
+    protected Message message;
+    
+    /** Used to return account balances from the bank
+     */
+    protected Balances balances;
+    
+    /** List of available transaction types to display as a menu
+     */
+<span class="fc" id="L344">    private static final String [] TRANSACTION_TYPES_MENU = </span>
+<span class="fc" id="L345">        { &quot;Withdrawal&quot;, &quot;Deposit&quot;, &quot;Transfer&quot;, &quot;Balance Inquiry&quot; };</span>
+        
+    /** Next serial number - used to assign a unique serial number to
+     *  each transaction
+     */
+<span class="fc" id="L350">    private static int nextSerialNumber = 1;</span>
+    
+    /** The current state of the transaction
+     */
+    private int state;
+    
+    // Possible values for state
+    
+    /** Getting specifics of the transaction from customer
+     */
+    private static final int GETTING_SPECIFICS_STATE = 1;
+    
+    /** Sending transaction to bank
+     */
+    private static final int SENDING_TO_BANK_STATE = 2;
+    
+    /** Performing invalid PIN extension
+     */
+    private static final int INVALID_PIN_STATE = 3;
+    
+    /** Completing transaction
+     */
+    private static final int COMPLETING_TRANSACTION_STATE = 4;
+    
+    /** Printing receipt
+     */
+    private static final int PRINTING_RECEIPT_STATE = 5;
+    
+    /** Asking if customer wants to do another transaction
+     */
+<span class="fc" id="L380">    private static final int ASKING_DO_ANOTHER_STATE = 6;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

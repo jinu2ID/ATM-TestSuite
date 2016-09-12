@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SimReceiptPrinter.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">ATMMain (Nov 1, 2015 8:01:40 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">simulation</a> &gt; <span class="el_source">SimReceiptPrinter.java</span></div><h1>SimReceiptPrinter.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">/*</span>
+ * ATM Example system - file SimReceiptPrinter.java
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package simulation;
+
+import java.awt.*;
+import java.awt.event.*;
+
+/** Simulate the receipt printer
+ */
+class SimReceiptPrinter extends Panel
+{
+    /** Constructor
+     */
+<span class="fc" id="L19">    SimReceiptPrinter()</span>
+    {
+<span class="fc" id="L21">        setLayout(new BorderLayout(5, 5));</span>
+        
+        // The actual area where receipt prints
+        
+<span class="fc" id="L25">        printArea = </span>
+<span class="fc" id="L26">            new TextArea(&quot;&quot;, ATMPanel.PRINTABLE_LINES, ATMPanel.PRINTABLE_CHARS,</span>
+<span class="fc" id="L27">                         TextArea.SCROLLBARS_VERTICAL_ONLY);</span>
+<span class="fc" id="L28">        printArea.setBackground(Color.white);</span>
+<span class="fc" id="L29">        printArea.setForeground(Color.black);</span>
+<span class="fc" id="L30">        printArea.setFont(new Font(&quot;Monospaced&quot;, Font.PLAIN, 12));</span>
+<span class="fc" id="L31">        printArea.setEditable(false);</span>
+<span class="fc" id="L32">        add(printArea, BorderLayout.SOUTH);</span>
+             
+        // Give user a button to click to take receipt - only visible when a
+        // receipt has been printed. We put the button in a panel with a
+        // GridLayout to ensure it gets space, even when invisible
+        
+<span class="fc" id="L38">        Panel buttonPanel = new Panel();</span>
+<span class="fc" id="L39">        buttonPanel.setLayout(new GridLayout(1,1));</span>
+<span class="fc" id="L40">        take = new Button(&quot;Take receipt&quot;);</span>
+<span class="fc" id="L41">        buttonPanel.add(take);</span>
+<span class="fc" id="L42">        add(buttonPanel, BorderLayout.NORTH);</span>
+<span class="fc" id="L43">        take.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e)
+            {
+<span class="nc" id="L46">                printArea.setText(&quot;&quot;);</span>
+<span class="nc" id="L47">                take.setVisible(false);</span>
+<span class="nc" id="L48">            }</span>
+        });
+        
+<span class="fc" id="L51">        take.setVisible(false);</span>
+<span class="fc" id="L52">    }</span>
+    
+    /** Print line to receipt
+     *
+     *  @param text the line to print
+     */
+    void println(String text)
+    {
+<span class="fc" id="L60">        printArea.append(text + '\n');</span>
+        try
+        { 
+<span class="fc" id="L63">            Thread.sleep(1 * 1000);</span>
+<span class="fc" id="L64">        }</span>
+<span class="nc" id="L65">        catch (InterruptedException e)</span>
+        { }
+
+<span class="fc" id="L68">       take.setVisible(true);</span>
+<span class="fc" id="L69">    }        </span>
+
+    /** Simulated printout of receipt
+     */
+    private TextArea printArea;
+    
+    /** Button to allow the user to take the receipt
+     */
+    private Button take;
+}                               
+    
+    
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>ATMMain (Nov 1, 2015 8:01:40 PM)</div></body></html>

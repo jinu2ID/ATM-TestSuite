@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>LogPanel.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">ATMMain (Nov 1, 2015 8:01:40 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">simulation</a> &gt; <span class="el_source">LogPanel.java</span></div><h1>LogPanel.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">/*</span>
+ * ATM Example system - file LogPanel.java  
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package simulation;
+
+import java.awt.*;
+import java.awt.event.*;
+
+/** The GUI panel that displays the ATM's internal log
+ */
+class LogPanel extends Panel
+{
+    /** Constructor
+     *
+     *  @param gui the the overall GUI
+     */
+     
+<span class="fc" id="L22">    LogPanel(final GUI gui)</span>
+    {
+<span class="fc" id="L24">        GridBagLayout logLayout = new GridBagLayout();</span>
+<span class="fc" id="L25">        setLayout(logLayout);</span>
+<span class="fc" id="L26">        setFont(new Font(&quot;Monospaced&quot;, Font.PLAIN, 14));</span>
+        
+<span class="fc" id="L28">        Label logPanelLabel = new Label(&quot;Log&quot;, Label.CENTER);</span>
+<span class="fc" id="L29">        add(logPanelLabel);</span>
+<span class="fc" id="L30">        GridBagConstraints constraints = </span>
+<span class="fc" id="L31">            GUI.makeConstraints(0, 0, 1, 1, GridBagConstraints.NONE);</span>
+<span class="fc" id="L32">        constraints.weighty = 0;</span>
+<span class="fc" id="L33">        logLayout.setConstraints(logPanelLabel, constraints); </span>
+            
+<span class="fc" id="L35">        logPrintArea = new TextArea();</span>
+<span class="fc" id="L36">        logPrintArea.setBackground(Color.white);</span>
+<span class="fc" id="L37">        logPrintArea.setForeground(Color.black);</span>
+<span class="fc" id="L38">        logPrintArea.setFont(new Font(&quot;Monospaced&quot;, Font.PLAIN, 12));</span>
+<span class="fc" id="L39">        logPrintArea.setEditable(false);        </span>
+
+<span class="fc" id="L41">        add(logPrintArea);</span>
+<span class="fc" id="L42">        constraints = GUI.makeConstraints(1, 0, 1, 1, GridBagConstraints.BOTH);</span>
+<span class="fc" id="L43">        constraints.weighty = 1;</span>
+<span class="fc" id="L44">        logLayout.setConstraints(logPrintArea, constraints);</span>
+        
+<span class="fc" id="L46">        Panel logButtonPanel = new Panel();</span>
+<span class="fc" id="L47">        logButtonPanel.setLayout(new FlowLayout());</span>
+        
+<span class="fc" id="L49">        Button clearLogButton = new Button(&quot;Clear Log&quot;);</span>
+<span class="fc" id="L50">        clearLogButton.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e)
+            {
+<span class="nc" id="L53">                logPrintArea.setText(&quot;&quot;);</span>
+<span class="nc" id="L54">            }</span>
+        });
+<span class="fc" id="L56">        logButtonPanel.add(clearLogButton);</span>
+        
+<span class="fc" id="L58">        Button dismissLogButton = new Button(&quot; Hide Log &quot;);</span>
+<span class="fc" id="L59">        dismissLogButton.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e)
+            {
+<span class="nc" id="L62">                gui.showCard(&quot;ATM&quot;);</span>
+<span class="nc" id="L63">            }</span>
+        });
+        
+<span class="fc" id="L66">        logButtonPanel.add(dismissLogButton);</span>
+<span class="fc" id="L67">        add(logButtonPanel);</span>
+<span class="fc" id="L68">        constraints = GUI.makeConstraints(2, 0, 1, 1, GridBagConstraints.NONE);</span>
+<span class="fc" id="L69">        constraints.weighty = 0;</span>
+<span class="fc" id="L70">        logLayout.setConstraints(logButtonPanel, constraints);</span>
+<span class="fc" id="L71">    }</span>
+    
+    /** Add text to the log
+     *
+     *  @param text the text to be printed
+     */
+    void println(String text)
+    {
+<span class="fc" id="L79">        logPrintArea.append(text + &quot;\n&quot;);</span>
+<span class="fc" id="L80">    }</span>
+    
+    /** Area into which the log is to be printed
+     */
+    private TextArea logPrintArea;
+}
+    
+        
+        
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>ATMMain (Nov 1, 2015 8:01:40 PM)</div></body></html>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>BillsPanel.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">simulation</a> &gt; <span class="el_source">BillsPanel.java</span></div><h1>BillsPanel.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">/*</span>
+ * ATM Example system - file BillsPanel.java    
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package simulation;
+
+import banking.Money;
+
+import java.awt.*;
+import java.awt.event.*;
+
+/** The GUI panel that allows the operator to enter the number of bills in the
+ *  ATM at startup
+ */
+public class BillsPanel extends Panel
+{
+    /** Constructor
+     */
+<span class="fc" id="L22">    public BillsPanel()</span>
+    {
+<span class="fc" id="L24">        setLayout(new GridLayout(0, 1, 0, 0));</span>
+<span class="fc" id="L25">        setFont(new Font(&quot;Monospaced&quot;, Font.PLAIN, 14));</span>
+        
+<span class="fc" id="L27">        add(new Label(&quot;A real ATM would have a mechanism to sense&quot;,</span>
+<span class="fc" id="L28">                      Label.CENTER));</span>
+<span class="fc" id="L29">        add(new Label(&quot;or allow the operator to enter the number&quot;,</span>
+<span class="fc" id="L30">                      Label.CENTER));</span>
+<span class="fc" id="L31">        add(new Label(&quot;of $20 bills in the cash dispenser.&quot;,</span>
+<span class="fc" id="L32">                      Label.CENTER));</span>
+<span class="fc" id="L33">        add(new Label(&quot;For purposes of the simulation,&quot;,</span>
+<span class="fc" id="L34">                      Label.CENTER));</span>
+<span class="fc" id="L35">        add(new Label(&quot;please enter the number of $20 bills manually.&quot;,</span>
+<span class="fc" id="L36">                      Label.CENTER));</span>
+<span class="fc" id="L37">        add(new Label(&quot;Then press RETURN&quot;,</span>
+<span class="fc" id="L38">                      Label.CENTER));</span>
+        
+<span class="fc" id="L40">        billsNumberField = new TextField(30);</span>
+<span class="fc" id="L41">        billsNumberField.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e)
+            {
+<span class="nc" id="L44">                synchronized(BillsPanel.this)</span>
+                {
+<span class="nc" id="L46">                    BillsPanel.this.notify();</span>
+                }
+<span class="nc" id="L48">            }</span>
+        });
+<span class="fc" id="L50">        Panel billsNumberPanel = new Panel();</span>
+<span class="fc" id="L51">        billsNumberPanel.add(billsNumberField);</span>
+<span class="fc" id="L52">        add(billsNumberPanel);  </span>
+<span class="fc" id="L53">    }</span>
+
+    /** Ask the operator to enter the number of bills in the cash dispenser
+     *
+     *  @return the number entered
+     */
+    public synchronized int readBills()
+    {
+<span class="fc" id="L61">        boolean validNumberRead = false;</span>
+<span class="fc" id="L62">        int billsNumber = 0;</span>
+        
+<span class="fc" id="L64">        billsNumberField.setText(&quot;&quot;);</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        while(! validNumberRead)</span>
+        {
+<span class="fc" id="L67">          billsNumberField.requestFocus();</span>
+          // Check if value of bills has already been set
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">          if (this.getBills() == null){</span>
+            try
+            {
+<span class="nc" id="L72">                wait();</span>
+<span class="nc" id="L73">            }</span>
+<span class="nc" id="L74">            catch(InterruptedException e)</span>
+            { }
+          }
+          
+            try
+            {
+<span class="fc" id="L80">                billsNumber = Integer.parseInt(this.getBillsNF());</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">                if (billsNumber &gt;= 0){</span>
+<span class="fc" id="L82">                 	validNumberRead = true;</span>
+<span class="fc" id="L83">                }</span>
+                else 
+<span class="nc" id="L85">                    getToolkit().beep();</span>
+<span class="nc" id="L86">            }</span>
+<span class="nc" id="L87">            catch(NumberFormatException e)</span>
+            {
+<span class="nc" id="L89">                getToolkit().beep();</span>
+<span class="nc" id="L90">                numberFormatExceptionCount++;</span>
+            }
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">            if (! validNumberRead)</span>
+            {
+<span class="nc" id="L94">            	bills = null;</span>
+<span class="nc" id="L95">                billsNumberField.setText(&quot;Must be a valid integer &gt;= 0&quot;);</span>
+<span class="nc" id="L96">                billsNumberField.selectAll();</span>
+            }
+        }
+<span class="fc" id="L99">        return billsNumber;</span>
+    }
+    
+    // Get bills from text field
+    public String getBillsNF(){
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">    	if (bills == null){</span>
+<span class="nc" id="L105">    		bills = billsNumberField.getText();</span>
+    	}
+<span class="fc" id="L107">    	return bills;</span>
+    }
+    
+    // Set value of bills
+    public synchronized void setBills(String _bills){
+<span class="fc" id="L112">    	bills = _bills;</span>
+<span class="fc" id="L113">    }</span>
+
+    // Get value of bills
+    public String getBills(){
+<span class="fc" id="L117">    	return bills;</span>
+    }
+    
+    
+    // The field which stores the string value of the bills
+<span class="fc" id="L122">    private String bills = null;</span>
+    
+    // Keeps track of numberFormatExceptions for testing
+<span class="fc" id="L125">    public int numberFormatExceptionCount = 0;</span>
+    
+    /** The field into which the number of bills is to be entered
+     */
+    private TextField billsNumberField;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

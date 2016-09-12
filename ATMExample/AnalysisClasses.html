@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"DTD/xhtml11-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+<title>Analysis Classes</title>
+
+</head>
+
+<body>
+<h2>Analysis Classes</h2>
+
+<p>
+An initial reading of the use cases suggests that the following will be
+part of the system.
+</p>
+
+<ul>
+
+<li>A controller object representing the ATM itself (managing the boundary
+objects listed below.)  <br />&nbsp;<br />
+</li>
+
+<li>Boundary objects representing the individual component parts of the ATM:
+<br />&nbsp;
+<ul>
+<li>Operator panel.</li>
+<li>Card reader.</li>
+<li>Customer console, consisting of a display and keyboard.</li>
+<li>Network connection to the bank.</li>
+<li>Cash dispenser.</li>
+<li>Envelope acceptor.</li>
+<li>Receipt printer.</li>
+</ul>
+<br />&nbsp;
+</li>
+
+<li>Controller objects corresponding to use cases.  (Note: class ATM can
+handle the Startup and Shutdown use cases itself, so these do not give rise to separate
+objects here.)
+<br />&nbsp;
+<ul>
+<li>Session</li>
+<li>Transaction (abstract generalization, responsible for common features, with
+concrete specializations responsible for type-specific portions) </li>
+</ul>
+<br />&nbsp;
+</li>
+
+<li>An entity object representing the information encoded on the ATM card inserted by
+customer.
+<br />&nbsp;
+</li>
+
+<li>An entity object representing the log of transactions maintained by the machine.
+<br />&nbsp;
+</li>
+
+
+</ul>
+
+<p>
+This leads to the following diagram of analysis classes:
+<br />&nbsp;
+</p>
+
+<hr />
+
+<h4>Click on a class icon to go to links to various kinds of information about it</h4>
+
+<p class="clickablediagram">
+&nbsp;<br />
+<img src="AnalysisClasses.gif" usemap="#analysismap" alt="[ Analysis Class Diagram ]" />
+
+<map name="analysismap" id="analysismap">
+<area shape="rect" coords="126,27,162,63" href="ClassLinks.html#OperatorPanel" 
+    alt="class OperatorPanel" 
+    title="class OperatorPanel" />
+<area shape="rect" coords="126,126,162,162" href="ClassLinks.html#CardReader" 
+    alt="class CardReader" 
+    title="class CardReader" />
+<area shape="rect" coords="126,207,162,243" href="ClassLinks.html#CustomerConsole" 
+    alt="class CustomerConsole" 
+    title="class CustomerConsole" />
+<area shape="rect" coords="126,297,162,333" href="ClassLinks.html#ReceiptPrinter" 
+    alt="class ReceiptPrinter" 
+    title="class ReceiptPrinter" />
+<area shape="rect" coords="126,378,162,414" href="ClassLinks.html#CashDispenser" 
+    alt="class CashDispenser" 
+    title="class CashDispenser" />
+<area shape="rect" coords="126,459,162,495" href="ClassLinks.html#EnvelopeAcceptor" 
+    alt="class EnvelopeAcceptor" 
+    title="class EnvelopeAcceptor" />
+<area shape="rect" coords="207,27,243,63" href="ClassLinks.html#ATM" 
+    alt="class ATM" 
+    title="class ATM" />
+<area shape="rect" coords="207,90,243,126" href="ClassLinks.html#Card" 
+    alt="class Card" 
+    title="class Card" />
+<area shape="rect" coords="279,126,315,162" href="ClassLinks.html#Session" 
+    alt="class Session" 
+    title="class Session" />
+<area shape="rect" coords="279,324,315,360" href="ClassLinks.html#Transaction" 
+    alt="class Transaction" 
+    title="class Transaction" />
+<area shape="rect" coords="279,414,315,450" href="ClassLinks.html#Log" 
+    alt="class Log" 
+    title="class Log" />
+<area shape="rect" coords="378,324,414,360" href="ClassLinks.html#NetworkToBank" 
+    alt="class NetworkToBank" 
+    title="class NetworkToBank" />
+</map>
+
+</p>
+
+<hr />
+
+<p class="navigation">
+<a href="InitialFunctionalTests.html"><img src="Back.gif" alt="Link to 
+previous page" /></a>
+<a href="CRCCards.html"><img src="Next.gif" alt="Link to next page" /></a>
+</p>
+
+<p>
+<a href="Links.html">Page of links for non frames-enabled browsers.</a>
+</p>
+
+<p>
+<a href="http://validator.w3.org/check/referer">
+<img class="XHTML_image"
+	src="XHTML_validation_image.gif"
+	alt="Valid XHTML 1.0!" height="31" width="88" />
+</a>
+</p>
+  
+<h6>Copyright &copy; 2000, 2001, 2002 - Russell C. Bjork.  Permission for non-commercial 
+reproduction for educational use is hereby granted; all other rights are reserved.</h6>
+
+</body>
+</html>

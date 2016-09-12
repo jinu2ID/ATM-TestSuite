@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"DTD/xhtml11-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+<style type="text/css"> P.statechart { text-align: center; } </style>
+
+<title>Package Diagram for Example ATM System</title>
+
+</head>
+
+<body>
+
+<h2>Package Diagram for Example ATM System</h2>
+
+<p>
+The package diagram shows how the various classes are
+grouped into packages.  There are two "top-level" classes - ATMMain and
+ATMApplet - which allow the system to be run (respectively) as an
+application or as an Applet.  (Only one of the two would be instantiated
+in any particular use of the system.)
+</p>
+
+<p>
+Each of these classes, in turn, depends on the package atm which contains
+the class ATM that represents the system as a whole, and the class Session
+that represents one session.  ATM depends on Session, and vice versa -
+since the ATM creates Sessions, and each Session, in turn, uses the ATM to
+interact with the customer.
+</p>
+
+<p>
+The subpackage transaction contains the classes used to represent individual
+transactions that a customer initiates.  The class Session depends on the
+transaction package because it creates individual transaction objects.  These,
+in turn, again depend on the ATM to interact with the customer.
+</p>
+
+<p>
+The subpackage physical contains the classes that represent the
+various physical components of the ATM.  For the purposes of this
+simulation, these are simulated by a GUI.  A real ATM would have
+quite different classes in this package - classes that actually control
+its physical components.  The class ATM makes use of these components,
+and Session and the various kinds of transaction gain access to them
+through ATM to actually perform the needed operations.
+</p>
+
+<p>
+Finally, the package banking contains classes that represent the banking enterprise
+itself and the information communicated back and
+forth between the ATM and the bank - i.e. classes which might be the same
+in a totally different implementation of an ATM that interacts with the same
+bank.
+</p>
+
+<p>
+This is, of course, a simulation.  However, most of the code that is specific
+to the simulation resides in the package physical, plus the two top-level
+classes.  Presumably, the other classes and packages might be similar in a
+real system.
+</p>
+
+<hr />
+
+<p class="diagram">
+<img src="Packages.gif" alt="[ Package Diagram ]" />
+</p>
+
+<hr />
+
+<p class="navigation">
+<a href="DetailedDesign.html"><img src="Back.gif" alt="Link to previous page" /></a>
+<a href="Code.html"><img src="Next.gif" alt="Link to next page" /></a>
+</p>
+
+<p>
+<a href="Links.html">Page of links for non frames-enabled browsers.</a>
+</p>
+
+
+<p>
+<a href="http://validator.w3.org/check/referer">
+<img class="XHTML_image"
+	src="XHTML_validation_image.gif"
+	alt="Valid XHTML 1.0!" height="31" width="88" />
+</a>
+</p>
+
+<h6>Copyright &copy; 2001 - Russell C. Bjork.  Permission for non-commercial 
+reproduction for educational use is hereby granted; all other rights are reserved.</h6>
+
+</body>
+</html>

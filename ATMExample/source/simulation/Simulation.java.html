@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Simulation.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">ATMMain (Nov 1, 2015 8:01:40 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">simulation</a> &gt; <span class="el_source">Simulation.java</span></div><h1>Simulation.java</h1><pre class="source lang-java linenums">/*
+ * ATM Example system - file Simulation.java
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package simulation;
+
+import atm.ATM;
+import banking.Balances;
+import banking.Card;
+import banking.Message;
+import banking.Money;
+import banking.Status;
+
+/** Simulation of the physical components of the ATM, including its network 
+ *  connection to the bank.  An instance is created at startup by either the
+ *  application's main() program or the applet's init() method.
+ *
+ *  The individual components are displayed in a panel belonging to class GUI.
+ *  The bank is simulated by an object belonging to class SimulatedBank.  The
+ *  constructor for this class creates one instance of each.
+ *
+ *  The static method getInstance() allows components of the ATM to access the one
+ *  and only instance of this class in order to simulate various operations.  The
+ *  remaining methods simulate specific operations of the ATM, and are forwarded
+ *  to either the GUI panel or the simulated bank to actually carry them out.
+ */
+public class Simulation
+{
+<span class="fc" id="L32">    public Simulation(ATM atm)</span>
+    {
+<span class="fc" id="L34">        this.atm = atm;</span>
+        
+        // Create the simulated individual components of the ATM's GUI
+        
+<span class="fc" id="L38">        operatorPanel = new SimOperatorPanel(this);</span>
+<span class="fc" id="L39">        cardReader = new SimCardReader(this);</span>
+<span class="fc" id="L40">        display = new SimDisplay();</span>
+<span class="fc" id="L41">        cashDispenser = new SimCashDispenser();</span>
+<span class="fc" id="L42">        envelopeAcceptor = new SimEnvelopeAcceptor();</span>
+<span class="fc" id="L43">        receiptPrinter = new SimReceiptPrinter();</span>
+<span class="fc" id="L44">        keyboard = new SimKeyboard(display, envelopeAcceptor);</span>
+        
+        // Create the GUI containing the above
+        
+<span class="fc" id="L48">        gui = new GUI(operatorPanel, cardReader, display, keyboard,</span>
+<span class="fc" id="L49">                      cashDispenser, envelopeAcceptor, receiptPrinter);</span>
+        
+        // Create the simulation of the bank
+        
+<span class="fc" id="L53">        simulatedBank = new SimulatedBank();</span>
+        
+<span class="fc" id="L55">        theInstance = this;</span>
+<span class="fc" id="L56">    }</span>
+    
+    /** Accessor for the one and only instance of this class
+     *
+     *  @return the instance of this class
+     */
+    public static Simulation getInstance()
+    {
+<span class="fc" id="L64">        return theInstance;</span>
+    }
+    
+    /** Simulated getting initial amount of cash from operator
+     *
+     *  @return value of initial cash entered
+     */
+    public Money getInitialCash()
+    {
+<span class="fc" id="L73">        return gui.getInitialCash();</span>
+    }
+    
+    /** Simulate reading of a card
+     *
+     *
+     *  @return Card object representing information on the card if read
+     *          successfully, null if not read successfully
+     */
+    public Card readCard()
+    {
+        // Machine can't be turned off while there is a card in it
+<span class="fc" id="L85">        operatorPanel.setEnabled(false);</span>
+
+<span class="fc" id="L87">        cardReader.animateInsertion();</span>
+        
+        // Since we don't have a magnetic stripe reader, we'll simulate by
+        // having customer type the card number in
+        
+<span class="fc" id="L92">        return gui.readCard();</span>
+    }
+    
+    /** Simulate ejecting a card 
+     */
+    public void ejectCard()
+    {
+<span class="fc" id="L99">        cardReader.animateEjection();</span>
+
+        // Re-enable on-off switch
+<span class="fc" id="L102">        operatorPanel.setEnabled(true);</span>
+<span class="fc" id="L103">    }</span>
+    
+    /** Simulate retaining a card
+     */
+    public void retainCard()
+    {
+<span class="fc" id="L109">        cardReader.animateRetention();</span>
+
+        // Re-enable on-off switch
+<span class="fc" id="L112">        operatorPanel.setEnabled(true);</span>
+<span class="fc" id="L113">    }</span>
+    
+    /** Clear the simulated display
+     */
+    public void clearDisplay()
+    {
+<span class="fc" id="L119">        display.clearDisplay();</span>
+<span class="fc" id="L120">    }</span>
+    
+    /** Write one or more lines to the display - beginning just after the
+     *  last line written
+     *
+     *  @param text the text to display
+     */
+    public void display(String text)
+    {
+<span class="fc" id="L129">        display.display(text);</span>
+<span class="fc" id="L130">    }</span>
+     
+    /** Simulate reading input from the keyboard
+     *
+     *  @param mode the input mode to use - one of the constants defined below.
+     *  @param maxValue the maximum acceptable value (used in MENU_MODE only)
+     *  @return the line that was entered - null if user pressed CANCEL.
+     */
+    public String readInput(int mode, int maxValue)
+    {
+<span class="fc" id="L140">        return keyboard.readInput(mode, maxValue);</span>
+    }
+    
+    /** Simulate dispensing cash to a customer
+     *
+     *  @param amount the amount of cash to dispense
+     *
+     *  Precondition: amount is &lt;= cash on hand
+     */
+    public void dispenseCash(Money amount)
+    {
+<span class="fc" id="L151">        cashDispenser.animateDispensingCash(amount);</span>
+<span class="fc" id="L152">    }</span>
+
+    /** Simulate accepting an envelope from customer.
+     *
+     *  return true if an envelope was received within the prescribed time,
+     *         else false
+     */
+    public boolean acceptEnvelope()
+    {
+<span class="fc" id="L161">        return envelopeAcceptor.acceptEnvelope();</span>
+    }
+
+    /** Simulate printing one line of a receipt
+     *
+     *  @param text the line to print
+     */
+    public void printReceiptLine(String text)
+    {
+<span class="fc" id="L170">        receiptPrinter.println(text);</span>
+<span class="fc" id="L171">    }</span>
+    
+    /** Simulate printing a line to the log
+     *
+     *  @param text the line to print
+     */
+    public void printLogLine(String text)
+    {
+<span class="fc" id="L179">        gui.printLogLine(text);</span>
+<span class="fc" id="L180">    }</span>
+    
+    /** Simulate sending a message to bank
+     *
+     *  @param message the message to send
+     *  @param balances (out) balances in customer's account as reported
+     *         by bank
+     *  @return status code returned by bank
+     */
+    public Status sendMessage(Message message, Balances balances)
+    {
+        // Simulate time taken to send message over network
+        
+        try
+        {
+<span class="fc" id="L195">            Thread.sleep(2 * 1000);</span>
+<span class="fc" id="L196">        }</span>
+<span class="nc" id="L197">        catch(InterruptedException e)</span>
+        { }
+        
+<span class="fc" id="L200">        return simulatedBank.handleMessage(message, balances);</span>
+    }
+
+    /** Notify the ATM that the state of the on-off switch has been changed
+     *
+     *  @param on true if state is now &quot;on&quot;, false if it is &quot;off&quot;
+     */
+    void switchChanged(boolean on)
+    {
+        // The card reader is only enabled when the switch is on
+        
+<span class="fc" id="L211">        cardReader.setVisible(on);</span>
+        
+<span class="fc bfc" id="L213" title="All 2 branches covered.">        if (on)</span>
+<span class="fc" id="L214">            atm.switchOn();</span>
+        else
+<span class="fc" id="L216">            atm.switchOff();</span>
+<span class="fc" id="L217">    }</span>
+    
+    /** Notify ATM that a card has been inserted
+     */
+    void cardInserted()
+    {
+<span class="fc" id="L223">        atm.cardInserted();</span>
+<span class="fc" id="L224">    }</span>
+    
+    /** Accessor for GUI Panel that simulates the ATM
+     *
+     *  @return the GUI Panel
+     */
+    public GUI getGUI()
+    {
+<span class="fc" id="L232">        return gui;</span>
+    }
+    
+    /** Accessor for simulated bank
+     *
+     *  @return simulated bank
+     */
+    public SimulatedBank getSimulatedBank()
+    {
+<span class="nc" id="L241">        return simulatedBank;</span>
+    }
+
+    /* Possible values for mode parameter to readInput() */
+    
+    /** Read input in PIN mode - allow user to enter several characters,
+     *  and to clear the line if the user wishes; echo as asterisks
+     */
+    public static final int PIN_MODE = 1;
+    
+    /** Read input in amount mode - allow user to enter several characters,
+     *  and to clear the line if the user wishes; echo what use types
+     */
+    public static final int AMOUNT_MODE = 2;
+    
+    /** Read input in menu choice mode - wait for one digit key to be pressed,
+     *  and return value immediately.
+     */
+    public static final int MENU_MODE = 3;
+    
+    /** The ATM object for the ATM being simulated
+     */
+    private ATM atm;
+    
+    /** The simulated operator panel
+     */
+    private SimOperatorPanel operatorPanel;
+    
+    /** The simulated card reader
+     */
+    private SimCardReader cardReader;
+    
+    /** The simulated display
+     */
+    private SimDisplay display;
+    
+    /** The simulated keyboard
+     */
+    private SimKeyboard keyboard;
+    
+    /** The simulated cash dispenser
+     */
+    private SimCashDispenser cashDispenser;
+    
+    /** The simulated envelope acceptor
+     */
+    private SimEnvelopeAcceptor envelopeAcceptor;
+    
+    /** The simulated receipt printer
+     */
+    private SimReceiptPrinter receiptPrinter;
+    
+    /** Panel containing the GUI that simulates the ATM
+     */
+    private GUI gui;
+    
+    /** Simulated bank
+     */
+    private SimulatedBank simulatedBank;
+    
+    /** The one and only instance of this class
+     */
+    private static Simulation theInstance;
+}    
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>ATMMain (Nov 1, 2015 8:01:40 PM)</div></body></html>

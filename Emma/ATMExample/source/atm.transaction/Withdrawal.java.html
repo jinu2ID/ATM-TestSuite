@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Withdrawal.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">atm.transaction</a> &gt; <span class="el_source">Withdrawal.java</span></div><h1>Withdrawal.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">/*</span>
+ * ATM Example system - file Withdrawal.java    
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package atm.transaction;
+import atm.ATM;
+import atm.Session;
+import atm.physical.*;
+import banking.AccountInformation;
+import banking.Card;
+import banking.Message;
+import banking.Money;
+import banking.Status;
+import banking.Receipt;
+
+/** Representation for a cash withdrawal transaction
+ */
+public class Withdrawal extends Transaction
+{
+    /** Constructor
+     *
+     *  @param atm the ATM used to communicate with customer
+     *  @param session the session in which the transaction is being performed
+     *  @param card the customer's card
+     *  @param pin the PIN entered by the customer
+     */
+    public Withdrawal(ATM atm, Session session, Card card, int pin)
+    {
+<span class="fc" id="L32">        super(atm, session, card, pin);</span>
+<span class="fc" id="L33">    }</span>
+    
+    /** Get specifics for the transaction from the customer
+     *
+     *  @return message to bank for initiating this transaction
+     *  @exception CustomerConsole.Cancelled if customer cancelled this transaction
+     */
+    protected Message getSpecificsFromCustomer() throws CustomerConsole.Cancelled
+    {
+<span class="nc" id="L42">        from = atm.getCustomerConsole().readMenuChoice(</span>
+<span class="nc" id="L43">            &quot;Account to withdraw from&quot;,</span>
+<span class="nc" id="L44">            AccountInformation.ACCOUNT_NAMES);</span>
+
+<span class="nc" id="L46">        String [] amountOptions = { &quot;$20&quot;, &quot;$40&quot;, &quot;$60&quot;, &quot;$100&quot;, &quot;$200&quot; };</span>
+<span class="nc" id="L47">        Money [] amountValues = { </span>
+<span class="nc" id="L48">                                  new Money(20), new Money(40), new Money(60),</span>
+<span class="nc" id="L49">                                  new Money(100), new Money(200)</span>
+                                };
+                                  
+<span class="nc" id="L52">        String amountMessage = &quot;&quot;;</span>
+<span class="nc" id="L53">        boolean validAmount = false;</span>
+        
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        while (! validAmount)</span>
+        {
+<span class="nc" id="L57">            amount = amountValues [ </span>
+<span class="nc" id="L58">                atm.getCustomerConsole().readMenuChoice(</span>
+<span class="nc" id="L59">                    amountMessage + &quot;Amount of cash to withdraw&quot;, amountOptions) ];</span>
+                            
+<span class="nc" id="L61">            validAmount = atm.getCashDispenser().checkCashOnHand(amount);</span>
+
+<span class="nc bnc" id="L63" title="All 2 branches missed.">            if (! validAmount)</span>
+<span class="nc" id="L64">                amountMessage = &quot;Insufficient cash available\n&quot;;</span>
+        }
+        
+<span class="nc" id="L67">        return new Message(Message.WITHDRAWAL, </span>
+<span class="nc" id="L68">                           card, pin, serialNumber, from, -1, amount);</span>
+
+    }
+    
+    /** Complete an approved transaction
+     *
+     *  @return receipt to be printed for this transaction
+     */
+    protected Receipt completeTransaction()
+    {
+<span class="nc" id="L78">        atm.getCashDispenser().dispenseCash(amount);</span>
+<span class="nc" id="L79">        return new Receipt(this.atm, this.card, this, this.balances) {</span>
+            {
+<span class="nc" id="L81">                detailsPortion = new String[2];</span>
+<span class="nc" id="L82">                detailsPortion[0] = &quot;WITHDRAWAL FROM: &quot; + </span>
+<span class="nc" id="L83">                                    AccountInformation.ACCOUNT_ABBREVIATIONS[from];</span>
+<span class="nc" id="L84">                detailsPortion[1] = &quot;AMOUNT: &quot; + amount.toString();</span>
+            }
+        };
+    }
+    
+    /** Account to withdraw from
+     */ 
+    private int from;
+    
+    /** Amount of money to withdraw
+     */
+    private Money amount;           
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

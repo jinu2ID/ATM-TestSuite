@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>EnvelopeAcceptor.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">ATMMain (Nov 1, 2015 8:01:40 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">atm.physical</a> &gt; <span class="el_source">EnvelopeAcceptor.java</span></div><h1>EnvelopeAcceptor.java</h1><pre class="source lang-java linenums">/*
+ * ATM Example system - file EnvelopeAcceptor.java
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package atm.physical;
+
+import simulation.Simulation;
+
+/** Manager for the ATM's envelope acceptor.  In a real ATM, this would 
+ *  manage a physical device; in this simulation,  it uses classes 
+ *  in package simulation to simulate the device.
+ */
+ 
+public class EnvelopeAcceptor
+{
+
+    /** Constructor
+     *
+     *  @param log the log in which to record receiving an envelope
+     */
+<span class="fc" id="L24">    public EnvelopeAcceptor(Log log)</span>
+    {
+<span class="fc" id="L26">        this.log = log;</span>
+<span class="fc" id="L27">    }</span>
+    
+    /** Accept an envelope from customer.
+     *
+     *  @exception CustomerConsole.Cancelled if operation timed out or the
+     *             customer cancelled it
+     */
+    public void acceptEnvelope() throws CustomerConsole.Cancelled
+    {
+<span class="fc" id="L36">        boolean inserted = Simulation.getInstance().acceptEnvelope();</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        if (inserted)</span>
+<span class="fc" id="L38">            log.logEnvelopeAccepted();</span>
+        else
+<span class="fc" id="L40">            throw new CustomerConsole.Cancelled();</span>
+<span class="fc" id="L41">    }</span>
+    
+    /** Log in which to record receiving an envelope
+     */
+    private Log log;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>ATMMain (Nov 1, 2015 8:01:40 PM)</div></body></html>

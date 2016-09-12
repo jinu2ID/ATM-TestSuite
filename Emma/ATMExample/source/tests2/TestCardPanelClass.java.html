@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestCardPanelClass.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">tests2</a> &gt; <span class="el_source">TestCardPanelClass.java</span></div><h1>TestCardPanelClass.java</h1><pre class="source lang-java linenums">package tests2;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import simulation.CardPanel;
+
+<span class="fc" id="L9">public class TestCardPanelClass {</span>
+	
+	@Test
+	public void testConstructor(){
+<span class="fc" id="L13">		CardPanel panel = new CardPanel();</span>
+<span class="fc" id="L14">		assertNotNull(panel);</span>
+<span class="fc" id="L15">	}</span>
+
+	@Test
+	public void testReadCardNumber(){
+<span class="fc" id="L19">		CardPanel panel = new CardPanel();</span>
+<span class="fc" id="L20">		panel.setCardNumberField(&quot;1234&quot;);</span>
+<span class="fc" id="L21">		assertEquals(1234, panel.readCardNumber());</span>
+		
+<span class="fc" id="L23">	}</span>
+	
+	@Test
+	public void testReadCardNumber_Negative(){
+<span class="fc" id="L27">		CardPanel panel = new CardPanel();</span>
+<span class="fc" id="L28">		panel.setCardNumberField(&quot;-1&quot;);</span>
+<span class="fc" id="L29">		assertEquals(-1, panel.readCardNumber());</span>
+		
+<span class="fc" id="L31">	}</span>
+	
+	@Test
+	public void testReadCardNumber_NonNumeric(){
+<span class="fc" id="L35">		CardPanel panel = new CardPanel();</span>
+<span class="fc" id="L36">		panel.setCardNumberField(&quot;A&quot;);</span>
+<span class="fc" id="L37">		assertEquals(-1, panel.readCardNumber());</span>
+		
+<span class="fc" id="L39">	}</span>
+	
+	@Test
+	public void testGetCardNumberField(){
+<span class="fc" id="L43">		CardPanel panel = new CardPanel();</span>
+<span class="fc" id="L44">		panel.setCardNumberField(&quot;1234&quot;);</span>
+<span class="fc" id="L45">		assertEquals(&quot;1234&quot;, panel.getCardNumberField());</span>
+<span class="fc" id="L46">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

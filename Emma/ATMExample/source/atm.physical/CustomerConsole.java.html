@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CustomerConsole.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">atm.physical</a> &gt; <span class="el_source">CustomerConsole.java</span></div><h1>CustomerConsole.java</h1><pre class="source lang-java linenums">/*
+ * ATM Example system - file CustomerConsole.java   
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package atm.physical;
+
+import banking.Money;
+import banking.Status;
+
+import simulation.Simulation;
+
+/** Manager for the ATM's customer console.  In a real ATM, this would 
+ *  manage a physical device; in this simulation,  it uses classes 
+ *  in package simulation to simulate the device (actually two separate
+ *  devices - the display and the keyboard.)
+ */
+ 
+public class CustomerConsole
+{
+    /** Constructor
+     */
+<span class="fc" id="L25">    public CustomerConsole()</span>
+    {
+<span class="fc" id="L27">    }</span>
+    
+    /** Display a message to the customer
+     *
+     *  @param message the message to display
+     */
+    public void display(String message)
+    {
+<span class="fc" id="L35">        Simulation.getInstance().clearDisplay();</span>
+<span class="fc" id="L36">        Simulation.getInstance().display(message);</span>
+<span class="fc" id="L37">    }</span>
+    
+    // Returns the string currently being displayed in simulation.display
+    public String getDisplay(){
+<span class="fc" id="L41">    	return Simulation.getInstance().getDisplay();</span>
+    }
+    
+    /** Read a PIN entered by the customer (echoed as asterisks)
+     *
+     *  @param prompt the message to display prompting the customer to enter PIN
+     *  @return the PIN that was entered
+     *  @exception Cancelled if customer presses the CANCEL key before pressing ENTER
+     */
+    public int readPIN(String prompt) throws Cancelled
+    {
+<span class="fc" id="L52">        Simulation.getInstance().clearDisplay();</span>
+<span class="fc" id="L53">        Simulation.getInstance().display(prompt);</span>
+<span class="fc" id="L54">        Simulation.getInstance().display(&quot;&quot;);</span>
+        
+<span class="fc" id="L56">        String input = Simulation.getInstance().readInput(Simulation.PIN_MODE, 0);</span>
+        
+<span class="fc" id="L58">        Simulation.getInstance().clearDisplay();</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (input == null)</span>
+<span class="fc" id="L60">            throw new Cancelled();</span>
+        else
+<span class="fc" id="L62">            return Integer.parseInt(input);</span>
+    }
+    
+    // Sets value of current input in keyboard
+    public void setCurrentInput(String input){
+<span class="fc" id="L67">    	Simulation.getInstance().setCurrentInput(input);</span>
+<span class="fc" id="L68">    }</span>
+    
+    /** Display a menu of options and return choice made by customer
+     *
+     *  @param prompt message to display before the list of options
+     *  @param menu the options
+     *  @return the number of the option chosen (0 .. # of options - 1)
+     *  Note: the options are numbered 1 .. # of options when displayed for the
+     *  customer - but the menu array indices and the final result returned are in
+     *  the range 0 .. # of options - 1
+     *
+     *  @exception Cancelled if customer presses the CANCEL key before choosing option
+     */
+    public synchronized int readMenuChoice(String prompt, String[] menu) throws Cancelled
+    {
+<span class="fc" id="L83">        Simulation.getInstance().clearDisplay();</span>
+<span class="fc" id="L84">        Simulation.getInstance().display(prompt);</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        for (int i = 0; i &lt; menu.length; i ++)</span>
+<span class="fc" id="L86">            Simulation.getInstance().display((i+1) + &quot;) &quot; + menu[i]);</span>
+
+<span class="fc" id="L88">        String input = </span>
+<span class="fc" id="L89">            Simulation.getInstance().readInput(Simulation.MENU_MODE, menu.length);</span>
+   
+<span class="fc" id="L91">        Simulation.getInstance().clearDisplay();</span>
+        
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (input == null)</span>
+<span class="fc" id="L94">            throw new Cancelled();</span>
+        else
+<span class="fc" id="L96">        	return Integer.parseInt(input) - 1;</span>
+        
+    }
+    
+    /** Read a money amount entered by the customer
+     *
+     *  @param prompt the message to display prompting the customer to enter amount
+     *  @return the amount entered by the customer
+     *  @exception Cancelled if customer presses the CANCEL key before pressing ENTER
+     */
+    public synchronized Money readAmount(String prompt) throws Cancelled
+    {
+<span class="fc" id="L108">        Simulation.getInstance().clearDisplay();</span>
+<span class="fc" id="L109">        Simulation.getInstance().display(prompt);</span>
+<span class="fc" id="L110">        Simulation.getInstance().display(&quot;&quot;);</span>
+        
+<span class="fc" id="L112">        String input = Simulation.getInstance().readInput(Simulation.AMOUNT_MODE, 0);</span>
+        
+<span class="fc" id="L114">        Simulation.getInstance().clearDisplay();</span>
+        
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (input == null)</span>
+<span class="fc" id="L117">            throw new Cancelled();</span>
+        else
+        {
+<span class="fc" id="L120">            int dollars = Integer.parseInt(input) / 100;</span>
+<span class="fc" id="L121">            int cents = Integer.parseInt(input) % 100;</span>
+<span class="fc" id="L122">            return new Money(dollars, cents);</span>
+        }
+    }
+    
+    
+    /** Exception thrown when the user presses the cancel key while the ATM is
+     *  waiting for some action
+     */
+    public static class Cancelled extends Exception
+    {
+        /** Constructor
+         */
+        public Cancelled()
+        {
+<span class="fc" id="L136">            super(&quot;Cancelled by customer&quot;);</span>
+<span class="fc" id="L137">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

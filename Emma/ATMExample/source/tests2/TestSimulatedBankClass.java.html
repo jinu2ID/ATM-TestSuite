@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestSimulatedBankClass.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">tests2</a> &gt; <span class="el_source">TestSimulatedBankClass.java</span></div><h1>TestSimulatedBankClass.java</h1><pre class="source lang-java linenums">package tests2;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import banking.Balances;
+import banking.Card;
+import banking.Message;
+import banking.Money;
+import banking.Status;
+import simulation.SimulatedBank;
+
+<span class="fc" id="L14">public class TestSimulatedBankClass {</span>
+	
+	@Test
+	public void testHandlMessage_InvalidCard(){
+<span class="fc" id="L18">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L19">		Card card = new Card(0);</span>
+<span class="fc" id="L20">		Money money = new Money(100);</span>
+<span class="fc" id="L21">		Balances bal = new Balances();</span>
+<span class="fc" id="L22">		Message message = new Message(0, card,1,1,1,1,money);</span>
+<span class="fc" id="L23">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L24">		assertEquals(&quot;FAILURE Invalid card&quot;, status.toString());</span>
+<span class="fc" id="L25">	}</span>
+	
+	@Test
+	public void testHandlMessage_InvalidCard_PINLength(){
+<span class="fc" id="L29">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L30">		Card card = new Card(12);</span>
+<span class="fc" id="L31">		Money money = new Money(100);</span>
+<span class="fc" id="L32">		Balances bal = new Balances();</span>
+<span class="fc" id="L33">		Message message = new Message(0, card,1,1,1,1,money);</span>
+<span class="fc" id="L34">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L35">		assertEquals(&quot;FAILURE Invalid card&quot;, status.toString());</span>
+<span class="fc" id="L36">	}</span>
+	
+	@Test
+	public void testHandlMessage_InvalidPin(){
+<span class="fc" id="L40">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L41">		Card card = new Card(1);</span>
+<span class="fc" id="L42">		Money money = new Money(100);</span>
+<span class="fc" id="L43">		Balances bal = new Balances();</span>
+<span class="fc" id="L44">		Message message = new Message(0, card,1,1,1,1,money);</span>
+<span class="fc" id="L45">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L46">		assertEquals(&quot;INVALID PIN&quot;, status.toString());</span>
+<span class="fc" id="L47">	}</span>
+	
+	
+	@Test
+	public void testHandlMessage_Withdrawal(){
+<span class="fc" id="L52">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L53">		Card card = new Card(1);</span>
+<span class="fc" id="L54">		Money money = new Money(100);</span>
+<span class="fc" id="L55">		Balances bal = new Balances();</span>
+<span class="fc" id="L56">		Message message = new Message(0, card,42,1,1,1,money);</span>
+<span class="fc" id="L57">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L58">		assertEquals(&quot;SUCCESS&quot;, status.toString());</span>
+		
+<span class="fc" id="L60">	}</span>
+	
+	@Test
+	public void testHandlMessage_InitiateDeposit(){
+<span class="fc" id="L64">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L65">		Card card = new Card(1);</span>
+<span class="fc" id="L66">		Money money = new Money(100);</span>
+<span class="fc" id="L67">		Balances bal = new Balances();</span>
+<span class="fc" id="L68">		Message message = new Message(1, card,42,1,1,1,money);</span>
+<span class="fc" id="L69">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L70">		assertEquals(&quot;SUCCESS&quot;, status.toString());</span>
+		
+<span class="fc" id="L72">	}</span>
+
+	@Test
+	public void testHandlMessage_CompleteDeposit(){
+<span class="fc" id="L76">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L77">		Card card = new Card(1);</span>
+<span class="fc" id="L78">		Money money = new Money(100);</span>
+<span class="fc" id="L79">		Balances bal = new Balances();</span>
+<span class="fc" id="L80">		Message message = new Message(2, card,42,1,1,1,money);</span>
+<span class="fc" id="L81">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L82">		assertEquals(&quot;SUCCESS&quot;, status.toString());</span>
+		
+<span class="fc" id="L84">	}</span>
+	
+	@Test
+	public void testHandlMessage_Transfer(){
+<span class="fc" id="L88">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L89">		Card card = new Card(1);</span>
+<span class="fc" id="L90">		Money money = new Money(100);</span>
+<span class="fc" id="L91">		Balances bal = new Balances();</span>
+<span class="fc" id="L92">		Message message = new Message(3, card,42,1,1,0,money);</span>
+<span class="fc" id="L93">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L94">		assertEquals(&quot;SUCCESS&quot;, status.toString());</span>
+		
+<span class="fc" id="L96">	}</span>
+	
+	@Test
+	public void testHandlMessage_Inquiry(){
+<span class="fc" id="L100">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L101">		Card card = new Card(1);</span>
+<span class="fc" id="L102">		Money money = new Money(100);</span>
+<span class="fc" id="L103">		Balances bal = new Balances();</span>
+<span class="fc" id="L104">		Message message = new Message(4, card,42,1,1,0,money);</span>
+<span class="fc" id="L105">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L106">		assertEquals(&quot;SUCCESS&quot;, status.toString());</span>
+		
+<span class="fc" id="L108">	}</span>
+	
+	@Test
+	public void testHandlMessage_Null(){
+<span class="fc" id="L112">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L113">		Card card = new Card(1);</span>
+<span class="fc" id="L114">		Money money = new Money(100);</span>
+<span class="fc" id="L115">		Balances bal = new Balances();</span>
+<span class="fc" id="L116">		Message message = new Message(5, card,42,1,1,0,money);</span>
+<span class="fc" id="L117">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L118">		assertNull(status);</span>
+		
+<span class="fc" id="L120">	}</span>
+	
+	@Test
+	public void testWithdrawal_InvalidAccount(){
+<span class="fc" id="L124">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L125">		Card card = new Card(1);</span>
+<span class="fc" id="L126">		Money money = new Money(100);</span>
+<span class="fc" id="L127">		Balances bal = new Balances();</span>
+<span class="fc" id="L128">		Message message = new Message(0, card,42,1,2,1,money);</span>
+<span class="fc" id="L129">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L130">		assertEquals(&quot;FAILURE Invalid account type&quot;, status.toString());</span>
+		
+<span class="fc" id="L132">	}</span>
+	
+	@Test
+	public void testWithdrawal_Limit(){
+<span class="fc" id="L136">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L137">		Card card = new Card(1);</span>
+<span class="fc" id="L138">		Money money = new Money(1000);</span>
+<span class="fc" id="L139">		Balances bal = new Balances();</span>
+<span class="fc" id="L140">		Message message = new Message(0, card,42,1,1,1,money);</span>
+<span class="fc" id="L141">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L142">		assertEquals(&quot;FAILURE Daily withdrawal limit exceeded&quot;, status.toString());</span>
+		
+<span class="fc" id="L144">	}</span>
+	
+	@Test
+	public void testWithdrawal_InsufficientBalance(){
+<span class="fc" id="L148">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L149">		Card card = new Card(1);</span>
+<span class="fc" id="L150">		Money money = new Money(200);</span>
+<span class="fc" id="L151">		Balances bal = new Balances();</span>
+<span class="fc" id="L152">		Message message = new Message(0, card,42,1,0,1,money);</span>
+<span class="fc" id="L153">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L154">		assertEquals(&quot;FAILURE Insufficient available balance&quot;, status.toString());</span>
+		
+<span class="fc" id="L156">	}</span>
+	
+	@Test
+	public void testInitiateDeposit_InvalidAccount(){
+<span class="fc" id="L160">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L161">		Card card = new Card(1);</span>
+<span class="fc" id="L162">		Money money = new Money(100);</span>
+<span class="fc" id="L163">		Balances bal = new Balances();</span>
+<span class="fc" id="L164">		Message message = new Message(1, card,42,1,1,2,money);</span>
+<span class="fc" id="L165">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L166">		assertEquals(&quot;FAILURE Invalid account type&quot;, status.toString());</span>
+		
+<span class="fc" id="L168">	}</span>
+	
+	@Test
+	public void testCompleteDeposit_InvalidAccount(){
+<span class="fc" id="L172">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L173">		Card card = new Card(1);</span>
+<span class="fc" id="L174">		Money money = new Money(100);</span>
+<span class="fc" id="L175">		Balances bal = new Balances();</span>
+<span class="fc" id="L176">		Message message = new Message(2, card,42,1,1,2,money);</span>
+<span class="fc" id="L177">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L178">		assertEquals(&quot;FAILURE Invalid account type&quot;, status.toString());</span>
+		
+<span class="fc" id="L180">	}</span>
+	
+	@Test
+	public void testTransfer_InvalidFromAccount(){
+<span class="fc" id="L184">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L185">		Card card = new Card(1);</span>
+<span class="fc" id="L186">		Money money = new Money(100);</span>
+<span class="fc" id="L187">		Balances bal = new Balances();</span>
+<span class="fc" id="L188">		Message message = new Message(3, card,42,1,2,1,money);</span>
+<span class="fc" id="L189">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L190">		assertEquals(&quot;FAILURE Invalid from account type&quot;, status.toString());</span>
+		
+<span class="fc" id="L192">	}</span>
+	
+	@Test
+	public void testTransfer_InvalidToAccount(){
+<span class="fc" id="L196">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L197">		Card card = new Card(1);</span>
+<span class="fc" id="L198">		Money money = new Money(100);</span>
+<span class="fc" id="L199">		Balances bal = new Balances();</span>
+<span class="fc" id="L200">		Message message = new Message(3, card,42,1,1,2,money);</span>
+<span class="fc" id="L201">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L202">		assertEquals(&quot;FAILURE Invalid to account type&quot;, status.toString());</span>
+		
+<span class="fc" id="L204">	}</span>
+	
+	@Test
+	public void testTransfer_SameAccounts(){
+<span class="fc" id="L208">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L209">		Card card = new Card(1);</span>
+<span class="fc" id="L210">		Money money = new Money(100);</span>
+<span class="fc" id="L211">		Balances bal = new Balances();</span>
+<span class="fc" id="L212">		Message message = new Message(3, card,42,1,1,1,money);</span>
+<span class="fc" id="L213">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L214">		assertEquals(&quot;FAILURE Can't transfer money from\n&quot; </span>
+<span class="fc" id="L215">		+&quot;an account to itself&quot;, status.toString());</span>
+		
+<span class="fc" id="L217">	}</span>
+	
+	@Test
+	public void testTransfer_InsufficientBalance(){
+<span class="fc" id="L221">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L222">		Card card = new Card(1);</span>
+<span class="fc" id="L223">		Money money = new Money(200);</span>
+<span class="fc" id="L224">		Balances bal = new Balances();</span>
+<span class="fc" id="L225">		Message message = new Message(3, card,42,1,0,1,money);</span>
+<span class="fc" id="L226">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L227">		assertEquals(&quot;FAILURE Insufficient available balance&quot;, status.toString());</span>
+		
+<span class="fc" id="L229">	}</span>
+	
+	@Test
+	public void testInquiry_InvalidAccount(){
+<span class="fc" id="L233">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L234">		Card card = new Card(1);</span>
+<span class="fc" id="L235">		Money money = new Money(100);</span>
+<span class="fc" id="L236">		Balances bal = new Balances();</span>
+<span class="fc" id="L237">		Message message = new Message(4, card,42,1,2,2,money);</span>
+<span class="fc" id="L238">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L239">		assertEquals(&quot;FAILURE Invalid account type&quot;, status.toString());</span>
+		
+<span class="fc" id="L241">	}</span>
+
+	@Test
+	public void testSuccess_isInvalidPin(){
+<span class="fc" id="L245">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L246">		Card card = new Card(1);</span>
+<span class="fc" id="L247">		Money money = new Money(100);</span>
+<span class="fc" id="L248">		Balances bal = new Balances();</span>
+<span class="fc" id="L249">		Message message = new Message(0, card,42,1,1,1,money);</span>
+<span class="fc" id="L250">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L251">		assertFalse(status.isInvalidPIN());</span>
+		
+<span class="fc" id="L253">	}</span>
+	
+	@Test
+	public void testSuccess_getMessage(){
+<span class="fc" id="L257">		SimulatedBank bank = new SimulatedBank();</span>
+<span class="fc" id="L258">		Card card = new Card(1);</span>
+<span class="fc" id="L259">		Money money = new Money(100);</span>
+<span class="fc" id="L260">		Balances bal = new Balances();</span>
+<span class="fc" id="L261">		Message message = new Message(0, card,42,1,1,1,money);</span>
+<span class="fc" id="L262">		Status status = bank.handleMessage(message,bal);</span>
+<span class="fc" id="L263">		assertNull(status.getMessage());</span>
+		
+<span class="fc" id="L265">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

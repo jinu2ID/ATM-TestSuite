@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SimKeyboard.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">simulation</a> &gt; <span class="el_source">SimKeyboard.java</span></div><h1>SimKeyboard.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">/*</span>
+ * ATM Example system - file SimKeyboard.java
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package simulation;
+
+import java.awt.*;
+import java.awt.event.*;
+
+/** Simulate the keyboard portion of the customer console
+ */
+public class SimKeyboard extends Panel
+{
+    /** Constructor
+     *
+     *  @param display the display on which to echo typed input
+     *  @param envelopeAcceptor - to be notified if cancel is pressed
+     */
+<span class="fc" id="L22">    public SimKeyboard(SimDisplay display,</span>
+                SimEnvelopeAcceptor envelopeAcceptor)
+    {
+<span class="fc" id="L25">        this.display = display;</span>
+<span class="fc" id="L26">        this.envelopeAcceptor = envelopeAcceptor;</span>
+        
+<span class="fc" id="L28">        setLayout(new GridLayout(5,3));</span>
+        
+        // Create the keys representing digits
+        
+<span class="fc" id="L32">        Button [] digitKey = new Button[10];</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        for (int i = 1; i &lt; 10; i ++)</span>
+        { 
+<span class="fc" id="L35">            digitKey[i] = new Button(&quot;&quot; + i);</span>
+<span class="fc" id="L36">            add(digitKey[i]);</span>
+        }
+        
+<span class="fc" id="L39">        add(new Label(&quot;&quot;));</span>
+        
+<span class="fc" id="L41">        digitKey[0] = new Button(&quot;0&quot;);</span>
+<span class="fc" id="L42">        add(digitKey[0]);</span>
+        
+<span class="fc" id="L44">        add(new Label(&quot;&quot;));</span>
+        
+        // Create the function keys
+        
+<span class="fc" id="L48">        Button enterKey = new Button(&quot;ENTER&quot;);</span>
+<span class="fc" id="L49">        enterKey.setForeground(Color.black);</span>
+<span class="fc" id="L50">        enterKey.setBackground(new Color(128, 128, 255)); // Light blue</span>
+<span class="fc" id="L51">        add(enterKey);</span>
+        
+<span class="fc" id="L53">        Button clearKey = new Button(&quot;CLEAR&quot;);</span>
+<span class="fc" id="L54">        clearKey.setForeground(Color.black);</span>
+<span class="fc" id="L55">        clearKey.setBackground(new Color(255, 128, 128)); // Light red</span>
+<span class="fc" id="L56">        add(clearKey);</span>
+        
+<span class="fc" id="L58">        Button cancelKey = new Button(&quot;CANCEL&quot;);</span>
+<span class="fc" id="L59">        cancelKey.setBackground(Color.red);</span>
+<span class="fc" id="L60">        cancelKey.setForeground(Color.black);</span>
+<span class="fc" id="L61">        add(cancelKey);</span>
+        
+        // Add action listeners to each key
+        
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        for (int i = 0; i &lt; 10; i ++)</span>
+<span class="fc" id="L66">            digitKey[i].addActionListener(new ActionListener() {</span>
+                public void actionPerformed(ActionEvent e)
+                {
+<span class="nc" id="L69">                    digitKeyPressed(Integer.parseInt(e.getActionCommand()));</span>
+<span class="nc" id="L70">                }</span>
+            });
+            
+<span class="fc" id="L73">        enterKey.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e)
+            {
+<span class="nc" id="L76">                enterKeyPressed();</span>
+<span class="nc" id="L77">            }</span>
+        });
+
+<span class="fc" id="L80">        clearKey.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e)
+            {
+<span class="nc" id="L83">                clearKeyPressed();</span>
+<span class="nc" id="L84">            }</span>
+        });
+
+<span class="fc" id="L87">        cancelKey.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e)
+            {
+<span class="nc" id="L90">                cancelKeyPressed();</span>
+<span class="nc" id="L91">            }</span>
+        });
+        
+        // Allow the user to use the regular keyboard instead of the awt keyboard
+
+<span class="fc" id="L96">        addKeyListener(new KeyAdapter() {</span>
+            public void keyPressed(KeyEvent e)
+            {
+<span class="nc" id="L99">                char keyChar = e.getKeyChar();</span>
+<span class="nc" id="L100">                int keyCode = e.getKeyCode();</span>
+<span class="nc bnc" id="L101" title="All 4 branches missed.">                if (keyChar &gt;= '0' &amp;&amp; keyChar &lt;= '9')</span>
+                {
+<span class="nc" id="L103">                    digitKeyPressed(keyChar - '0');</span>
+<span class="nc" id="L104">                    e.consume();</span>
+<span class="nc" id="L105">                }</span>
+                else
+                {
+<span class="nc bnc" id="L108" title="All 4 branches missed.">                    switch (keyCode)</span>
+                    {
+                        case KeyEvent.VK_ENTER:
+                        
+<span class="nc" id="L112">                            enterKeyPressed();</span>
+<span class="nc" id="L113">                            break;</span>
+                            
+                        case KeyEvent.VK_CLEAR:
+                        
+<span class="nc" id="L117">                            clearKeyPressed();</span>
+<span class="nc" id="L118">                            break;</span>
+                            
+                        case KeyEvent.VK_CANCEL:
+                        case KeyEvent.VK_ESCAPE:
+                        
+<span class="nc" id="L123">                            cancelKeyPressed();</span>
+                            break;
+                    }
+<span class="nc" id="L126">                    e.consume();</span>
+                }
+<span class="nc" id="L128">            }</span>
+        });
+
+        // Initialze mode and input buffer
+        
+<span class="fc" id="L133">        currentInput = new StringBuffer();</span>
+<span class="fc" id="L134">        mode = IDLE_MODE;</span>
+<span class="fc" id="L135">    }</span>
+    
+    /** Read input from the keyboard
+     *
+     *  @param mode the input mode to use - one of the constants defined below.
+     *  @param maxValue the maximum acceptable value (used in MENU_MODE only)
+     *  @return the line that was entered - null if user pressed CANCEL.
+     */
+    public synchronized String readInput(int mode, int maxValue)
+    {
+<span class="fc" id="L145">        this.mode = mode;</span>
+<span class="fc" id="L146">        this.maxValue = maxValue;</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if (!currentInputSet)</span>
+<span class="nc" id="L148">        	currentInput.setLength(0);</span>
+<span class="fc" id="L149">        cancelled = false;</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        if (mode == AMOUNT_MODE)</span>
+<span class="fc" id="L151">            setEcho(&quot;0.00&quot;);</span>
+        else
+<span class="fc" id="L153">            setEcho(&quot;&quot;);</span>
+<span class="fc" id="L154">        requestFocus();</span>
+        
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">        if (!currentInputSet){</span>
+        	try
+        	{
+<span class="nc" id="L159">        		wait();</span>
+<span class="nc" id="L160">        	}</span>
+<span class="nc" id="L161">        	catch(InterruptedException e)</span>
+        	{ }
+        }
+
+<span class="fc" id="L165">        this.mode = IDLE_MODE;</span>
+        
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">        if (cancelled)</span>
+<span class="nc" id="L168">            return null;</span>
+        else{
+<span class="fc" id="L170">        	String input = currentInput.toString();</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">        	if (currentInputSet){</span>
+<span class="fc" id="L172">        		currentInputSet = false;</span>
+<span class="fc" id="L173">        		currentInput = new StringBuffer();</span>
+        	}
+<span class="fc" id="L175">            return input;</span>
+        }
+    }
+    
+    /** Handle a digit key
+     *
+     *  @param digit the value on the key
+     */
+    public synchronized void digitKeyPressed(int digit)
+    {
+<span class="pc bpc" id="L185" title="1 of 5 branches missed.">        switch (mode)</span>
+        {
+            case IDLE_MODE:
+            
+<span class="fc" id="L189">                break;</span>
+                
+            case PIN_MODE:
+            {
+<span class="fc" id="L193">                currentInput.append(digit);</span>
+<span class="fc" id="L194">                StringBuffer echoString = new StringBuffer();</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">                for (int i = 0; i &lt; currentInput.length(); i ++)</span>
+<span class="fc" id="L196">                    echoString.append('*');</span>
+<span class="fc" id="L197">                setEcho(echoString.toString());</span>
+<span class="fc" id="L198">                break;</span>
+            }
+                
+            case AMOUNT_MODE:
+            {           
+<span class="fc" id="L203">                currentInput.append(digit);</span>
+<span class="fc" id="L204">                String input = currentInput.toString();</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">                if (input.length() == 1)</span>
+<span class="fc" id="L206">                    setEcho(&quot;0.0&quot; + input);</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">                else if (input.length() == 2)</span>
+<span class="fc" id="L208">                    setEcho(&quot;0.&quot; + input);</span>
+                else
+<span class="fc" id="L210">                    setEcho(input.substring(0, input.length() - 2) + &quot;.&quot; +</span>
+<span class="fc" id="L211">                        input.substring(input.length() - 2));</span>
+<span class="fc" id="L212">                break;</span>
+            }
+            
+            case MENU_MODE:
+            {
+<span class="pc bpc" id="L217" title="1 of 4 branches missed.">                if (digit &gt; 0 &amp;&amp; digit &lt;= maxValue)</span>
+                {
+<span class="fc" id="L219">                    currentInput.append(digit);</span>
+<span class="fc" id="L220">                    notify();</span>
+<span class="fc" id="L221">                }</span>
+                else
+<span class="fc" id="L223">                    getToolkit().beep();</span>
+                break;
+            }               
+        }
+<span class="fc" id="L227">    }</span>
+    
+    /** Handle the ENTER key
+     */
+    private synchronized void enterKeyPressed()
+    {
+<span class="nc bnc" id="L233" title="All 4 branches missed.">        switch(mode)</span>
+        {
+            case IDLE_MODE:
+            
+<span class="nc" id="L237">                break;</span>
+                
+            case PIN_MODE:
+            case AMOUNT_MODE:
+            
+<span class="nc bnc" id="L242" title="All 2 branches missed.">                if (currentInput.length() &gt; 0)</span>
+<span class="nc" id="L243">                    notify();</span>
+                else
+<span class="nc" id="L245">                    getToolkit().beep();</span>
+<span class="nc" id="L246">                break;</span>
+                    
+            case MENU_MODE:
+            
+<span class="nc" id="L250">                getToolkit().beep();</span>
+                break;
+        }
+<span class="nc" id="L253">    }           </span>
+                
+    /** Handle the CLEAR key
+     */
+    private synchronized void clearKeyPressed()
+    {
+<span class="nc bnc" id="L259" title="All 5 branches missed.">        switch(mode)</span>
+        {
+            case IDLE_MODE:
+            
+<span class="nc" id="L263">                break;</span>
+                
+            case PIN_MODE:
+            
+<span class="nc" id="L267">                currentInput.setLength(0);</span>
+<span class="nc" id="L268">                setEcho(&quot;&quot;);</span>
+<span class="nc" id="L269">                break;</span>
+                
+            case AMOUNT_MODE:
+            
+<span class="nc" id="L273">                currentInput.setLength(0);</span>
+<span class="nc" id="L274">                setEcho(&quot;0.00&quot;);</span>
+<span class="nc" id="L275">                break;</span>
+                
+            case MENU_MODE:
+            
+<span class="nc" id="L279">                getToolkit().beep();</span>
+                break;
+        }
+<span class="nc" id="L282">    }           </span>
+                
+    /** Handle the CANCEL KEY
+     */
+    public synchronized void cancelKeyPressed()
+    {
+<span class="pc bpc" id="L288" title="2 of 3 branches missed.">        switch(mode)</span>
+        {
+            case IDLE_MODE:
+            
+                // It is possible to press the cancel key when requested
+                // to insert an envelope - so notify the envelope acceptor
+                // of this fact (notification is ignored if acceptor is
+                // not waiting for an envelope)
+                
+<span class="pc" id="L297">                synchronized(envelopeAcceptor)</span>
+                {
+<span class="fc" id="L299">                    envelopeAcceptor.notify();</span>
+                }
+                
+            case PIN_MODE:
+            case AMOUNT_MODE:
+            case MENU_MODE:
+            
+<span class="fc" id="L306">                cancelled = true;</span>
+<span class="fc" id="L307">                notify();</span>
+        }
+<span class="fc" id="L309">    }           </span>
+    
+    /** Set the echo string displayed on the display
+     *
+     *  @param echo the text to set the echo to (the whole line)
+     */
+    private void setEcho(String echo)
+    {
+<span class="fc" id="L317">        display.setEcho(echo);</span>
+<span class="fc" id="L318">    }</span>
+    
+    // Sets value of currentInput
+    public void setCurrentInput(String input){
+<span class="fc" id="L322">    	currentInput = new StringBuffer(input);</span>
+<span class="fc" id="L323">    	currentInputSet = true;</span>
+<span class="fc" id="L324">    }</span>
+    
+    // Get value of currentInput
+    public String getCurrentInput(){
+<span class="fc" id="L328">    	return currentInput.toString();</span>
+    }
+    
+    // Sets value of mode
+    public void setMode(int _mode){
+<span class="fc" id="L333">    	mode = _mode;</span>
+<span class="fc" id="L334">    }</span>
+    
+    // Sets maxValue
+    public void setMaxValue(int max){
+<span class="fc" id="L338">    	maxValue = max;</span>
+<span class="fc" id="L339">    }</span>
+    
+    // Get value of cancelled
+    public boolean getCancelled(){
+<span class="fc" id="L343">    	return cancelled;</span>
+    }
+    
+    /** The display onto which to echo input
+     */
+    private SimDisplay display;
+    
+    /** The envelope acceptor to notify if CANCEL is pressed while not awaiting
+     *  customer input
+     */
+    private SimEnvelopeAcceptor envelopeAcceptor;
+    
+    /** Current input mode - one of the values defined below
+     */
+    private int mode;
+    
+    /** Not currently reading input - ignore keys (except CANCEL)
+     */
+    private static final int IDLE_MODE = 0;
+    
+    /** Read input in PIN mode - allow user to enter several characters,
+     *  and to clear the line if the user wishes; echo as asterisks
+     */
+    private static final int PIN_MODE = Simulation.PIN_MODE;
+    
+    /** Read input in amount mode - allow user to enter several characters,
+     *  and to clear the line if the user wishes; echo what use types
+     */
+    private static final int AMOUNT_MODE = Simulation.AMOUNT_MODE;
+    
+    /** Read input in menu choice mode - wait for one digit key to be pressed,
+     *  and return value immediately.
+     */
+    private static final int MENU_MODE = Simulation.MENU_MODE;
+    
+    /** Current partial line of input
+     */
+    private StringBuffer currentInput;
+    
+    // Keeps track of whether currentInput has been set
+<span class="fc" id="L383">    private boolean currentInputSet = false;</span>
+    
+    /** Cancellation flag - set to true if user cancels
+     */
+    private boolean cancelled;
+    
+    /** Maximum valid value - used in MENU_MODE only
+     */
+    private int maxValue;
+}                               
+    
+    
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

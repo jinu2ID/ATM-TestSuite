@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"DTD/xhtml11-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<title>Requirements Statement for Example ATM System</title>
+</head>
+
+<body>
+
+<h2>Requirements Statement for Example ATM System</h2>
+
+<p>
+The software to be designed will control a simulated automated teller machine (ATM)
+having a magnetic stripe reader for reading an ATM card, a customer console (keyboard and
+display) for interaction with the customer, a slot for depositing envelopes, a dispenser 
+for cash (in multiples of $20), a printer for printing customer receipts, and
+a key-operated switch to allow an operator to start or stop the machine.  The ATM
+will communicate with the bank's computer over an appropriate communication link.
+(The software on the latter is not part of the requirements for this problem.)
+</p>
+
+<p>
+The ATM will service one customer at a time.  A customer will be required to 
+insert an ATM card and enter a personal identification number (PIN) - both of
+which will be sent to the bank for validation as part of each transaction.  The
+customer will then be able to perform one or more transactions.  The card will be 
+retained in the machine until the customer indicates that he/she desires no 
+further transactions, at which point it will be returned - except as noted below.
+</p>
+
+<p>
+The ATM must be able to provide the following services to the customer:
+</p>
+
+<ol>
+<li> A customer must be able to make a cash withdrawal from any suitable account
+   linked to the card, in multiples of $20.00.  Approval must be obtained from 
+   the bank before cash is dispensed.
+</li>
+<li> A customer must be able to make a deposit to any account linked to the card,
+   consisting of cash and/or checks in an envelope.  The customer will enter
+   the amount of the deposit into the ATM, subject to manual verification when
+   the envelope is removed from the machine by an operator.  Approval must be
+   obtained from the bank before physically accepting the envelope.  
+</li>
+<li> A customer must be able to make a transfer of money between any two accounts
+   linked to the card.
+</li>
+<li> A customer must be able to make a balance inquiry of any account linked to
+   the card.
+</li>
+</ol>
+
+<p>
+A customer must be able to abort a transaction in progress by pressing the Cancel
+key instead of responding to a request from the machine.
+</p>
+
+<p>
+The ATM will communicate each transaction to the bank and obtain verification
+that it was allowed by the bank.  Ordinarily, a transaction will be considered
+complete by the bank once it has been approved.  In the case of a deposit, a
+second message will be sent to the bank indicating that the customer has
+deposited the envelope.  (If the customer fails to deposit the envelope within
+the timeout period, or presses cancel instead, no second message will be sent to
+the bank and the deposit will not be credited to the customer.)
+</p>
+
+<p>
+If the bank determines that the customer's PIN is invalid, the customer will be
+required to re-enter the PIN before a transaction can proceed.  If the customer
+is unable to successfully enter the PIN after three tries, the card will be
+permanently retained by the machine, and the customer will have to contact the
+bank to get it back.  
+</p>
+
+<p>
+If a transaction fails for any reason other than an invalid PIN, the ATM will 
+display an explanation of the problem, and will then ask the customer whether
+he/she wants to do another transaction.
+</p>
+
+<p>
+The ATM will provide the customer with a printed receipt for each successful 
+transaction, showing the date, time, machine location, type of transaction, 
+account(s), amount, and ending and available balance(s) of the affected account 
+("to" account for transfers).
+</p>
+
+<p>
+The ATM will have a key-operated switch that will allow an operator to start and stop
+the servicing of customers.  After turning the switch to the "on" position, the operator
+will be required to verify and enter the total cash on hand.  The machine can only be
+turned off when it is not servicing a customer. When the switch is moved to the "off"
+position,  the machine will shut down, so that the operator may remove deposit envelopes
+and reload the machine with cash, blank receipts, etc.
+</p>
+
+<p>
+The ATM will also maintain an internal log of transactions to facilitate resolving
+ambiguities arising from a hardware failure in the middle of a transaction.
+Entries will be made in the log when the ATM is started up and shut down,
+for each message sent to the Bank (along with the response back, if one is expected),
+for the dispensing
+of cash, and for the receiving of an envelope.  Log entries may contain card
+numbers and dollar amounts, but for security will <em>never</em> contain a PIN.
+</p>
+
+<p class="navigation">
+<a href="Intro.html"><img src="Back.gif" alt="Link to previous page" /></a>
+<a href="UseCases.html"><img src="Next.gif" alt="Link to next page" /></a>
+</p>
+
+
+<p>
+<a href="Links.html">Page of links for non frames-enabled browsers.</a>
+</p>
+
+
+<p>
+<a href="http://validator.w3.org/check/referer">
+<img class="XHTML_image"
+	src="XHTML_validation_image.gif"
+	alt="Valid XHTML 1.0!" height="31" width="88" />
+</a>
+</p>
+
+<h6>Copyright &copy; 1996, 1997, 1998, 2000, 2001 - Russell C. Bjork.  Permission for non-commercial 
+reproduction for educational use is hereby granted; all other rights are reserved.</h6>
+
+</body>
+</html>

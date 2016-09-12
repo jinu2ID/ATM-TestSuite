@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestStatusClass.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">tests2</a> &gt; <span class="el_source">TestStatusClass.java</span></div><h1>TestStatusClass.java</h1><pre class="source lang-java linenums">package tests2;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import banking.Status;
+
+<span class="fc" id="L9">public class TestStatusClass {</span>
+	
+<span class="fc" id="L11">	public class testStatus extends Status{</span>
+
+		@Override
+		public boolean isSuccess() {
+<span class="fc bfc" id="L15" title="All 2 branches covered.">			if (success)</span>
+<span class="fc" id="L16">				return true;</span>
+			else
+<span class="fc" id="L18">				return false;</span>
+		}
+
+		@Override
+		public boolean isInvalidPIN() {
+<span class="fc bfc" id="L23" title="All 2 branches covered.">			if (invalidPIN)</span>
+<span class="fc" id="L24">				return true;</span>
+			else
+<span class="fc" id="L26">				return false;</span>
+		}
+
+		@Override
+		public String getMessage() {
+			// TODO Auto-generated method stub
+<span class="fc" id="L32">			return null;</span>
+		}
+		
+<span class="fc" id="L35">		public boolean success = false;</span>
+<span class="fc" id="L36">		public boolean invalidPIN = false;</span>
+		
+	}
+	
+	@Test
+	public void testConstructor(){
+<span class="fc" id="L42">		testStatus status = new testStatus();</span>
+<span class="fc" id="L43">		assertNotNull(status);</span>
+<span class="fc" id="L44">	}</span>
+	
+	@Test
+	public void testToString_Success(){
+<span class="fc" id="L48">		testStatus status = new testStatus();</span>
+<span class="fc" id="L49">		status.success = true;</span>
+<span class="fc" id="L50">		assertEquals(&quot;SUCCESS&quot;, status.toString());</span>
+<span class="fc" id="L51">	}</span>
+
+	@Test
+	public void testToString_InvalidPIN(){
+<span class="fc" id="L55">		testStatus status = new testStatus();</span>
+<span class="fc" id="L56">		status.invalidPIN = true;</span>
+<span class="fc" id="L57">		assertEquals(&quot;INVALID PIN&quot;, status.toString());</span>
+<span class="fc" id="L58">	}</span>
+	
+	@Test
+	public void testToString_Failure(){
+<span class="fc" id="L62">		testStatus status = new testStatus();</span>
+<span class="fc" id="L63">		assertEquals(&quot;FAILURE &quot;+null, status.toString());</span>
+<span class="fc" id="L64">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

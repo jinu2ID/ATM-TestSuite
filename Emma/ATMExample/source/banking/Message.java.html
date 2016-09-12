@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Message.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">banking</a> &gt; <span class="el_source">Message.java</span></div><h1>Message.java</h1><pre class="source lang-java linenums">/*
+ * ATM Example system - file Message.java
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package banking;
+
+/** Representations of a message from the ATM to the bank.
+ *  Messages to the bank use a fixed format with fixed slots, not all of which
+ *  pertain to any given type of transaction.  Each type of transaction creates
+ *  one or more subclasses using the slots that it needs, and supplying appropriate
+ *  &quot;not needed&quot; values for the rest.
+ */
+public class Message
+{
+    /** Constructor
+     *
+     *  @param messageCode identifying the type of message
+     *  @param card the customer's card
+     *  @param pin the PIN entered by the customer
+     *  @param serialNumber serial number of the transaction
+     *  @param fromAccount the type of the &quot;from&quot; account of the transaction - can
+     *         be -1 if the particular type of transaction does not have a &quot;from&quot;
+     *         account (e.g. a deposit) 
+     *  @param toAccount the type of the &quot;to&quot; account of the transaction - can
+     *         be -1 if the particular type of transaction does not have a &quot;to&quot;
+     *         account (e.g. a withdrawal)
+     *  @param amount the amount of the transaction - can be null if the particular
+     *         type of transaction does not have an amount (e.g. an inquiry)
+     */
+<span class="fc" id="L33">    public Message(int messageCode, Card card, int pin, </span>
+                   int serialNumber, int fromAccount, int toAccount, Money amount)
+    {
+<span class="fc" id="L36">        this.messageCode = messageCode;</span>
+<span class="fc" id="L37">        this.card = card;</span>
+<span class="fc" id="L38">        this.pin = pin;</span>
+<span class="fc" id="L39">        this.serialNumber = serialNumber;</span>
+<span class="fc" id="L40">        this.fromAccount = fromAccount;</span>
+<span class="fc" id="L41">        this.toAccount = toAccount;</span>
+<span class="fc" id="L42">        this.amount = amount;</span>
+<span class="fc" id="L43">    }</span>
+    
+    /** Create a printable string representing this message
+     *
+     *  @return string representation
+     */
+    public String toString()
+    {
+<span class="fc" id="L51">        String result = &quot;&quot;;</span>
+        
+<span class="pc bpc" id="L53" title="1 of 6 branches missed.">        switch (messageCode)</span>
+        {
+            case WITHDRAWAL:
+            
+<span class="fc" id="L57">                result += &quot;WITHDRAW&quot;;</span>
+<span class="fc" id="L58">                break;</span>
+                
+            case INITIATE_DEPOSIT:
+            
+<span class="fc" id="L62">                result += &quot;INIT_DEP&quot;;</span>
+<span class="fc" id="L63">                break;</span>
+                
+            case COMPLETE_DEPOSIT:
+            
+<span class="fc" id="L67">                result += &quot;COMP_DEP&quot;;</span>
+<span class="fc" id="L68">                break;</span>
+                
+            case TRANSFER:
+            
+<span class="fc" id="L72">                result += &quot;TRANSFER&quot;;</span>
+<span class="fc" id="L73">                break;</span>
+                
+            case INQUIRY:
+            
+<span class="fc" id="L77">                result += &quot;INQUIRY &quot;;</span>
+                break;
+<span class="fc" id="L79">        }</span>
+        
+<span class="fc" id="L81">        result += &quot; CARD# &quot; + card.getNumber();</span>
+<span class="fc" id="L82">        result += &quot; TRANS# &quot; + serialNumber;</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        if (fromAccount &gt;= 0)</span>
+<span class="fc" id="L84">            result += &quot; FROM  &quot; + fromAccount;</span>
+        else
+<span class="fc" id="L86">            result += &quot; NO FROM&quot;;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (toAccount &gt;= 0)</span>
+<span class="fc" id="L88">            result += &quot; TO  &quot; + toAccount;</span>
+        else
+<span class="fc" id="L90">            result += &quot; NO TO&quot;;</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (! amount.lessEqual(new Money(0)))</span>
+<span class="fc" id="L92">            result += &quot; &quot; + amount;</span>
+        else
+<span class="fc" id="L94">            result += &quot; NO AMOUNT&quot;;</span>
+        
+<span class="fc" id="L96">        return result;</span>
+    } 
+                
+    /** Set PIN to a new value (if original pin was invalid and customer is
+     *  asked to re-enter PIN)
+     *
+     *  @param pin the new pin to set
+     */
+    public void setPIN(int pin)
+    {
+<span class="fc" id="L106">        this.pin = pin;</span>
+<span class="fc" id="L107">    }</span>
+    
+    /** Accessor for message code
+     *
+     *  @return the code identifying the type of message
+     */
+    public int getMessageCode()
+    {
+<span class="fc" id="L115">        return messageCode;</span>
+    }
+    
+    /** Accessor for customer's card
+     *
+     *  @return the customer's card
+     */
+    public Card getCard()
+    {
+<span class="fc" id="L124">        return card;</span>
+    }
+    
+    /** Accessor for PIN
+     *
+     *  @return the PIN entered by the customer
+     */
+    public int getPIN()
+    {
+<span class="fc" id="L133">        return pin;</span>
+    }
+    
+    /** Accessor for transaction serial number
+     *
+     *  @return the serial number of the transaction
+     */
+    public int getSerialNumber()
+    {
+<span class="fc" id="L142">        return serialNumber;</span>
+    }
+    
+    /** Accessor for &quot;from&quot; account
+     *
+     *  @return the type of the &quot;from&quot; account
+     */
+    public int getFromAccount()
+    {
+<span class="fc" id="L151">        return fromAccount;</span>
+    }
+    
+    /** Accessor for &quot;to&quot; account
+     *
+     *  @return the type of the &quot;to&quot; account
+     */
+    public int getToAccount()
+    {
+<span class="fc" id="L160">        return toAccount;</span>
+    }
+    
+    /** Accessor for acmount
+     *
+     *  @return the transaction amount
+     */
+    public Money getAmount()
+    {
+<span class="fc" id="L169">        return amount;</span>
+    }
+    
+
+    // Possible values for messageCode
+    
+
+    /** messageCode value for a cash withdrawal message
+     */ 
+    public static final int WITHDRAWAL = 0;
+    
+    /** messageCode value for a message initiating a deposit
+     */ 
+    public static final int INITIATE_DEPOSIT = 1;
+    
+    /** messageCode value for a message completing a deposit (envelope received).
+     */ 
+    public static final int COMPLETE_DEPOSIT = 2;
+    
+    /** messageCode value for a transfer between accounts message
+     */ 
+    public static final int TRANSFER = 3;
+    
+    /** messageCode value for an inquiry message
+     */ 
+    public static final int INQUIRY = 4;
+
+
+    // Fixed slots in the message - may not all be used for any given message
+
+
+    /** Code identifying the type of message - one of the above values
+     */
+    private int messageCode;
+    
+    /** The customer's card
+     */
+    private Card card;
+    
+    /** PIN entered by customer
+     */
+    private int pin;
+    
+    /** Serial number of the transaction
+     */
+    private int serialNumber;
+    
+    /** &quot;From&quot; account specified by customer - if needed (else - 1)
+     */
+    private int fromAccount;
+    
+    /** &quot;To&quot; account specified by customer - if needed (else - 1)
+     */
+    private int toAccount;
+    
+    /** Transaction amount specified by customer - if needed (else $0.00)
+     */
+    private Money amount;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

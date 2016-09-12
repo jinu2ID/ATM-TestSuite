@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestATMClass.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">tests2</a> &gt; <span class="el_source">TestATMClass.java</span></div><h1>TestATMClass.java</h1><pre class="source lang-java linenums">package tests2;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import atm.ATM;
+import atm.physical.CardReader;
+import atm.physical.CashDispenser;
+import atm.physical.CustomerConsole;
+import atm.physical.EnvelopeAcceptor;
+import simulation.Simulation;
+
+<span class="fc" id="L14">public class TestATMClass {</span>
+
+	@Test
+	public void testATMConstructor(){
+		
+<span class="fc" id="L19">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+		
+<span class="fc" id="L21">		assertNotNull(newATM);</span>
+<span class="fc" id="L22">	}</span>
+
+	@Test
+	public void testRun(){
+		
+<span class="fc" id="L27">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L28">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L30">		Thread atm = new Thread(newATM);</span>
+<span class="fc" id="L31">		atm.start();</span>
+<span class="fc" id="L32">		newATM.switchOn();</span>
+<span class="fc" id="L33">		newATM.setBills(&quot;5&quot;);</span>
+		
+		try {
+<span class="fc" id="L36">			atm.join(10000);</span>
+<span class="pc" id="L37">		} catch (InterruptedException e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L39">			e.printStackTrace();</span>
+		}
+		
+		
+<span class="fc" id="L43">	}</span>
+	@Test
+	public void testSwitchOn(){
+		
+<span class="fc" id="L47">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L48">		newATM.switchOn();</span>
+		
+<span class="fc" id="L50">		assertTrue(newATM.getSwitchOn());</span>
+		
+<span class="fc" id="L52">	}</span>
+	
+	@Test
+	public void testSwitchOff(){
+		
+<span class="fc" id="L57">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L58">		newATM.switchOn();</span>
+		
+<span class="fc" id="L60">		newATM.switchOff();</span>
+		
+<span class="fc" id="L62">		assertFalse(newATM.getSwitchOn());</span>
+		
+<span class="fc" id="L64">	}</span>
+	
+	@Test
+	public void testCardInserted(){
+		
+<span class="fc" id="L69">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L70">		assertFalse(newATM.getCardInserted());</span>
+		
+<span class="fc" id="L72">		newATM.cardInserted();</span>
+<span class="fc" id="L73">		assertTrue(newATM.getCardInserted());</span>
+		
+<span class="fc" id="L75">	}</span>
+	
+	@Test
+	public void testSetCardNumberField(){
+		
+<span class="fc" id="L80">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L81">		Simulation theSimulation = new Simulation(newATM);</span>
+<span class="fc" id="L82">		newATM.setCardNumberField(&quot;1234&quot;);</span>
+		
+<span class="fc" id="L84">		assertEquals(&quot;1234&quot;, Simulation.getInstance().getCardNumberField());</span>
+		
+<span class="fc" id="L86">	}</span>
+	
+	@Test
+	public void testSetCurrentInput(){
+		
+<span class="fc" id="L91">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L92">		Simulation theSimulation = new Simulation(newATM);</span>
+<span class="fc" id="L93">		newATM.setCurrentInput(&quot;1&quot;);</span>
+		
+<span class="fc" id="L95">		assertEquals(&quot;1&quot;, Simulation.getInstance().getCurrentInput());</span>
+<span class="fc" id="L96">	}</span>
+	
+	@Test
+	public void testGetID(){
+		
+<span class="fc" id="L101">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L102">		int id = newATM.getID();</span>
+		
+<span class="fc" id="L104">		assertEquals(1, id);</span>
+<span class="fc" id="L105">	}</span>
+	
+	@Test
+	public void testGetPlace(){
+		
+<span class="fc" id="L110">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L111">		String place = newATM.getPlace();</span>
+		
+<span class="fc" id="L113">		assertEquals(&quot;testPlace&quot;, place);</span>
+<span class="fc" id="L114">	}</span>
+	
+	@Test
+	public void testGetBankName(){
+		
+<span class="fc" id="L119">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L120">		String bankName = newATM.getBankName();</span>
+		
+<span class="fc" id="L122">		assertEquals(&quot;testBank&quot;, bankName);</span>
+		
+<span class="fc" id="L124">	}</span>
+	
+	@Test
+	public void testGetCardReader(){
+		
+<span class="fc" id="L129">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L130">		CardReader newReader = newATM.getCardReader();</span>
+		
+<span class="fc" id="L132">		assertNotNull(newReader);</span>
+<span class="fc" id="L133">	}</span>
+	
+	@Test
+	public void testGetCashDispenser(){
+		
+<span class="fc" id="L138">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L139">		CashDispenser newDispenser = newATM.getCashDispenser();</span>
+		
+<span class="fc" id="L141">		assertNotNull(newDispenser);</span>
+<span class="fc" id="L142">	}</span>
+	
+	@Test
+	public void testGetCustomerConsole(){
+		
+<span class="fc" id="L147">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L148">		CustomerConsole newConsole = newATM.getCustomerConsole();</span>
+		
+<span class="fc" id="L150">		assertNotNull(newConsole);</span>
+<span class="fc" id="L151">	}</span>
+	
+	@Test
+	public void testGetEnvelopeAcceptor(){
+		
+<span class="fc" id="L156">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L157">		EnvelopeAcceptor newAcceptor = newATM.getEnvelopeAcceptor();</span>
+		
+<span class="fc" id="L159">		assertNotNull(newAcceptor);</span>
+<span class="fc" id="L160">	}</span>
+	
+	@Test
+	public void testEnvelopeAcceptorIsVisible
+	(){
+		
+<span class="fc" id="L166">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+		
+<span class="fc" id="L168">		assertFalse(newATM.envelopeAcceptorIsVisible());</span>
+<span class="fc" id="L169">	}</span>
+	
+	@Test
+	public void testEnvelopeAcceptorIsVisibleFalse(){
+	
+<span class="fc" id="L174">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L175">		Simulation theSimulation = new Simulation(newATM);</span>
+<span class="fc" id="L176">		Simulation.getInstance().acceptEnvelope();</span>
+		
+<span class="fc" id="L178">		assertFalse(newATM.envelopeAcceptorIsVisible());</span>
+		
+<span class="fc" id="L180">	}</span>
+	
+	@Test
+	public void testGetEnvelopeAcceptorLabel(){
+		
+<span class="fc" id="L185">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L186">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L188">		assertNotNull(newATM.getEnvelopeAcceptorLabel());</span>
+<span class="fc" id="L189">	}</span>
+	
+	@Test
+	public void testSetEnvelopeInsert(){
+		
+<span class="fc" id="L194">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L195">		Simulation theSimulation = new Simulation(newATM);</span>
+<span class="fc" id="L196">		Simulation.getInstance().acceptEnvelope();</span>
+		
+<span class="fc" id="L198">		newATM.setEnvelopeInsert(true);</span>
+		
+<span class="fc" id="L200">		assertTrue(Simulation.getInstance().getEnvelopeInserted());</span>
+<span class="fc" id="L201">	}</span>
+	
+	@Test
+	public void testGetLog(){
+
+<span class="fc" id="L206">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L207">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L209">		assertNotNull(newATM.getLog());</span>
+<span class="fc" id="L210">	}</span>
+	
+	@Test
+	public void testGetLogString(){
+		
+<span class="fc" id="L215">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L216">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L218">		assertNotNull(newATM.getLogString());</span>
+		
+<span class="fc" id="L220">	}</span>
+	
+	@Test
+	public void testGetNetworkToBank(){
+		
+<span class="fc" id="L225">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L226">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L228">		assertNotNull(newATM.getNetworkToBank());</span>
+<span class="fc" id="L229">	}</span>
+	
+	@Test
+	public void testGetOperatorPanel(){
+		
+<span class="fc" id="L234">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L235">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L237">		assertNotNull(newATM.getOperatorPanel());</span>
+		
+<span class="fc" id="L239">	}</span>
+	
+	@Test
+	public void testGetReceiptPrinter(){
+	
+<span class="fc" id="L244">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L245">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L247">		assertNotNull(newATM.getReceiptPrinter());</span>
+<span class="fc" id="L248">	}</span>
+	
+	@Test
+	public void testGetReciept(){
+<span class="fc" id="L252">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L253">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L255">		assertNotNull(newATM.getReceipt());</span>
+<span class="fc" id="L256">	}</span>
+	
+	@Test
+	public void testGetState(){
+	
+<span class="fc" id="L261">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L262">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L264">		assertEquals(0, newATM.getState());</span>
+<span class="fc" id="L265">	}</span>
+	
+	@Test
+	public void testGetSwitchOn(){
+		
+<span class="fc" id="L270">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L271">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L273">		assertFalse(newATM.getSwitchOn());</span>
+<span class="fc" id="L274">	}</span>
+	
+	@Test
+	public void testGetCardInserted(){
+		
+<span class="fc" id="L279">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L280">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L282">		assertFalse(newATM.getCardInserted());</span>
+<span class="fc" id="L283">	}</span>
+	
+	@Test
+	public void testSetBills(){
+		
+<span class="fc" id="L288">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L289">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L291">		newATM.setBills(&quot;5&quot;);</span>
+<span class="fc" id="L292">		assertEquals(&quot;5&quot;,(Simulation.getInstance().getBillsPanelBills()));</span>
+		
+<span class="fc" id="L294">	}</span>
+	
+	@Test 
+	public void testGetNFECount(){
+		
+<span class="fc" id="L299">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L300">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L302">		assertEquals(0, newATM.getNFECount());</span>
+<span class="fc" id="L303">	}</span>
+	
+	@Test
+	public void testGetCard(){
+		
+<span class="fc" id="L308">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L309">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L311">		assertNotNull(newATM.getCard());</span>
+<span class="fc" id="L312">	}</span>
+	
+	@Test
+	public void testGetDisplay(){
+<span class="fc" id="L316">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L317">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L319">		assertNotNull(newATM.getDisplay());</span>
+<span class="fc" id="L320">	}</span>
+	
+	@Test
+	public void testGetLabel(){
+		
+<span class="fc" id="L325">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L326">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L328">		assertNotNull(newATM.getLabel());</span>
+<span class="fc" id="L329">	}</span>
+	
+	@Test
+	public void testUpdateSessionState(){
+		
+<span class="fc" id="L334">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L335">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L337">		newATM.updateSessionState(1);</span>
+<span class="fc" id="L338">		assertEquals(1, newATM.sessionState);</span>
+<span class="fc" id="L339">	}</span>
+	
+	@Test
+	public void testUpdateTransactionState(){
+		
+<span class="fc" id="L344">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L345">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L347">		newATM.updateTransactionState(1);</span>
+<span class="fc" id="L348">		assertEquals(1, newATM.transactionState);</span>
+<span class="fc" id="L349">	}</span>
+	
+	@Test
+	public void testUpdatePinInvalidCount(){
+		
+<span class="fc" id="L354">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L355">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L357">		assertEquals(0, newATM.pinInvalidCount);</span>
+<span class="fc" id="L358">		newATM.updatePinInvalidCount(1);</span>
+<span class="fc" id="L359">		assertEquals(1, newATM.pinInvalidCount);</span>
+<span class="fc" id="L360">	}</span>
+	
+	@Test
+	public void testUpdateCardRetained(){
+		
+<span class="fc" id="L365">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L366">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L368">		assertFalse(newATM.isCardRetained);</span>
+<span class="fc" id="L369">		newATM.updateCardRetained(true);</span>
+<span class="fc" id="L370">		assertTrue(newATM.isCardRetained);</span>
+<span class="fc" id="L371">	}</span>
+	
+	@Test
+	public void testCancelKeyPress(){
+		
+<span class="fc" id="L376">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L377">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L379">		newATM.cancelKeyPressed();</span>
+<span class="fc" id="L380">		assertTrue(Simulation.getInstance().getCancelled());</span>
+<span class="fc" id="L381">	}</span>
+	
+	@Test
+	public void testGetCOH(){
+		
+<span class="fc" id="L386">		ATM newATM = new ATM(1, &quot;testPlace&quot;, &quot;testBank&quot;, null);</span>
+<span class="fc" id="L387">		Simulation theSimulation = new Simulation(newATM);</span>
+		
+<span class="fc" id="L389">		assertNotNull(newATM.getCOH());</span>
+<span class="fc" id="L390">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

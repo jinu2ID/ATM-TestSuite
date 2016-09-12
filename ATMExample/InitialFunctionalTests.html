@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"DTD/xhtml11-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+
+<title>Initial Functional Test Cases for Example ATM System</title>
+
+</head>
+
+<body>
+<h2>Initial Functional Test Cases for Example ATM System</h2>
+
+<p>
+The following initial test cases can be identified early in the design process as a
+vehicle for checking that the implementation is basically correct.  <em>No attempt has
+been made at this point to do thorough testing, including all possible errors and
+boundary cases.</em>  That needs to come later.  These cases represent an initial check
+that the functionality specified by the use cases is present.
+</p>
+
+<p>
+Some writers would argue for developing test cases like these <em>in place of</em>
+use cases.  Here, they are presented as a vehicle for &quot;fleshing out&quot; the use
+cases, not as a substitute for them.
+</p>
+
+<table border="3" frame="box" rules="groups" width="100%">
+<thead>
+<tr><th>Use Case</th><th>Function Being Tested</th><th>Initial System State</th><th>Input</th><th>Expected Output</th></tr>
+<tr><td>System Startup</td>
+	<td>System is started when the switch is turned &quot;on&quot;</td>
+	<td>System is off</td>
+	<td>Activate the &quot;on&quot; switch</td>
+	<td>System requests initial cash amount</td>
+</tr>
+</thead>
+
+
+<tbody>
+<tr><td>System Startup</td>
+	<td>System accepts initial cash amount</td>
+	<td>System is requesting cash amount</td>
+	<td>Enter a legitimate amount</td>
+	<td>System is on</td>
+</tr>
+<tr><td>System Startup</td>
+	<td>Connection to the bank is established</td>
+	<td>System has just been turned on</td>
+	<td>Perform a legitimate inquiry transaction</td>
+	<td>System output should demonstrate that a connection has been established to the Bank</td>
+</tr>
+</tbody>
+
+<tbody>
+<tr><td>System Shutdown</td>
+	<td>System is shut down when the switch is turned &quot;off&quot;</td>
+	<td>System is on and not servicing a customer</td>
+	<td>Activate the &quot;off&quot; switch</td>
+	<td>System is off</td>
+</tr>
+<tr><td>System Shutdown</td>
+	<td>Connection to the Bank is terminated when the system is shut down</td>
+	<td>System has just been shut down</td>
+	<td>&nbsp;</td>
+	<td>Verify from the bank side that a connection to the ATM no longer exists</td>
+</tr>
+</tbody>
+
+<tbody>
+<tr><td>Session</td>
+	<td>System reads a customer's ATM card</td>
+	<td>System is on and not servicing a customer</td>
+	<td>Insert a readable card</td>
+	<td>Card is accepted;<br />
+		System asks for entry of PIN</td>
+</tr>
+<tr><td>Session</td>
+	<td>System rejects an unreadable card</td>
+	<td>System is on and not servicing a customer</td>
+	<td>Insert an unreadable card</td>
+	<td>Card is ejected;<br />
+		System displays an error screen;<br />
+		System is ready to start a new session</td>
+</tr>
+<tr><td>Session</td>
+	<td>System accepts customer's PIN</td>
+	<td>System is asking for entry of PIN</td>
+	<td>Enter a PIN</td>
+	<td>System displays a menu of transaction types</td>
+</tr>
+<tr><td>Session</td>
+	<td>System allows customer to perform a transaction</td>
+	<td>System is displaying menu of transaction types</td>
+	<td>Perform a transaction</td>
+	<td>System asks whether customer wants another transaction</td>
+</tr>
+<tr><td>Session</td>
+	<td>System allows multiple transactions in one session</td>
+	<td>System is asking whether customer wants another transaction</td>
+	<td>Answer yes</td>
+	<td>System displays a menu of transaction types</td>
+</tr>
+<tr><td>Session</td>
+	<td>Session ends when customer chooses not to do another transaction</td>
+	<td>System is asking whether customer wants another transaction </td>
+	<td>Answer no</td>
+	<td>System ejects card and is ready to start a new session</td>
+</tr>
+</tbody>
+
+<tbody>
+<tr><td>Transaction</td>
+	<td>Individual types of transaction will be tested below</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr><td>Transaction</td>
+	<td>System handles an invalid PIN properly</td>
+	<td>A readable card has been entered</td>
+	<td>Enter an incorrect PIN and then attempt a transaction</td>
+	<td>The Invalid PIN Extension is performed</td>
+</tr>
+</tbody>
+
+<tbody>
+<tr><td>Withdrawal</td>
+	<td>System asks customer to choose an account to withdraw from</td>
+	<td>Menu of transaction types is being displayed</td>
+	<td>Choose Withdrawal transaction</td>
+	<td>System displays a menu of account types</td>
+</tr>
+<tr><td>Withdrawal</td>
+	<td>System asks customer to choose a dollar amount to withdraw</td>
+	<td>Menu of account types is being displayed</td>
+	<td>Choose checking account</td>
+	<td>System displays a menu of possible withdrawal amounts</td>
+</tr>
+<tr><td>Withdrawal</td>
+	<td>System performs a legitimate withdrawal transaction properly</td>
+	<td>System is displaying the menu of withdrawal amounts</td>
+	<td>Choose an amount that the system currently has and which is not greater than
+		the account balance</td>
+	<td>System dispenses this amount of cash;<br /> 
+		System prints a correct receipt showing amount and correct updated balance;<br />
+		System records transaction correctly in the log (showing both message to the bank
+			and approval back)</td>
+</tr>
+<tr><td>Withdrawal</td>
+	<td>System verifies that it has sufficient cash on hand to fulfill the request</td>
+	<td>System has been started up with less than the maximum withdrawal amount in cash on hand;<br />
+		System is requesting a withdrawal amount</td>
+	<td>Choose an amount greater than what the system currently has</td>
+	<td>System displays an appropriate message and asks customer to choose a different amount</td>
+</tr>
+<tr><td>Withdrawal</td>
+	<td>System verifies that customer's balance is sufficient to fulfill the request</td>
+	<td>System is requesting a withdrawal ammount</td>
+	<td>Choose an amount that the system currently has but which is greater than
+		the account balance</td>
+	<td>System displays an appropriate message and offers customer the option of choosing
+		to do another transaction or not.</td>
+</tr>
+<tr><td>Withdrawal</td>
+	<td>A withdrawal transaction can be cancelled by the customer any time prior to choosing
+		the dollar amount</td>
+	<td>System is displaying menu of account types</td>
+	<td>Press &quot;Cancel&quot; key</td>
+	<td>System displays an appropriate message and offers customer the option of choosing
+		to do another transaction or not.</td>
+</tr>
+<tr><td>Withdrawal</td>
+	<td>A withdrawal transaction can be cancelled by the customer any time prior to choosing
+		the dollar amount</td>
+	<td>System is displaying menu of dollar amounts</td>
+	<td>Press &quot;Cancel&quot; key</td>
+	<td>System displays an appropriate message and offers customer the option of choosing
+		to do another transaction or not.</td>
+</tr>
+</tbody>
+		
+<tbody>
+<tr><td>Deposit</td>
+	<td>System asks customer to choose an account to deposit to</td>
+	<td>Menu of transaction types is being displayed</td>
+	<td>Choose Deposit transaction</td>
+	<td>System displays a menu of account types</td>
+</tr>
+<tr><td>Deposit</td>
+	<td>System asks customer to enter a dollar amount to deposit</td>
+	<td>Menu of account types is being displayed</td>
+	<td>Choose checking account</td>
+	<td>System displays a request for the customer to type a dollar amount</td>
+</tr>
+<tr><td>Deposit</td>
+	<td>System asks customer to insert an envelope</td>
+	<td>System is displaying a request for the customer to type a dollar amount</td>
+	<td>Enter a legitimate dollar amount</td>
+	<td>System requests that customer insert an envelope</td>
+</tr>
+<tr><td>Deposit</td>
+	<td>System performs a legitimate deposit transaction properly</td>
+	<td>System is requesting that customer insert an envelope</td>
+	<td>Insert an envelope</td>
+	<td>System accepts envelope;<br /> 
+		System prints a correct receipt showing amount and correct updated balance;<br />
+		System records transaction correctly in the log (showing message to the bank,
+			approval back, and acceptance of the envelope)</td>
+</tr>
+<tr><td>Deposit</td>
+	<td>A deposit transaction can be cancelled by the customer any time prior to
+		inserting an envelope</td>
+	<td>System is displaying menu of account types</td>
+	<td>Press &quot;Cancel&quot; key</td>
+	<td>System displays an appropriate message and offers customer the option of choosing
+		to do another transaction or not.</td>
+</tr>
+<tr><td>Deposit</td>
+	<td>A deposit transaction can be cancelled by the customer any time prior to
+		inserting an envelope</td>
+	<td>System is requesting customer to enter a dollar amount</td>
+	<td>Press &quot;Cancel&quot; key</td>
+	<td>System displays an appropriate message and offers customer the option of choosing
+		to do another transaction or not.</td>
+</tr>
+<tr><td>Deposit</td>
+	<td>A deposit transaction can be cancelled by the customer any time prior to
+		inserting an envelope</td>
+	<td>System is requesting customer to insert an envelope</td>
+	<td>Press &quot;Cancel&quot; key</td>
+	<td>System displays an appropriate message and offers customer the option of choosing
+		to do another transaction or not.</td>
+</tr>
+<tr><td>Deposit</td>
+	<td>A deposit transaction is cancelled automatically if an envelope is not
+		inserted within a reasonable time</td>
+	<td>System is requesting customer to insert an envelope</td>
+	<td>Wait for the request to time out</td>
+	<td>System displays an appropriate message and offers customer the option of choosing
+		to do another transaction or not.</td>
+</tr>
+</tbody>
+
+<tbody>
+<tr><td>Transfer</td>
+	<td>System asks customer to choose an account to transfer from</td>
+	<td>Menu of transaction types is being displayed</td>
+	<td>Choose Transfer transaction</td>
+	<td>System displays a menu of account types specifying transfer from</td>
+</tr>
+<tr><td>Transfer</td>
+	<td>System asks customer to choose an account to transfer to</td>
+	<td>Menu of account types to transfer from is being displayed</td>
+	<td>Choose checking account</td>
+	<td>System displays a menu of account types specifying transfer to</td>
+</tr>
+<tr><td>Transfer</td>
+	<td>System asks customer to enter a dollar amount to transfer</td>
+	<td>Menu of account types to transfer to is being displayed</td>
+	<td>Choose savings account</td>
+	<td>System displays a request for the customer to type a dollar amount</td>
+</tr>
+<tr><td>Transfer</td>
+	<td>System performs a legitimate transfer transaction properly</td>
+	<td>System is displaying a request for the customer to type a dollar amount</td>
+	<td>Enter a legitimate dollar amount</td>
+	<td>System prints a correct receipt showing amount and correct updated balance;<br />
+		System records transaction correctly in the log (showing both message to the bank
+			and approval back)</td>
+</tr>
+<tr><td>Transfer</td>
+	<td>A transfer transaction can be cancelled by the customer any time prior to
+		entering dollar amount</td>
+	<td>System is displaying menu of account types specifying transfer from</td>
+	<td>Press &quot;Cancel&quot; key</td>
+	<td>System displays an appropriate message and offers customer the option of choosing
+		to do another transaction or not.</td>
+</tr>
+<tr><td>Transfer</td>
+	<td>A transfer transaction can be cancelled by the customer any time prior to
+		entering dollar amount</td>
+	<td>System is displaying menu of account types specifying transfer to</td>
+	<td>Press &quot;Cancel&quot; key</td>
+	<td>System displays an appropriate message and offers customer the option of choosing
+		to do another transaction or not.</td>
+</tr>
+<tr><td>Transfer</td>
+	<td>A transfer transaction can be cancelled by the customer any time prior to
+		entering dollar amount</td>
+	<td>System is requesting customer to enter a dollar amount</td>
+	<td>Press &quot;Cancel&quot; key</td>
+	<td>System displays an appropriate message and offers customer the option of choosing
+		to do another transaction or not.</td>
+</tr>
+</tbody>
+
+<tbody>
+<tr><td>Inquiry</td>
+	<td>System asks customer to choose an account to inquire about</td>
+	<td>Menu of transaction types is being displayed</td>
+	<td>Choose Inquiry transaction</td>
+	<td>System displays a menu of account types</td>
+</tr>
+<tr><td>Inquiry</td>
+	<td>System performs a legitimate inquiry transaction properly</td>
+	<td>System is displaying menu of account types</td>
+	<td>Choose checking account</td>
+	<td>System prints a correct receipt showing correct balance;<br />
+		System records transaction correctly in the log (showing both message to the bank
+			and approval back)</td>
+</tr>
+<tr><td>Inquiry</td>
+	<td>An inquiry transaction can be cancelled by the customer any time prior to
+		choosing an account</td>
+	<td>System is displaying menu of account types</td>
+	<td>Press &quot;Cancel&quot; key</td>
+	<td>System displays an appropriate message and offers customer the option of choosing
+		to do another transaction or not.</td>
+</tr>
+</tbody>
+
+
+<tbody>
+<tr><td>Invalid PIN Extension</td>
+	<td>Customer is asked to reenter PIN</td>
+	<td>&nbsp;</td>
+	<td>Enter an incorrect PIN;<br />
+		Attempt an inquiry transaction on the customer's checking account</td>
+	<td>Customer is asked to re-enter PIN</td>
+</tr>
+<tr><td>Invalid PIN Extension</td>
+	<td>Correct re-entry of PIN is accepted</td>
+	<td>Request to re-enter PIN is being displayed</td>
+	<td>Enter correct PIN</td>
+	<td>Original transaction completes successfully</td>
+</tr>
+<tr><td>Invalid PIN Extension</td>
+	<td>A correctly re-entered PIN is used for subsequent transactions</td>
+	<td>An incorrect PIN has been re-entered and transaction completed normally</td>
+	<td>Perform another transaction</td>
+	<td>This transaction completes successfully as well</td>
+</tr>
+<tr><td>Invalid PIN Extension</td>
+	<td>Incorrect re-entry of PIN is not accepted</td>
+	<td>Request to re-enter PIN is being displayed</td>
+	<td>Enter incorrect PIN</td>
+	<td>An appropriate message is displayed and re-entry of the PIN is again
+		requested</td>
+</tr>
+<tr><td>Invalid PIN Extension</td>
+	<td>Correct re-entry of PIN on the second try is accepted</td>
+	<td>Request to re-enter PIN is being displayed</td>
+	<td>Enter incorrect PIN the first time, then correct PIN the second time</td>
+	<td>Original transaction completes successfully</td>
+</tr>
+<tr><td>Invalid PIN Extension</td>
+	<td>Correct re-entry of PIN on the third try is accepted</td>
+	<td>Request to re-enter PIN is being displayed</td>
+	<td>Enter incorrect PIN the first time and second times, then correct PIN the third time</td>
+	<td>Original transaction completes successfully</td>
+</tr>
+<tr><td>Invalid PIN Extension</td>
+	<td>Three incorrect re-entries of PIN result in retaining card and aborting transaction</td>
+	<td>Request to re-enter PIN is being displayed</td>
+	<td>Enter incorrect PIN three times</td>
+	<td>An appropriate message is displayed;<br />
+		Card is retained by machine;<br />
+		Session is terminated</td>
+</tr>
+</tbody>
+
+</table>
+
+
+<p class="navigation">
+<a href="UseCases.html"><img src="Back.gif" alt="Link to previous page" /></a>
+<a href="AnalysisClasses.html"><img src="Next.gif" alt="Link to next page" /></a>
+</p>
+
+<p>
+<a href="Links.html">Page of links for non frames-enabled browsers.</a>
+</p>
+
+
+<p>
+<a href="http://validator.w3.org/check/referer">
+<img class="XHTML_image"
+	src="XHTML_validation_image.gif"
+	alt="Valid XHTML 1.0!" height="31" width="88" />
+</a>
+</p>
+
+<h6>Copyright &copy; 2004 - Russell C. Bjork.  Permission for non-commercial 
+reproduction for educational use is hereby granted; all other rights are reserved.</h6>
+
+</body>
+</html>

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"DTD/xhtml11-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+<meta name="keywords" content="object-oriented, analysis, design, UML, java" /> 
+<title>Introduction</title>
+
+</head>
+
+<body>
+<h2>Introduction</h2>
+
+<h3>What you will Find Here</h3>
+
+<p>
+This page is the starting point into a series of pages that attempt to give a
+complete example of object-oriented analysis, design, and programming applied to
+a moderate size problem: the simulation of an Automated Teller Machine.  I developed
+these pages in the belief that students would benefit from seeing a <em>complete
+</em> example of OO methodology applied to a single problem.  Since then, I have
+developed a similar-style solution to an even simpler problem: 
+<a href="http://www.cs.gordon.edu/courses/cs211/AddressBookExample/index.html"
+target="_top">maintaining a <em>very</em> simple address book</a>.
+
+</p>
+
+<p>
+Beginning with a statement of requirements, the process proceeds through analysis,
+overall design, and detailed design and implementation, culminating with some
+suggestions for maintenance.  (Testing is left as an exercise to the reader :-).) 
+</p>
+
+<p>
+Analysis is done by identifying the use cases and detailing a flow of events for each.
+Also, an initial set of functional test cases is specified, to serve as a vehicle for
+checking that the implementation is complete and basically correct.
+Analysis culminates in identifying classes implied by the use cases, and documenting 
+them using an Analysis Class Diagram.
+(The Statechart diagrams done under design are also, in part, analysis tasks.
+In OO, the line between analysis and design is not always a sharp one.)
+</p>
+<p>
+Overall design begins by using CRC cards to assign responsibilities to the
+various classes.  The static structure of the design is summarized by means
+of an overall Class Diagram.  Then the dynamic aspects of the design are
+developed, using State Charts for the major controller classes, plus an Interaction Diagram
+for each of the main use cases.  
+</p>
+<p>  
+The detailed design is developed by spelling out the attributes and methods for each
+class, using a class diagram for each class with all three "compartments" fully
+filled in.   A package diagram is used to show how the various classes are groupled
+into packages.  Each class is then implemented in Java.  The code page contains links both to
+Javadoc documentation for each class, and to the complete source code.  Also included
+are a main class, which allows the simulation to run as an application, and an Applet
+class, which allows it to be run as an Applet.  (This illustrates how the same basic
+code can be designed to be used either way; the application was used for most of
+the initial development work, but the Applet is accessible to anyone over the web).
+</p>
+<p>  
+The Executable Applet version can be loaded and executed 
+from within any web browser that supports at least JDK 1.1.x.
+</p>
+<p>
+The Maintenance page discusses ideas for possible changes to the system, each of
+which would require changes to multiple documents, not just the code.
+</p>
+
+
+<h3>Background</h3>
+
+<p>
+This is the second significant revision of this series of pages.
+</p>
+<ol>
+<li>I originally developed this series of pages for use in a course which was taught to
+junior CS majors at Gordon College from 1996 to 1999, using C++.  (That version is available 
+<a href="../../cs320/ATM_Example/index.html">here</a> - from which you can
+follow a link to an even older version if you wish.)</li>
+<li>The second version represents a major revision (done during 2000 and 2001) for use in 
+<a href="../index.html"> "Object-Oriented Software Development"</a>,
+which is taught to sophmore CS majors and uses Java.  The most
+signficant change in the second and subsequent versions is the use of UML notation
+throughout, together with a reorganization of the process to more closely follow the UML approach.
+Moreover, the original version was implemented in both C++ and Java; but subsequent
+versions uses only Java, so as to be able to utilize some features of that language 
+(e.g. threads) which have no direct analog in the C++ language per se.  That version is
+available <a href = "../ATMExample2001/index.html">here</a>. </li>
+<li>I more recently (in 2002) revised the sequencing of the pages to reflect a slightly 
+different ordering of the steps in the software development process as I am now teaching
+it in 2002.  (The content of the current set of pages is almost exactly the same as the 
+2000-2001 version, but the order is different.)</li>
+</ol>
+
+<p>
+The original version followed the design methodology taught in the textbook I used
+in the earlier course - [Horstmann, 1997], and some aspects of that
+approach remain.    For second and subsequent versions, I have
+used a simplified version of the process outlined in [Jacobson, Booch, and Rumbaugh, 1999].
+</p>
+<p>
+It may be argued that more diagrams have been used than are really necessary for
+a project of this size.  I wanted to give as complete an example of using the
+various UML diagrams as possible.  Even so, this example does not include any
+activity, component, or deployment diagrams.
+</p>
+
+<h3>Using these Pages</h3>
+
+<p>
+Probably the best way to start using these pages is to first read the requirements,
+and then work through the entire analysis, design, and implementation process.
+</p>
+
+<ol>
+<li>
+<p>
+Begin with the Statement of Requirements 
+and then view the Use Cases.  The Use Case document has a Use Case Diagram and
+a series of flows of events, one for each use case.  The analysis phase can be
+studied both in terms of the "big picture" and in terms of the details of the 
+use cases.
+</p>
+
+<ul>
+<li>
+Before studying the flows of events
+in detail, it might be helpful to look at the diagram showing the Analysis classes
+to get an overall view of the system implicit in the use cases.  The
+Analysis Class Diagram captures the basic class structure implied by the
+use case flows of events.
+</li>
+
+<li>
+Then it is
+time to study the flows of events in detail. 
+</li>
+
+</ul>
+<p>&nbsp;</p>
+</li>
+
+<li>
+<p>
+Having looked at the requirements/analysis documents, you can then study the design
+phase by viewing the CRC cards, the overall Class
+Diagram, and the Statechart and Interaction Diagrams.  
+</p>
+
+<ul>
+
+<li>
+There is one CRC card for each class, incorporating all responsibilities of
+the class arising from all of the use cases, linked to from the icon for the class
+in either Class Diagram.  The CRC cards were created by "walking through" each
+use case, assigning the responsibility for each task to some class.   Note that
+there are CRC cards for classes that do not appear in the Analysis Class Diagram;
+the need for these classes became apparent as the other cards were being created.
+(This is typical; Booch suggests that the ratio of classes in a complete application
+to analysis classes may be as much as 5:1; in this particular case, it is about 2:1.)
+</li>
+
+<li>
+The Class Diagram pulls together all of the structural information from
+the CRC Cards and shows the needed links between classes.  
+Each class icon is linked to other relevant design documents, including a detailed design
+for that class.
+</li>
+
+<li>
+For the major controller classes, there is also a Statechart diagram depicting the
+various states the corresponding object can be in.  This, too, is accessible from the
+class's icon in either Class Diagram.
+</li>
+
+<li>
+Finally, there is one Interaction diagram for each use case, linked to from the use
+case flow of events.  This shows the objects that
+work together to realize the use case, and the flow of messages between them.  This
+records the same assignment of responsibilities as in the CRC cards, but in a different way 
+(organized by use case, rather than by class), with additional detail.  (These, rather
+than the CRC cards, were actually used when creating the detailed design.  CRC cards
+are not actually a UML diagram, but are a useful tool to help in discovering the
+design that does get recorded in UML Interaction diagrams.)
+</li>
+
+</ul>
+
+<p>
+In terms of the order in which these would be created, the Analysis Class Diagram and
+the CRC cards would be done first, then the overall Class Diagram, and
+finally the Statechart and Interaction Diagrams.
+Thus, to understand the design <em>process</em>, these could be read
+in the order they were created.  However, in terms of understanding the design
+itself, it may be desirable to read the Class Diagram first.
+</p>
+</li>
+
+<li>
+<p>
+The detailed design document was developed directly from
+the Interaction diagrams and Class Diagram.  The former determined what methods the
+class would need, and both the former and the latter determined what attributes were
+needed.  
+</p>
+<p>
+In terms of actually writing the code, the skeletons for the various classes were created
+directly from the detailed design.  The individual method bodies were fleshed out by using the
+Statechart and Interaction diagrams.  Each message on the Interaction diagram becomes a line or
+so of code in the implementation.  The controller classes for which a statechart was
+done have a method that is structured as a finite state machine based on the statechart
+(run() in ATM; performSession() in Session; performTransaction() in Transaction.) 
+</p>
+
+<p>
+Although this web site shows a finished product in which
+the various design documents and the code are in agreement, the reality is that the coding
+process demonstrated the need
+for slight changes to the various design documents, so in some cases the design documents
+were modified to conform to the code, rather than vice versa.  (However, the bulk of the
+design did exist before the code was written!  The idea is to use the design documents
+to guide coding, not to produce design documents after the fact!) 
+</p> 
+</li>
+
+<li>
+<p>
+Under the Quality Assurance heading, there is a link to an executable (applet) form of
+the Java implementation, which you can run if you have a JDK 1.1.x (or later)
+compliant browser.  Enjoy! 
+</p>
+</li>
+
+<li>
+<p>
+Finally, under the Maintenance heading, there is a link to a page of suggested changes.
+One such change deals with implementing a stated requirement that is missing from
+the design and implementation presented here.  (This would never happen in real life,
+of course :-) )  Can you find the missed requirement?
+Other changes have to do with adding additional
+features to the system.  These make interesting exercises for the reader.
+</p>
+</li>
+
+</ol>
+
+<h3>Downloadable Version</h3>
+
+<p>
+A downloadable version of the complete set of pages - including the Java source
+code in a folder called "source" is available 
+<a href="http://www.cs.gordon.edu/local/courses/cs211/atmexample.tar">here</a>.
+Please note the copyright information below before downloading.
+</p>
+
+<h3>Author and Copyright Information</h3>
+
+<p>
+Though the pages are copyrighted, I hereby freely give permission for their 
+reproduction for non commercial educational purposes.  I hope they will prove useful
+to other faculty who are starting - as I am - to teach OO methods.
+I would also really welcome suggestions and <a href="mailto:bjork@gordon.edu">
+feedback</a> - either about the design itself or the way it is presented.  Input
+from UML guru's would especially be appreciated, as I am revising these pages in part
+as a way to learn UML myself!
+</p>
+
+<p>
+Russell C. Bjork<br />
+Professor of Computer Science<br />
+<a href="http://www.gordon.edu/">Gordon College</a><br />
+255 Grapevine Road<br />
+Wenham, MA 01984<br />
+(978) 927-2300 x 4377<br />
+bjork@gordon.edu
+</p>
+
+<p class="navigation">
+<a href="Requirements.html"><img src="Next.gif" alt="Link to next page" /></a>
+</p>
+
+<p>
+<a href="Links.html">Page of links for non frames-enabled browsers.</a>
+</p>
+
+<p>
+<a href="http://validator.w3.org/check/referer">
+<img class="XHTML_image"
+	src="XHTML_validation_image.gif"
+	alt="Valid XHTML 1.0!" height="31" width="88" />
+</a>
+</p>
+  
+<h6>Copyright &copy; 1996, 1997, 1998, 2000, 2001, 2002, 2004 - Russell C. Bjork.  Permission for non-commercial 
+reproduction for educational use is hereby granted; all other rights are reserved.</h6>
+
+</body>
+</html>

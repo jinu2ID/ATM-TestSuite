@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"DTD/xhtml11-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+
+<title>State Charts for Example ATM System</title>
+
+</head>
+
+<body>
+
+<h2>State Charts for Example ATM System</h2>
+
+<p>
+Three of the objects we have identified have behavior that is
+sufficiently complex to warrant developing a State Chart for
+them.  (These are the objects that were identified as the major controller
+objects.)  
+</p>
+
+<ul>
+<li><a href="#ATM">The object representing the machine itself</a> (responsible for the
+System Startup and Shutdown use cases)</li>
+<li><a href="#Session">Objects representing a customer session (one per session)
+</a> (responsible for the Session use case)</li>
+<li><a href="#Transaction">Objects representing an individual transaction (one per
+transaction)</a> (responsible for the Transaction use case, use cases for the
+specific types of transaction, and Invalid PIN extension).</li>
+</ul>
+
+
+<div>
+
+<a name="ATM"></a>
+<hr />
+<p class="diagram">
+<img src="ATMStatechart.gif" alt="[ Statechart for overall ATM ]"/>
+<br />
+<a href="CRCCards.html#ATM">[ CRC Card for ATM ]</a>
+<a href="Interactions.html#Startup">[ Interaction diagram for Startup ]</a>
+<a href="Interactions.html#Shutdown">[ Interaction diagram for Shutdown ]</a>
+</p>
+
+<a name="Session"></a>
+<hr />
+<p class="diagram">
+<img src="SessionStatechart.gif" alt="[ Statechart for a session ]"/>
+<br />
+<a href="CRCCards.html#Session">[ CRC Card for Session ]</a>
+<a href="Interactions.html#Session">[ Interaction diagram for Session ]</a>
+</p>
+
+<a name="Transaction"></a>
+<hr />
+<p class="diagram">
+<img src="TransactionStatechart.gif" alt="[ Statechart for a transaction ]"/>
+<br />
+<a href="CRCCards.html#Transaction">[ CRC Card for Transaction ] </a>
+<a href="Interactions.html#Transaction">[ Interaction diagram for Transaction ]</a><br />
+<a href="CRCCards.html#Withdrawal">[ CRC Card for Withdrawal ]</a>
+<a href="Interactions.html#Withdrawal">[ Interaction diagram for portion unique to Withdrawal ]</a><br />
+<a href="CRCCards.html#Deposit">[ CRC Card for Deposit ]</a>
+<a href="Interactions.html#Deposit">[ Interaction diagram for portion unique to Deposit ]</a><br />
+<a href="CRCCards.html#Transfer">[ CRC Card for Transfer ]</a>
+<a href="Interactions.html#Transfer">[ Interaction diagram for portion unique to Transfer ]</a><br />
+<a href="CRCCards.html#Inquiry">[ CRC Card for Inquiry ]</a>
+<a href="Interactions.html#Inquiry">[ Interaction diagram for portion unique to Inquiry ]</a><br />
+<a href="Interactions.html#InvalidPIN">[ Interaction diagram for Invalid PIN Extension ]</a>
+
+
+</p>
+<hr />
+</div>
+
+<p class="navigation">
+<a href="ClassDiagram.html"><img src="Back.gif" alt="Link to previous page" /></a>
+<a href="Interactions.html"><img src="Next.gif" alt="Link to next page" /></a>
+</p>
+
+<p>
+<a href="Links.html">Page of links for non frames-enabled browsers.</a>
+</p>
+
+
+<p>
+<a href="http://validator.w3.org/check/referer">
+<img class="XHTML_image"
+	src="XHTML_validation_image.gif"
+	alt="Valid XHTML 1.0!" height="31" width="88" />
+</a>
+</p>
+
+<h6>Copyright &copy; 2000, 2001, 2002 - Russell C. Bjork.  Permission for non-commercial 
+reproduction for educational use is hereby granted; all other rights are reserved.</h6>
+
+</body>
+</html>

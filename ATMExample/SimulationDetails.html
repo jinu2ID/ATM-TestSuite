@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"DTD/xhtml11-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+<style type="text/css"> P.statechart { text-align: center; } </style>
+
+<title>GUI Simulation of the ATM</title>
+
+</head>
+
+<body>
+
+<h2>GUI Simulation of the ATM</h2>
+
+<p>
+The GUI simulation of the ATM is carried out by objects belonging to classes in package
+simulation.  The overall manager is an object of class Simulation, which is created at
+program startup by either either the main program for the application version (in
+class ATMMain) or the applet object (belonging to class ATMApplet).  The various objects
+in package atm.physical obtain access to this simulation manager object through the class method
+Simulation.getInstance().  The simulation manager object, in turn, has methods that correspond
+to the various actions that are simulated by the GUI.
+</p>
+
+<p>
+The GUI is contained in a panel that is an instance of class GUI in the simulation package.
+The simulation manager creates an instance of this panel, which is then added to the main
+window of the application version or the applet panel of the applet version.  The simulation
+manager forwards requests to simulate various events to this panel, which in turn may forward
+them to the appropriate component to carry them out.  The GUI panel uses a CardLayout, and has
+four cards: the regular display of the ATM, the panel that requests the operator to enter the
+number of bills in the cash dispenser, the panel that asks the user to enter a card number,
+and the panel that displays the log.  These four panels are implemented by objects of
+class ATMPanel, BillsPanel, CardPanel, and LogPanel, respectively.
+</p>
+
+<p>
+Corresponding to each of the visible physical components of the ATM is a GUI component
+that simulates that physical component.  These components are instances of class
+SimCardReader, SimCashDispenser, SimDisplay, SimKeyboard, SimEnvelopeAcceptor, SimOperatorPanel,
+and SimReceiptPrinter.  (Note that the customer console is simulated by two GUI components -
+one simulating the display and one the keyboard.)  There are no GUI simulations of the
+log and the network to the bank, since these are not directly visible to customers.
+</p>
+
+<p>
+Finally, a class SimulatedBank simulates the bank itself.  Messages to the bank are actually
+"sent" to an object of this class, which simulates the operation and creates an appropriate
+Status object to "send" back.
+</p>
+
+<p>
+Source code for the various classes is accessible through the links below
+</p>
+
+<table border="3" frame="box" rules="none" width="100%">
+
+<tr><th>Package</th><th>Class - source code</th></tr>
+<tr><td>&nbsp;</td></tr>
+
+<tr><td>simulation</td><td><a href="source/simulation/Simulation.java">Simulation</a></td></tr>
+<tr><td><hr/></td><td><hr /></td></tr>
+
+<tr><td>simulation</td><td><a href="source/simulation/GUI.java">GUI</a></td></tr>
+<tr><td></td><td><a href="source/simulation/ATMPanel.java">ATMPanel</a></td></tr>
+<tr><td></td><td><a href="source/simulation/BillsPanel.java">BillsPanel</a></td></tr>
+<tr><td></td><td><a href="source/simulation/CardPanel.java">CardPanel</a></td></tr>
+<tr><td></td><td><a href="source/simulation/LogPanel.java">LogPanel</a></td></tr>
+<tr><td><hr/></td><td><hr /></td><td><hr /></td></tr>
+
+<tr><td>simulation</td><td><a href="source/simulation/SimCardReader.java">SimCardReader</a></td></tr>
+<tr><td></td><td><a href="source/simulation/SimCashDispenser.java">SimCashDispenser</a></td></tr>
+<tr><td></td><td><a href="source/simulation/SimDisplay.java">SimDisplay</a></td></tr>
+<tr><td></td><td><a href="source/simulation/SimEnvelopeAcceptor.java">SimEnvelopeAcceptor</a></td></tr>
+<tr><td></td><td><a href="source/simulation/SimKeyboard.java">SimKeyboard</a></td></tr>
+<tr><td></td><td><a href="source/simulation/SimOperatorPanel.java">SimOperatorPanel</a></td></tr>
+<tr><td></td><td><a href="source/simulation/SimReceiptPrinter.java">SimReceiptPrinter</a></td></tr>
+<tr><td><hr/></td><td><hr /></td><td><hr /></td></tr>
+
+<tr><td>simulation</td><td><a href="source/simulation/SimulatedBank.java">SimulatedBank</a></td></tr>
+
+</table>
+
+<p>
+<br />&nbsp;
+</p>
+
+<hr />
+
+<p class="navigation">
+<a href="Code.html">Return to main Code page</a>
+</p>
+
+<p>
+<a href="http://validator.w3.org/check/referer">
+<img class="XHTML_image"
+	src="XHTML_validation_image.gif"
+	alt="Valid XHTML 1.0!" height="31" width="88" />
+</a>
+</p>
+
+<h6>Copyright &copy; 2001 - Russell C. Bjork.  Permission for non-commercial 
+reproduction for educational use is hereby granted; all other rights are reserved.</h6>
+
+</body>
+</html>

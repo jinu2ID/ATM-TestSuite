@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"DTD/xhtml11-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+<style type="text/css"> P.statechart { text-align: center; } </style>
+
+<title>Code for Example ATM System</title>
+
+</head>
+
+<body>
+
+<h2>Code for Example ATM System</h2>
+
+<p>
+This page contains links both to the actual Java code that implements the ATM simulation,
+and to javadoc documentation generated from the code.  The code is organized into a
+collection of packages, as shown in the <a href="Package.html">Package Diagram</a>.
+</p>
+
+<p>
+In addition to the classes and packages that have been discussed throughout the design,
+the GUI simulation makes use of a package (called simulation) that contains the details
+of the GUI, including the code that does the animation.  This code takes the place of
+an actual hardware ATM, but has not been otherwise documented in this series of web
+pages.  The design of the simulation package is discussed briefly, and its code may
+be accessed <a href="SimulationDetails.html">here</a> if you want to see it. 
+</p>
+
+<table border="3" frame="box" rules="none" width="100%">
+
+<tr><th>Package</th><th>Class - source code</th><th>Class - javadoc</th></tr>
+<tr><td>&nbsp;</td></tr>
+
+<tr><td>(Top-level)</td><td><a href="source/ATMMain.java">ATMMain.java</a></td><td>(No javadoc for this class)</td></tr>
+<tr><td>(Top-level)</td><td><a href="source/ATMApplet.java">ATMApplet.java</a></td><td>(No javadoc for this class)</td></tr>
+<tr><td><hr/></td><td><hr /></td><td><hr /></td></tr>
+
+<tr><td>atm</td><td><a href="source/atm/ATM.java">ATM</a></td><td><a href="javadoc/atm/ATM.html">ATM</a></td></tr>
+<tr><td></td><td><a href="source/atm/Session.java">Session</a></td><td><a href="javadoc/atm/Session.html">Session</a></td></tr>
+<tr><td><hr/></td><td><hr /></td><td><hr /></td></tr>
+
+<tr><td>atm.physical</td><td><a href="source/atm/physical/CardReader.java">CardReader</a></td><td><a href="javadoc/atm/physical/CardReader.html">CardReader</a></td></tr>
+<tr><td></td><td><a href="source/atm/physical/CashDispenser.java">CashDispenser</a></td><td><a href="javadoc/atm/physical/CashDispenser.html">CashDispenser</a></td></tr>
+<tr><td></td><td><a href="source/atm/physical/CustomerConsole.java">CustomerConsole</a></td><td><a href="javadoc/atm/physical/CustomerConsole.html">CustomerConsole</a></td></tr>
+<tr><td></td><td><a href="source/atm/physical/EnvelopeAcceptor.java">EnvelopeAcceptor</a></td><td><a href="javadoc/atm/physical/EnvelopeAcceptor.html">EnvelopeAcceptor</a></td></tr>
+<tr><td></td><td><a href="source/atm/physical/Log.java">Log</a></td><td><a href="javadoc/atm/physical/Log.html">Log</a></td></tr>
+<tr><td></td><td><a href="source/atm/physical/NetworkToBank.java">NetworkToBank</a></td><td><a href="javadoc/atm/physical/NetworkToBank.html">NetworkToBank</a></td></tr>
+<tr><td></td><td><a href="source/atm/physical/OperatorPanel.java">OperatorPanel</a></td><td><a href="javadoc/atm/physical/OperatorPanel.html">OperatorPanel</a></td></tr>
+<tr><td></td><td><a href="source/atm/physical/ReceiptPrinter.java">ReceiptPrinter</a></td><td><a href="javadoc/atm/physical/ReceiptPrinter.html">ReceiptPrinter</a></td></tr>
+<tr><td><hr/></td><td><hr /></td><td><hr /></td></tr>
+
+<tr><td>atm.transaction</td><td><a href="source/atm/transaction/Transaction.java">Transaction</a></td><td><a href="javadoc/atm/transaction/Transaction.html">Transaction</a></td></tr>
+<tr><td></td><td><a href="source/atm/transaction/Withdrawal.java">Withdrawal</a></td><td><a href="javadoc/atm/transaction/Withdrawal.html">Withdrawal</a></td></tr>
+<tr><td></td><td><a href="source/atm/transaction/Deposit.java">Deposit</a></td><td><a href="javadoc/atm/transaction/Deposit.html">Deposit</a></td></tr>
+<tr><td></td><td><a href="source/atm/transaction/Transfer.java">Transfer</a></td><td><a href="javadoc/atm/transaction/Transfer.html">Transfer</a></td></tr>
+<tr><td></td><td><a href="source/atm/transaction/Inquiry.java">Inquiry</a></td><td><a href="javadoc/atm/transaction/Inquiry.html">Inquiry</a></td></tr>
+<tr><td><hr/></td><td><hr /></td><td><hr /></td></tr>
+
+<tr><td>banking</td><td><a href="source/banking/AccountInformation.java">AccountInformation</a></td><td><a href="javadoc/banking/AccountInformation.html">AccountInformation</a></td></tr>
+<tr><td></td><td><a href="source/banking/Balances.java">Balances</a></td><td><a href="javadoc/banking/Balances.html">Balances</a></td></tr>
+<tr><td></td><td><a href="source/banking/Card.java">Card</a></td><td><a href="javadoc/banking/Card.html">Card</a></td></tr>
+<tr><td></td><td><a href="source/banking/Message.java">Message</a></td><td><a href="javadoc/banking/Message.html">Message</a></td></tr>
+<tr><td></td><td><a href="source/banking/Money.java">Money</a></td><td><a href="javadoc/banking/Money.html">Money</a></td></tr>
+<tr><td></td><td><a href="source/banking/Receipt.java">Receipt</a></td><td><a href="javadoc/banking/Receipt.html">Receipt</a></td></tr>
+<tr><td></td><td><a href="source/banking/Status.java">Status</a></td><td><a href="javadoc/banking/Status.html">Status</a></td></tr>
+
+</table>
+
+<p>
+<br />&nbsp;
+</p>
+
+<hr />
+
+<p class="navigation">
+<a href="Package.html"><img src="Back.gif" alt="Link to previous page" /></a>
+<a href="Executable.html"><img src="Next.gif" alt="Link to next page" /></a>
+</p>
+
+<p>
+<a href="Links.html">Page of links for non frames-enabled browsers.</a>
+</p>
+
+
+<p>
+<a href="http://validator.w3.org/check/referer">
+<img class="XHTML_image"
+	src="XHTML_validation_image.gif"
+	alt="Valid XHTML 1.0!" height="31" width="88" />
+</a>
+</p>
+
+<h6>Copyright &copy; 2001 - Russell C. Bjork.  Permission for non-commercial 
+reproduction for educational use is hereby granted; all other rights are reserved.</h6>
+
+</body>
+</html>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"DTD/xhtml11-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+<meta name="keywords" content="object-oriented, analysis, design, UML, java" /> 
+<title>Maintenance</title>
+
+</head>
+
+<body>
+<h2>Maintenance</h2>
+
+<p>
+This page lists various changes that might be made to the system.  Modifying the
+various documents to incorporate one or more of these changes would make an
+interesting exercise for the reader.
+</p>
+
+<h3 style="text-align: left">Corrective Maintenance</h3>
+
+<ul>
+	<li>The careful reader will note that the
+	requirement that "Entries will be made in the log when the ATM
+	is started up and shut down" has not been reflected in any of the
+	diagrams or the code.  What changes would be needed to implement this 
+	requirement?<br />&nbsp;</li>
+	
+	<li>When the system asks the customer a question, it waits as long as
+        necessary for the customer to answer.  This could cause a severe security
+ 	problem if the customer were to leave at this point without answering
+	the question, since the ATM card would still be in the machine,
+	generally with the customer's  PIN having already been entered, thus
+	allowing another user to "hijack" the session and perform operations
+	like cash withdrawal from the customer's account.<br />&nbsp;<br />
+
+	While this seems unlikely, it is conceivalbe in some cases
+	that a distracted customer might make this mistake.  For example,
+	after performing a transaction, the system asks the user "Would you
+	like to do another transaction?".  If the customer has just withdrawn 
+	cash, it is conceivable that the customer might place the cash 
+	in his/her wallet and accidentally forget about answering the
+	the question and retrieving the card.<br />&nbsp;<br />
+
+	A real ATM typically has a timeout mechanism that begins beeping and
+	ultimately ejects the card and ends the session if the user fails to
+	respond within a certain amount of time.  While a customer who
+	leaves before this happens might inadvertently leave a card
+	behind, at least the customer would not be "logged in" with 
+	his/her PIN.  (Thus, the security risk is comparable to that
+	resulting from a lost card, with the customer's account still
+	PIN protected.) What changes would be needed to the system requirements, design,
+	and code to improve security this way? <br />&nbsp;</li>
+</ul>
+
+
+<h3 style="text-align: left">Adaptive Maintenance</h3>
+
+<ul>
+	<li>Many ATM's have cash dispensers that can handle two different
+	denominations of bills - often $20 and $5 - which allows a user to request 
+	cash in any amount that is a multiple of $5.  Suppose the cash dispenser in
+	the example (which only handles $20 bills) were replaced with such a dispenser.  
+	What changes would be needed to take advantage of the enhanced capabilities of 
+	such a dispenser?</li>
+</ul>
+
+<h3 style="text-align: left">Perfective Maintenance</h3>
+
+<ul>
+	<li>When the customer's card is retained, an entry should be made in the log 
+	to this effect.<br />&nbsp;</li>
+
+	<li>Many ATM's offer the customer additional options beyond the basic four
+	listed here - e.g. making a payment on a loan the customer has from one of the
+	accounts linked to his/her card.  What changes would be needed to make it
+	possible for a customer to make a loan payment at the ATM?</li>
+</ul>
+
+<p class="navigation">
+<a href="Executable.html"><img src="Back.gif" alt="Link to previous page" /></a>
+</p>
+
+<p>
+<a href="Links.html">Page of links for non frames-enabled browsers.</a>
+</p>
+
+<p>
+<a href="http://validator.w3.org/check/referer">
+<img class="XHTML_image"
+	src="XHTML_validation_image.gif"
+	alt="Valid XHTML 1.0!" height="31" width="88" />
+</a>
+</p>
+  
+<h6>Copyright &copy; 2000, 2001, 2007 - Russell C. Bjork.  Permission for non-commercial 
+reproduction for educational use is hereby granted; all other rights are reserved.</h6>
+
+</body>
+</html>

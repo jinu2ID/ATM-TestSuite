@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestReceiptPrinter.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">tests2</a> &gt; <span class="el_source">TestReceiptPrinter.java</span></div><h1>TestReceiptPrinter.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package tests2;</span>
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import atm.ATM;
+import atm.physical.ReceiptPrinter;
+import atm.transaction.Deposit;
+import banking.AccountInformation;
+import banking.Balances;
+import banking.Card;
+import banking.Receipt;
+import simulation.Simulation;
+
+<span class="fc" id="L16">public class TestReceiptPrinter {</span>
+
+	@Test
+	public void testConstructor(){
+<span class="fc" id="L20">		ReceiptPrinter printer = new ReceiptPrinter();</span>
+<span class="fc" id="L21">		assertNotNull(printer);</span>
+<span class="fc" id="L22">	}</span>
+	
+	@Test
+	public void printReceipt(){
+<span class="fc" id="L26">		ATM newATM = new ATM(1,&quot;testPlace&quot;,&quot;testBank&quot;,null);</span>
+<span class="fc" id="L27">		Simulation newSimulation = new Simulation(newATM);</span>
+<span class="fc" id="L28">		ReceiptPrinter printer = newATM.getReceiptPrinter();</span>
+<span class="fc" id="L29">		Deposit testTransaction = new Deposit(newATM, null, null, 0);</span>
+		
+<span class="fc" id="L31">		Receipt receipt = new Receipt(newATM, new Card(1234), testTransaction, new Balances()){ </span>
+		{
+  
+<span class="fc" id="L34">                detailsPortion = new String[1];</span>
+<span class="fc" id="L35">                detailsPortion[0] = &quot;Test&quot;;</span>
+            }
+		};
+            
+<span class="fc" id="L39">		printer.printReceipt(receipt);</span>
+<span class="fc" id="L40">		boolean empty = newATM.getReceipt().isEmpty();</span>
+<span class="fc" id="L41">		assertFalse(empty);</span>
+<span class="fc" id="L42">	}</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

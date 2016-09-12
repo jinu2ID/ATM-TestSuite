@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestTransactionClass.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">tests2</a> &gt; <span class="el_source">TestTransactionClass.java</span></div><h1>TestTransactionClass.java</h1><pre class="source lang-java linenums">package tests2;
+
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
+
+import atm.ATM;
+import atm.transaction.Deposit;
+import atm.transaction.Inquiry;
+import atm.transaction.Transfer;
+import atm.transaction.Withdrawal;
+
+<span class="fc" id="L13">public class TestTransactionClass {</span>
+
+	@Test
+	public void testDepositConstructor(){
+		
+<span class="fc" id="L18">		ATM newATM = new ATM(1,&quot;testPlace&quot;,&quot;testBank&quot;,null);</span>
+<span class="fc" id="L19">		Deposit deposit = new Deposit(newATM,null,null,1);</span>
+		
+<span class="fc" id="L21">		assertNotNull(deposit);</span>
+<span class="fc" id="L22">	}</span>
+	
+	@Test
+	public void testInquiryConstructor(){
+		
+<span class="fc" id="L27">		ATM newATM = new ATM(1,&quot;testPlace&quot;,&quot;testBank&quot;,null);</span>
+<span class="fc" id="L28">		Inquiry inquiry = new Inquiry(newATM,null,null,1);</span>
+		
+<span class="fc" id="L30">		assertNotNull(inquiry);</span>
+<span class="fc" id="L31">	}</span>
+	
+	@Test
+	public void testTransferConstructor(){
+		
+<span class="fc" id="L36">		ATM newATM = new ATM(1,&quot;testPlace&quot;,&quot;testBank&quot;,null);</span>
+<span class="fc" id="L37">		Transfer transfer = new Transfer(newATM,null,null,1);</span>
+		
+<span class="fc" id="L39">		assertNotNull(transfer);</span>
+<span class="fc" id="L40">	}</span>
+	
+	@Test
+	public void testWithdrawalConstructor(){
+		
+<span class="fc" id="L45">		ATM newATM = new ATM(1,&quot;testPlace&quot;,&quot;testBank&quot;,null);</span>
+<span class="fc" id="L46">		Withdrawal withdrawal = new Withdrawal(newATM,null,null,1);</span>
+		
+<span class="fc" id="L48">		assertNotNull(withdrawal);</span>
+<span class="fc" id="L49">	}</span>
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

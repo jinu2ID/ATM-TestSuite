@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Deposit.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">ATMMain (Nov 1, 2015 8:01:40 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">atm.transaction</a> &gt; <span class="el_source">Deposit.java</span></div><h1>Deposit.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">/*</span>
+ * ATM Example system - file Deposit.java   
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package atm.transaction;
+import atm.ATM;
+import atm.Session;
+import atm.physical.*;
+import banking.AccountInformation;
+import banking.Card;
+import banking.Message;
+import banking.Money;
+import banking.Status;
+import banking.Receipt;
+
+/** Representation for a deposit transaction
+ */
+public class Deposit extends Transaction
+{
+    /** Constructor
+     *
+     *  @param atm the ATM used to communicate with customer
+     *  @param session the session in which the transaction is being performed
+     *  @param card the customer's card
+     *  @param pin the PIN entered by the customer
+     */
+    public Deposit(ATM atm, Session session, Card card, int pin)
+    {
+<span class="fc" id="L32">        super(atm, session, card, pin);</span>
+<span class="fc" id="L33">    }</span>
+    
+    /** Get specifics for the transaction from the customer
+     *
+     *  @return message to bank for initiating this transaction
+     *  @exception CustomerConsole.Cancelled if customer cancelled this transaction
+     */
+    protected Message getSpecificsFromCustomer() throws CustomerConsole.Cancelled
+    {
+<span class="fc" id="L42">        to = atm.getCustomerConsole().readMenuChoice(</span>
+<span class="fc" id="L43">            &quot;Account to deposit to&quot;,</span>
+<span class="fc" id="L44">            AccountInformation.ACCOUNT_NAMES);</span>
+
+<span class="fc" id="L46">        amount = atm.getCustomerConsole().readAmount(&quot;Amount to deposit&quot;);</span>
+        
+<span class="fc" id="L48">        return new Message(Message.INITIATE_DEPOSIT,</span>
+<span class="fc" id="L49">                           card, pin, serialNumber, -1, to, amount);</span>
+    }
+    
+    /** Complete an approved transaction
+     *
+     *  @return receipt to be printed for this transaction
+     *  @exception CustomerConsole.Cancelled if customer cancelled or 
+     *             transaction timed out
+     */
+    protected Receipt completeTransaction() throws CustomerConsole.Cancelled
+    {
+<span class="fc" id="L60">        atm.getEnvelopeAcceptor().acceptEnvelope();</span>
+<span class="fc" id="L61">        Status status = atm.getNetworkToBank().sendMessage(</span>
+<span class="fc" id="L62">            new Message(Message.COMPLETE_DEPOSIT,</span>
+<span class="fc" id="L63">                        card, pin, serialNumber, -1, to, amount), </span>
+<span class="fc" id="L64">            balances);</span>
+            
+<span class="fc" id="L66">        return new Receipt(this.atm, this.card, this, this.balances) {</span>
+            {
+<span class="fc" id="L68">                detailsPortion = new String[2];</span>
+<span class="fc" id="L69">                detailsPortion[0] = &quot;DEPOSIT TO: &quot; + </span>
+<span class="fc" id="L70">                                    AccountInformation.ACCOUNT_ABBREVIATIONS[to];</span>
+<span class="fc" id="L71">                detailsPortion[1] = &quot;AMOUNT: &quot; + amount.toString();</span>
+            }
+        };
+    }
+    
+    /** Account to deposit to
+     */ 
+    private int to;
+    
+    /** Amount of money to deposit
+     */
+    private Money amount;
+            
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>ATMMain (Nov 1, 2015 8:01:40 PM)</div></body></html>

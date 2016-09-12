@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestMessageClass.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">tests2 (Dec 6, 2015 8:21:44 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">tests2</a> &gt; <span class="el_source">TestMessageClass.java</span></div><h1>TestMessageClass.java</h1><pre class="source lang-java linenums">package tests2;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import banking.Card;
+import banking.Message;
+import banking.Money;
+
+<span class="fc" id="L11">public class TestMessageClass {</span>
+	
+	@Test
+	public void testConstructor(){
+<span class="fc" id="L15">		Card card = new Card(1234);</span>
+<span class="fc" id="L16">		Money money = new Money(100);</span>
+<span class="fc" id="L17">		Message message = new Message(1, card,1,1,1,1,money);</span>
+		
+<span class="fc" id="L19">		assertNotNull(message);</span>
+<span class="fc" id="L20">	}</span>
+	
+	@Test
+	public void testToString_Withdrawal(){
+		
+<span class="fc" id="L25">		Card card = new Card(1234);</span>
+<span class="fc" id="L26">		Money money = new Money(100);</span>
+<span class="fc" id="L27">		Message message = new Message(0, card,1,1,1,1,money);</span>
+		
+<span class="fc" id="L29">		String result = message.toString();</span>
+		
+<span class="fc" id="L31">		assertEquals(&quot;WITHDRAW CARD# 1234 TRANS# 1 FROM  1 TO  1 $100.00&quot;,result);</span>
+<span class="fc" id="L32">	}</span>
+
+	@Test
+	public void testToString_InitDeposit(){
+		
+<span class="fc" id="L37">		Card card = new Card(1234);</span>
+<span class="fc" id="L38">		Money money = new Money(100);</span>
+<span class="fc" id="L39">		Message message = new Message(1, card,1,1,1,1,money);</span>
+		
+<span class="fc" id="L41">		String result = message.toString();</span>
+		
+<span class="fc" id="L43">		assertEquals(&quot;INIT_DEP CARD# 1234 TRANS# 1 FROM  1 TO  1 $100.00&quot;,result);</span>
+<span class="fc" id="L44">	}</span>
+	
+	@Test
+	public void testToString_CompDeposit(){
+		
+<span class="fc" id="L49">		Card card = new Card(1234);</span>
+<span class="fc" id="L50">		Money money = new Money(100);</span>
+<span class="fc" id="L51">		Message message = new Message(2, card,1,1,1,1,money);</span>
+		
+<span class="fc" id="L53">		String result = message.toString();</span>
+		
+<span class="fc" id="L55">		assertEquals(&quot;COMP_DEP CARD# 1234 TRANS# 1 FROM  1 TO  1 $100.00&quot;,result);</span>
+<span class="fc" id="L56">	}</span>
+	
+	@Test
+	public void testToString_Transfer(){
+		
+<span class="fc" id="L61">		Card card = new Card(1234);</span>
+<span class="fc" id="L62">		Money money = new Money(100);</span>
+<span class="fc" id="L63">		Message message = new Message(3, card,1,1,1,1,money);</span>
+		
+<span class="fc" id="L65">		String result = message.toString();</span>
+		
+<span class="fc" id="L67">		assertEquals(&quot;TRANSFER CARD# 1234 TRANS# 1 FROM  1 TO  1 $100.00&quot;,result);</span>
+<span class="fc" id="L68">	}</span>
+	
+	@Test
+	public void testToString_Inquiry(){
+		
+<span class="fc" id="L73">		Card card = new Card(1234);</span>
+<span class="fc" id="L74">		Money money = new Money(0);</span>
+<span class="fc" id="L75">		Message message = new Message(4, card,1,1,1,1,money);</span>
+		
+<span class="fc" id="L77">		String result = message.toString();</span>
+		
+<span class="fc" id="L79">		assertEquals(&quot;INQUIRY  CARD# 1234 TRANS# 1 FROM  1 TO  1 NO AMOUNT&quot;,result);</span>
+<span class="fc" id="L80">	}</span>
+	
+	@Test
+	public void testToString_NoFromToAmount(){
+		
+<span class="fc" id="L85">		Card card = new Card(1234);</span>
+<span class="fc" id="L86">		Money money = new Money(100);</span>
+<span class="fc" id="L87">		Message message = new Message(1, card,1,1,-1,-1,money);</span>
+		
+<span class="fc" id="L89">		String result = message.toString();</span>
+		
+<span class="fc" id="L91">		assertEquals(&quot;INIT_DEP CARD# 1234 TRANS# 1 NO FROM NO TO $100.00&quot;,result);</span>
+<span class="fc" id="L92">	}</span>
+	
+	@Test
+	public void testSetPIN(){
+<span class="fc" id="L96">		Card card = new Card(1234);</span>
+<span class="fc" id="L97">		Money money = new Money(100);</span>
+<span class="fc" id="L98">		Message message = new Message(1, card,1,1,1,1,money);</span>
+		
+<span class="fc" id="L100">		message.setPIN(2);</span>
+<span class="fc" id="L101">		assertEquals(2, message.getPIN());</span>
+<span class="fc" id="L102">	}</span>
+	
+	@Test
+	public void testGetMessageCode(){
+<span class="fc" id="L106">		Card card = new Card(1234);</span>
+<span class="fc" id="L107">		Money money = new Money(100);</span>
+<span class="fc" id="L108">		Message message = new Message(4, card,1,1,1,1,money);</span>
+		
+<span class="fc" id="L110">		assertEquals(4, message.getMessageCode());</span>
+<span class="fc" id="L111">	}</span>
+	
+	@Test
+	public void testGetCard(){
+<span class="fc" id="L115">		Card card = new Card(1234);</span>
+<span class="fc" id="L116">		Money money = new Money(100);</span>
+<span class="fc" id="L117">		Message message = new Message(4, card,1,1,1,1,money);</span>
+		
+<span class="fc" id="L119">		assertEquals(1234, message.getCard().getNumber());</span>
+<span class="fc" id="L120">	}</span>
+	
+	@Test
+	public void testGetSerialNumber(){
+<span class="fc" id="L124">		Card card = new Card(1234);</span>
+<span class="fc" id="L125">		Money money = new Money(100);</span>
+<span class="fc" id="L126">		Message message = new Message(4, card,1,9,1,1,money);</span>
+		
+<span class="fc" id="L128">		assertEquals(9, message.getSerialNumber());</span>
+<span class="fc" id="L129">	}</span>
+	
+	@Test
+	public void testGetFromAccount(){
+<span class="fc" id="L133">		Card card = new Card(1234);</span>
+<span class="fc" id="L134">		Money money = new Money(100);</span>
+<span class="fc" id="L135">		Message message = new Message(4, card,1,1,2,1,money);</span>
+		
+<span class="fc" id="L137">		assertEquals(2, message.getFromAccount());</span>
+<span class="fc" id="L138">	}</span>
+	
+	@Test
+	public void testGetToAccount(){
+<span class="fc" id="L142">		Card card = new Card(1234);</span>
+<span class="fc" id="L143">		Money money = new Money(100);</span>
+<span class="fc" id="L144">		Message message = new Message(4, card,1,1,1,2,money);</span>
+		
+<span class="fc" id="L146">		assertEquals(2, message.getToAccount());</span>
+<span class="fc" id="L147">	}</span>
+	
+	@Test
+	public void testGetAmount(){
+<span class="fc" id="L151">		Card card = new Card(1234);</span>
+<span class="fc" id="L152">		Money money = new Money(100);</span>
+<span class="fc" id="L153">		Message message = new Message(4, card,1,1,2,1,money);</span>
+		
+<span class="fc" id="L155">		assertEquals(&quot;$100.00&quot;, message.getAmount().toString());</span>
+<span class="fc" id="L156">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>tests2 (Dec 6, 2015 8:21:44 PM)</div></body></html>

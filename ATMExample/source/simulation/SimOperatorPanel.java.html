@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SimOperatorPanel.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">ATMMain (Nov 1, 2015 8:01:40 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">simulation</a> &gt; <span class="el_source">SimOperatorPanel.java</span></div><h1>SimOperatorPanel.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">/*</span>
+ * ATM Example system - file SimOperatorPanel.java
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package simulation;
+
+import atm.ATM;
+
+import java.awt.*;
+import java.awt.event.*;
+
+/** Simulate the operator panel
+ */
+class SimOperatorPanel extends Panel
+{
+    /** Constructor
+     *
+     *  @param simulation the overall simulation object
+     */
+<span class="fc" id="L23">    SimOperatorPanel(final Simulation simulation)</span>
+    {
+<span class="fc" id="L25">        setLayout(new BorderLayout(10, 0));</span>
+<span class="fc" id="L26">        setBackground(new Color(128,128,255));</span>
+<span class="fc" id="L27">        add(new Label(&quot;     Operator Panel&quot;), BorderLayout.WEST);</span>
+<span class="fc" id="L28">        final Label message = new Label(&quot;Click button to turn ATM on&quot;, Label.CENTER);</span>
+<span class="fc" id="L29">        add(message, BorderLayout.CENTER);</span>
+<span class="fc" id="L30">        final Button button = new Button(&quot; ON &quot;);</span>
+<span class="fc" id="L31">        button.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e)
+            {
+<span class="fc bfc" id="L34" title="All 2 branches covered.">                if (button.getLabel().equals(&quot;OFF&quot;))    // ATM is currently on</span>
+                {
+<span class="fc" id="L36">                    message.setText(&quot;Click button to turn ATM on  &quot;);</span>
+<span class="fc" id="L37">                    button.setLabel(&quot; ON &quot;);</span>
+                    
+<span class="fc" id="L39">                    simulation.switchChanged(false);</span>
+<span class="fc" id="L40">                }</span>
+                else                                    // ATM is currently off
+                {
+<span class="fc" id="L43">                    message.setText(&quot;Click button to turn ATM off&quot;);</span>
+<span class="fc" id="L44">                    button.setLabel(&quot;OFF&quot;);</span>
+                    
+<span class="fc" id="L46">                    simulation.switchChanged(true);</span>
+                }
+<span class="fc" id="L48">            }</span>
+        });
+<span class="fc" id="L50">        Panel buttonPanel = new Panel();</span>
+<span class="fc" id="L51">        buttonPanel.add(button);</span>
+<span class="fc" id="L52">        add(buttonPanel, BorderLayout.EAST);</span>
+        
+        // Use a thread to blink the &quot;Click button to turn ATM on&quot; message when
+        // the ATM is off.  This will also make the message invisible when the
+        // button is not enabled.
+        
+<span class="fc" id="L58">        new Thread() {</span>
+            public void run()
+            {
+<span class="fc" id="L61">                while(true)</span>
+                {
+                    try
+                    {
+<span class="fc" id="L65">                        sleep(1000);</span>
+<span class="fc" id="L66">                    }</span>
+<span class="nc" id="L67">                    catch(InterruptedException e)</span>
+                    { }
+                    
+<span class="fc bfc" id="L70" title="All 4 branches covered.">                    if (message.isVisible() &amp;&amp; ! button.getLabel().equals(&quot;OFF&quot;)</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">                            || ! SimOperatorPanel.this.isEnabled() )</span>
+<span class="fc" id="L72">                        message.setVisible(false);</span>
+                    else
+<span class="fc" id="L74">                        message.setVisible(true);</span>
+                }
+            }
+<span class="fc" id="L77">        }.start();</span>
+<span class="fc" id="L78">    }</span>
+}                               
+    
+    
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>ATMMain (Nov 1, 2015 8:01:40 PM)</div></body></html>

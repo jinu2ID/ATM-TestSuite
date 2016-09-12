@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GUI.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">ATMMain (Nov 1, 2015 8:01:40 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">simulation</a> &gt; <span class="el_source">GUI.java</span></div><h1>GUI.java</h1><pre class="source lang-java linenums">/*
+ * ATM Example system - file GUI.java   
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package simulation;
+import atm.ATM;
+import banking.Card;
+import banking.Money;
+
+import java.awt.*;
+import java.awt.event.*;
+     
+/** The GUI for the ATM simulation 
+ */
+class GUI extends Panel
+{   
+    /** Constructor.
+     *
+     *  @param operatorPanel the simulation of the card reader
+     *  @param cardReader the simulation of the card reader
+     *  @param display the simulation of the display
+     *  @param keyboard the simulation of the keyboard
+     *  @param cashDispenser the simulation of the cash dispenser
+     *  @param receiptPrinter the simulation of the receipt printer
+     */
+<span class="fc" id="L29">    GUI(SimOperatorPanel operatorPanel,</span>
+        SimCardReader cardReader,
+        SimDisplay display,
+        SimKeyboard keyboard,
+        SimCashDispenser cashDispenser,
+        SimEnvelopeAcceptor envelopeAcceptor,
+        SimReceiptPrinter receiptPrinter)
+    {
+<span class="fc" id="L37">        setBackground(Color.lightGray);</span>
+        
+        // The overall GUI is a panel that uses a card layout, with four cards:
+        //
+        // - The card representing the ATM itself
+        // - A card simulating the facilty on the operator panel that allows
+        //   the operator to enter the number of bills in the machine (or
+        //   perhaps to sense this)
+        // - A card simulating the reading of the magnetic stripe on the
+        //   customer's ATM card
+        // - A card displaying the internal log
+        //
+        // Normally, the ATM card is displayed.  The initial money entry card
+        // is displayed during the startup sequence.  The magnetic stripe reader
+        // card is displayed when a card is inserted.  The log card is displayed
+        // when the user clicks &quot;Show Log&quot; and is dismissed when the user clicks
+        // &quot;Hide log&quot;.
+        
+<span class="fc" id="L55">        mainLayout = new CardLayout(5,5);</span>
+<span class="fc" id="L56">        setLayout(mainLayout);</span>
+        
+<span class="fc" id="L58">        atmPanel = new ATMPanel(this, </span>
+<span class="fc" id="L59">                                operatorPanel, cardReader, </span>
+<span class="fc" id="L60">                                display, keyboard,</span>
+<span class="fc" id="L61">                                cashDispenser, envelopeAcceptor, receiptPrinter);</span>
+<span class="fc" id="L62">        this.add(atmPanel, &quot;ATM&quot;);</span>
+
+<span class="fc" id="L64">        billsPanel = new BillsPanel();</span>
+<span class="fc" id="L65">        add(billsPanel, &quot;BILLS&quot;);</span>
+        
+<span class="fc" id="L67">        cardPanel = new CardPanel();</span>
+<span class="fc" id="L68">        add(cardPanel, &quot;CARD&quot;);</span>
+
+<span class="fc" id="L70">        logPanel = new LogPanel(this);</span>
+<span class="fc" id="L71">        add(logPanel, &quot;LOG&quot;);</span>
+
+<span class="fc" id="L73">        mainLayout.show(this, &quot;ATM&quot;);</span>
+<span class="fc" id="L74">    }</span>
+
+    /** Simulate getting the amount of cash in the cash dispenser from the operator
+     *  at start up
+     *
+     *  @return dollar value of the bills in the cash dispenser (# of bills x $20)
+     */
+    
+    public Money getInitialCash()
+    {
+<span class="fc" id="L84">        mainLayout.show(this, &quot;BILLS&quot;);</span>
+<span class="fc" id="L85">        int numberOfBills = billsPanel.readBills();</span>
+<span class="fc" id="L86">        mainLayout.show(this, &quot;ATM&quot;);</span>
+        
+<span class="fc" id="L88">        return new Money(20 * numberOfBills);</span>
+    }
+    
+    /** Simulate reading of a card
+     *
+     *
+     *  @return Card object representing information on the card if read
+     *          successfully, null if not read successfully
+     */
+    public Card readCard()
+    {
+<span class="fc" id="L99">        mainLayout.show(this, &quot;CARD&quot;);</span>
+<span class="fc" id="L100">        int cardNumber = cardPanel.readCardNumber();</span>
+<span class="fc" id="L101">        mainLayout.show(this, &quot;ATM&quot;);</span>
+        
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (cardNumber &gt; 0)</span>
+<span class="fc" id="L104">            return new Card(cardNumber);</span>
+        else
+<span class="fc" id="L106">            return null;</span>
+    }
+    
+    /** Simulate printing a line to the log
+     *
+     *  @param text the line to print
+     */
+    public void printLogLine(String text)
+    {
+<span class="fc" id="L115">        logPanel.println(text);</span>
+<span class="fc" id="L116">    }</span>
+    
+    /** Show a specific card
+     *
+     *  @param cardName the name of the card to show
+     */
+    void showCard(String cardName)
+    {
+<span class="nc" id="L124">        mainLayout.show(this, cardName);</span>
+<span class="nc" id="L125">    }</span>
+    
+    /** Create a GridBagConstraints object with specified constraints, and 
+     *  others defaulted.
+     *
+     *  @param row the row (y coordinate)
+     *  @param col the column (x coordinate)
+     *  @param width the width
+     *  @param height the height
+     *  @param fill the fill
+     *  @return GridBagConstraints object representing the above
+     */
+   static GridBagConstraints makeConstraints(
+                    int row, int col, int width, int height, int fill)
+    { 
+<span class="fc" id="L140">        GridBagConstraints g = new GridBagConstraints();</span>
+<span class="fc" id="L141">        g.gridy = row;</span>
+<span class="fc" id="L142">        g.gridx = col;</span>
+<span class="fc" id="L143">        g.gridheight = height;</span>
+<span class="fc" id="L144">        g.gridwidth = width;</span>
+<span class="fc" id="L145">        g.fill = fill;</span>
+<span class="fc" id="L146">        g.insets = new Insets(2,2,2,2);</span>
+<span class="fc" id="L147">        g.weightx = 1;</span>
+<span class="fc" id="L148">        g.weighty = 1;</span>
+<span class="fc" id="L149">        g.anchor = GridBagConstraints.CENTER;</span>
+<span class="fc" id="L150">        return g;</span>
+    }
+
+    /** The card layout for this panel
+     */
+    private CardLayout mainLayout;
+    
+    /** The panel displaying the ATM itself
+     */
+    private ATMPanel atmPanel;
+    
+    /** The panel asking the operator to enter the number of bills
+     */
+    private BillsPanel billsPanel;
+    
+    /** The panel asking the user to enter the number of the ATM Card
+     */
+    private CardPanel cardPanel;
+    
+    /** The panel displaying the log
+     */
+    private LogPanel logPanel;
+}    
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>ATMMain (Nov 1, 2015 8:01:40 PM)</div></body></html>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>NetworkToBank.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">ATMMain (Nov 1, 2015 8:01:40 PM)</a> &gt; <a href="../../index.html" class="el_group">ATMExample</a> &gt; <a href="../index.html" class="el_bundle">source</a> &gt; <a href="index.source.html" class="el_package">atm.physical</a> &gt; <span class="el_source">NetworkToBank.java</span></div><h1>NetworkToBank.java</h1><pre class="source lang-java linenums">/*
+ * ATM Example system - file NetworkToBank.java
+ *
+ * copyright (c) 2001 - Russell C. Bjork
+ *
+ */
+ 
+package atm.physical;
+
+import java.net.InetAddress;
+
+import banking.Message;
+import banking.Balances;
+import banking.Status;
+import simulation.Simulation;
+
+/** Manager for the ATM's network connection.  In a real ATM, this would 
+ *  manage a physical device; in this simulation,  it uses classes 
+ *  in package simulation to simulate the device.
+ */
+ 
+public class NetworkToBank
+{
+    /** Constructor
+     *
+     *  @param log the log in which to record sending of messages and responses
+     *  @param bankAddress the network address of the bank
+     */
+<span class="fc" id="L29">    public NetworkToBank(Log log, InetAddress bankAddress)</span>
+    {
+<span class="fc" id="L31">        this.log = log;</span>
+<span class="fc" id="L32">        this.bankAddress = bankAddress;</span>
+<span class="fc" id="L33">    }</span>
+    
+    /** Open connection to bank at system startup
+     */
+    public void openConnection()
+    {
+        // Since the network is simulated, we don't have to do anything
+<span class="fc" id="L40">    }</span>
+    
+    /** Close connection to bank at system shutdown
+     */
+    public void closeConnection()
+    {
+        // Since the network is simulated, we don't have to do anything
+<span class="fc" id="L47">    }</span>
+    
+    /** Send a message to bank
+     *
+     *  @param message the message to send
+     *  @param balances (out) balances in customer's account as reported
+     *         by bank
+     *  @return status code returned by bank
+     */
+    public Status sendMessage(Message message, Balances balances)
+    {
+        // Log sending of the message
+        
+<span class="fc" id="L60">        log.logSend(message);</span>
+        
+        // Simulate the sending of the message - here is where the real code
+        // to actually send the message over the network would go
+        
+<span class="fc" id="L65">        Status result = Simulation.getInstance().sendMessage(message, balances);</span>
+        
+        // Log the response gotten back
+        
+<span class="fc" id="L69">        log.logResponse(result);</span>
+        
+<span class="fc" id="L71">        return result;</span>
+    }
+    
+    // Log into which to record messages
+    
+    private Log log;
+    
+    // Network address of the bank
+    
+    private InetAddress bankAddress;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>ATMMain (Nov 1, 2015 8:01:40 PM)</div></body></html>
